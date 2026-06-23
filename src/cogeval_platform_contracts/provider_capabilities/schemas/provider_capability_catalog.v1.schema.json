@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.cogeval.dev/provider_capability_catalog.v1.schema.json",
+  "title": "COGEval Provider Capability Catalog v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "updated_at", "providers"],
+  "properties": {
+    "schema": { "const": "cogeval.provider_capability_catalog.v1" },
+    "updated_at": { "type": "string", "minLength": 1 },
+    "metadata": { "type": "object" },
+    "providers": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/provider" }
+    }
+  },
+  "$defs": {
+    "provider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider_id", "display_name"],
+      "properties": {
+        "provider_id": { "type": "string", "minLength": 1 },
+        "display_name": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["supported", "preview", "deprecated"] },
+        "interfaces": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/interface" }
+        },
+        "models": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/model" }
+        },
+        "metadata": { "type": "object" }
+      }
+    },
+    "interface": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["interface"],
+      "properties": {
+        "interface": { "type": "string", "minLength": 1 },
+        "display_name": { "type": ["string", "null"] },
+        "parameter_surfaces": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/parameter_surface" }
+        },
+        "metadata": { "type": "object" }
+      }
+    },
+    "parameter_surface": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "values": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "value_mapping": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "metadata": { "type": "object" }
+      }
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["model_id", "display_name", "model_name"],
+      "properties": {
+        "model_id": { "type": "string", "minLength": 1 },
+        "display_name": { "type": "string", "minLength": 1 },
+        "model_name": { "type": "string", "minLength": 1 },
+        "capabilities": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/capability" }
+        },
+        "metadata": { "type": "object" }
+      }
+    },
+    "capability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["supported"],
+      "properties": {
+        "supported": { "type": "boolean" },
+        "values": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "default": { "type": ["string", "null"] },
+        "parameter_surface": { "type": ["string", "null"], "minLength": 1 },
+        "adapter_policy": {
+          "enum": ["pass_through", "map_values", "unsupported", "drop_with_warning"]
+        },
+        "value_mapping": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "metadata": { "type": "object" }
+      }
+    }
+  }
+}
+

@@ -1,0 +1,30 @@
+{
+  "schema": "cogeval.provider_capability_catalog.v1",
+  "updated_at": "2026-06-23T00:00:00Z",
+  "providers": [
+    {
+      "provider_id": "custom",
+      "display_name": "Custom Provider",
+      "interfaces": [
+        {
+          "interface": "openai_compatible_chat",
+          "display_name": "OpenAI-Compatible Chat API"
+        }
+      ],
+      "models": [
+        {
+          "model_id": "custom-model",
+          "display_name": "Custom Model",
+          "model_name": "custom-model",
+          "capabilities": {
+            "thinking_effort": {
+              "supported": false,
+              "adapter_policy": "drop_with_warning"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
+

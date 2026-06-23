@@ -1,0 +1,39 @@
+{
+  "schema": "cogeval.provider_capability_catalog.v1",
+  "updated_at": "2026-06-23T00:00:00Z",
+  "providers": [
+    {
+      "provider_id": "google",
+      "display_name": "Google Gemini",
+      "interfaces": [
+        {
+          "interface": "gemini_interactions",
+          "display_name": "Gemini Interactions API",
+          "parameter_surfaces": {
+            "thinking_effort": {
+              "path": "generation_config.thinking_level",
+              "values": ["minimal", "low", "medium", "high"]
+            }
+          }
+        }
+      ],
+      "models": [
+        {
+          "model_id": "gemini-3-flash-preview",
+          "display_name": "Gemini 3 Flash Preview",
+          "model_name": "gemini-3-flash-preview",
+          "capabilities": {
+            "thinking_effort": {
+              "supported": true,
+              "values": ["minimal", "low", "medium", "high"],
+              "default": "high",
+              "parameter_surface": "thinking_effort",
+              "adapter_policy": "pass_through"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
+

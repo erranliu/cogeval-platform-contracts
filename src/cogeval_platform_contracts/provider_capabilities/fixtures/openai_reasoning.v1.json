@@ -1,0 +1,39 @@
+{
+  "schema": "cogeval.provider_capability_catalog.v1",
+  "updated_at": "2026-06-23T00:00:00Z",
+  "providers": [
+    {
+      "provider_id": "openai",
+      "display_name": "OpenAI",
+      "interfaces": [
+        {
+          "interface": "openai_responses",
+          "display_name": "OpenAI Responses API",
+          "parameter_surfaces": {
+            "thinking_effort": {
+              "path": "reasoning.effort",
+              "values": ["none", "minimal", "low", "medium", "high", "xhigh"]
+            }
+          }
+        }
+      ],
+      "models": [
+        {
+          "model_id": "gpt-5",
+          "display_name": "GPT-5",
+          "model_name": "gpt-5",
+          "capabilities": {
+            "thinking_effort": {
+              "supported": true,
+              "values": ["minimal", "low", "medium", "high"],
+              "default": "medium",
+              "parameter_surface": "thinking_effort",
+              "adapter_policy": "pass_through"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
+

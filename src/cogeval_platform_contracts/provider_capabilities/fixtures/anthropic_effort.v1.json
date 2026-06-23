@@ -1,0 +1,39 @@
+{
+  "schema": "cogeval.provider_capability_catalog.v1",
+  "updated_at": "2026-06-23T00:00:00Z",
+  "providers": [
+    {
+      "provider_id": "anthropic",
+      "display_name": "Anthropic",
+      "interfaces": [
+        {
+          "interface": "anthropic_messages",
+          "display_name": "Anthropic Messages API",
+          "parameter_surfaces": {
+            "thinking_effort": {
+              "path": "output_config.effort",
+              "values": ["low", "medium", "high", "xhigh", "max"]
+            }
+          }
+        }
+      ],
+      "models": [
+        {
+          "model_id": "claude-opus-4-8",
+          "display_name": "Claude Opus 4.8",
+          "model_name": "claude-opus-4-8",
+          "capabilities": {
+            "thinking_effort": {
+              "supported": true,
+              "values": ["low", "medium", "high", "xhigh", "max"],
+              "default": "high",
+              "parameter_surface": "thinking_effort",
+              "adapter_policy": "pass_through"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
+

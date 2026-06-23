@@ -1,0 +1,49 @@
+{
+  "schema": "cogeval.provider_capability_catalog.v1",
+  "updated_at": "2026-06-23T00:00:00Z",
+  "providers": [
+    {
+      "provider_id": "deepseek",
+      "display_name": "DeepSeek",
+      "interfaces": [
+        {
+          "interface": "openai_compatible_chat",
+          "display_name": "OpenAI-Compatible Chat API",
+          "parameter_surfaces": {
+            "thinking_effort": {
+              "path": "reasoning_effort",
+              "values": ["high", "max"],
+              "value_mapping": {
+                "low": "high",
+                "medium": "high",
+                "xhigh": "max"
+              }
+            }
+          }
+        }
+      ],
+      "models": [
+        {
+          "model_id": "deepseek-v4-flash",
+          "display_name": "DeepSeek V4 Flash",
+          "model_name": "deepseek-v4-flash",
+          "capabilities": {
+            "thinking_effort": {
+              "supported": true,
+              "values": ["high", "max"],
+              "default": "high",
+              "parameter_surface": "thinking_effort",
+              "adapter_policy": "map_values",
+              "value_mapping": {
+                "low": "high",
+                "medium": "high",
+                "xhigh": "max"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
+
