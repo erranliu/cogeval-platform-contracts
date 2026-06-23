@@ -21,10 +21,25 @@ payloads before relying on them.
 
 - `cogeval.provider_capability_catalog.v1`
 
+## Repository Layout
+
+```text
+src/cogeval_platform_contracts/
+  provider_capabilities/
+    v1.py
+    schemas/
+    fixtures/
+tests/
+docs/
+```
+
+Start with [Adding A Contract](docs/ADDING_A_CONTRACT.md) when introducing a
+new boundary. See [Compatibility Policy](docs/COMPATIBILITY_POLICY.md) for
+versioning rules.
+
 ## Development
 
 ```powershell
 python -m pip install -e .[test]
 python -m pytest
 ```
-
