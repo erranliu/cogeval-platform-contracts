@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.cogeval.dev/provider_interface_catalog.v1.schema.json",
+  "title": "COGEval Provider Interface Catalog v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "updated_at", "providers"],
+  "properties": {
+    "schema": { "const": "cogeval.provider_interface_catalog.v1" },
+    "updated_at": { "type": "string", "minLength": 1 },
+    "metadata": { "type": "object" },
+    "providers": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/provider" }
+    }
+  },
+  "$defs": {
+    "provider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider_id",
+        "display_name",
+        "status",
+        "default_base_url",
+        "supported_interfaces"
+      ],
+      "properties": {
+        "provider_id": { "type": "string", "minLength": 1 },
+        "display_name": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["supported", "preview", "deprecated"] },
+        "summary": { "type": ["string", "null"] },
+        "website_url": { "type": ["string", "null"] },
+        "console_url": { "type": ["string", "null"] },
+        "docs_url": { "type": ["string", "null"] },
+        "default_base_url": { "type": "string", "minLength": 1 },
+        "recommended": { "type": "boolean" },
+        "supported_interfaces": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/interface" }
+        },
+        "models": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/model" }
+        }
+      }
+    },
+    "interface": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["interface", "default_env_key"],
+      "properties": {
+        "interface": { "$ref": "#/$defs/interface_id" },
+        "default_base_url": { "type": ["string", "null"] },
+        "default_env_key": { "type": "string", "minLength": 1 },
+        "default_model_prefix": { "type": ["string", "null"] },
+        "wire_api": { "type": ["string", "null"] },
+        "model_provider": { "type": ["string", "null"] },
+        "recommended": { "type": "boolean" }
+      }
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["model_option_id", "display_name", "model_name", "supported_interfaces"],
+      "properties": {
+        "model_option_id": { "type": "string", "minLength": 1 },
+        "display_name": { "type": "string", "minLength": 1 },
+        "model_name": { "type": "string", "minLength": 1 },
+        "recommended": { "type": "boolean" },
+        "supported_interfaces": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/interface_id" }
+        },
+        "capabilities": { "type": "object" }
+      }
+    },
+    "interface_id": {
+      "enum": [
+        "openai_compatible_chat",
+        "openai_responses",
+        "anthropic_compatible_messages",
+        "qwen_code_native",
+        "kimi_code_native",
+        "gemini_cli_native",
+        "trae_agent_native"
+      ]
+    }
+  }
+}
+
