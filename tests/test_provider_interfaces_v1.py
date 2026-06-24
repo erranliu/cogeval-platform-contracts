@@ -94,6 +94,19 @@ def test_legacy_workbench_schema_is_rejected_for_canonical_catalog() -> None:
     assert schema_errors[0]["type"] == "literal_error"
 
 
+def test_missing_schema_is_rejected_for_canonical_catalog() -> None:
+    with pytest.raises(ValidationError) as exc:
+        ProviderInterfaceCatalog.model_validate(
+            {
+                "updated_at": "2026-06-24T00:00:00Z",
+                "providers": [],
+            }
+        )
+
+    schema_errors = [error for error in exc.value.errors() if error["loc"] == ("schema",)]
+    assert schema_errors
+
+
 def test_alias_helpers_canonicalize_legacy_interface_ids() -> None:
     assert canonical_provider_interface_id("codex_model_provider") == "openai_responses"
     assert canonical_provider_interface_id("anthropic_gateway") == "anthropic_compatible_messages"
@@ -185,4 +198,3 @@ def test_duplicate_providers_fail() -> None:
                 ],
             }
         )
-

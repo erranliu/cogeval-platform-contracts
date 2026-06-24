@@ -153,7 +153,6 @@ class ApiKeyProvider(StrictContractModel):
 
 class ProviderInterfaceCatalog(StrictContractModel):
     schema_version: Literal["cogeval.provider_interface_catalog.v1"] = Field(
-        default=PROVIDER_INTERFACE_CATALOG_SCHEMA,
         alias="schema",
     )
     updated_at: str = Field(min_length=1)
@@ -194,4 +193,3 @@ def _validate_optional_http_url(field_name: str, value: str | None) -> None:
     parsed = urlparse(value)
     if parsed.scheme not in {"http", "https"} or not parsed.netloc:
         raise ValueError(f"{field_name} must be an absolute http(s) URL")
-
