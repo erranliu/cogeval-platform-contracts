@@ -152,10 +152,10 @@ class ApiKeyProvider(StrictContractModel):
 
 
 class ProviderInterfaceCatalog(StrictContractModel):
-    schema_version: Literal[
-        "cogeval.provider_interface_catalog.v1",
-        "cogeval.api_key_provider_catalog.v1",
-    ] = Field(default=PROVIDER_INTERFACE_CATALOG_SCHEMA, alias="schema")
+    schema_version: Literal["cogeval.provider_interface_catalog.v1"] = Field(
+        default=PROVIDER_INTERFACE_CATALOG_SCHEMA,
+        alias="schema",
+    )
     updated_at: str = Field(min_length=1)
     providers: list[ApiKeyProvider] = Field(default_factory=list)
     metadata: dict[str, Any] = Field(default_factory=dict)

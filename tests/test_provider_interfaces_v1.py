@@ -46,10 +46,10 @@ def test_schema_file_matches_contract_version() -> None:
     assert payload["properties"]["schema"]["const"] == PROVIDER_INTERFACE_CATALOG_SCHEMA
 
 
-def test_current_workbench_schema_is_accepted_and_normalized() -> None:
+def test_canonical_schema_is_accepted_and_field_aliases_are_normalized() -> None:
     catalog = validate_provider_interface_catalog(
         {
-            "schema": WORKBENCH_PROVIDER_CATALOG_SCHEMA,
+            "schema": PROVIDER_INTERFACE_CATALOG_SCHEMA,
             "updated_at": "2026-06-24T00:00:00Z",
             "providers": [
                 {
@@ -74,9 +74,20 @@ def test_current_workbench_schema_is_accepted_and_normalized() -> None:
     )
 
     provider = catalog.providers[0]
-    assert catalog.schema == WORKBENCH_PROVIDER_CATALOG_SCHEMA
+    assert catalog.schema == PROVIDER_INTERFACE_CATALOG_SCHEMA
     assert provider.supported_interfaces[0].interface == "openai_compatible_chat"
     assert provider.models[0].supported_interfaces == ["openai_compatible_chat"]
+
+
+def test_legacy_workbench_schema_is_rejected_for_canonical_catalog() -> None:
+    with pytest.raises(ValidationError, match="Input should be 'cogeval.provider_interface_catalog.v1'"):
+        ProviderInterfaceCatalog.model_validate(
+            {
+                "schema": WORKBENCH_PROVIDER_CATALOG_SCHEMA,
+                "updated_at": "2026-06-24T00:00:00Z",
+                "providers": [],
+            }
+        )
 
 
 def test_alias_helpers_canonicalize_legacy_interface_ids() -> None:
