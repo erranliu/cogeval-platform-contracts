@@ -13,6 +13,12 @@ def test_provider_interface_json_schema_is_valid() -> None:
     Draft202012Validator.check_schema(load_schema("provider_interface_catalog.v1"))
 
 
+def test_provider_interface_json_schema_includes_opencode_native() -> None:
+    schema = load_schema("provider_interface_catalog.v1")
+
+    assert "opencode_native" in schema["$defs"]["interface_id"]["enum"]
+
+
 def test_provider_interface_fixtures_validate_against_json_schema() -> None:
     schema = load_schema("provider_interface_catalog.v1")
     validator = Draft202012Validator(schema)

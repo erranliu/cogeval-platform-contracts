@@ -85,7 +85,8 @@
         "qwen_code_native",
         "kimi_code_native",
         "gemini_cli_native",
-        "trae_agent_native"
+        "trae_agent_native",
+        "opencode_native"
       ]
     }
   }

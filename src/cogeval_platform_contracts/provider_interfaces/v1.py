@@ -10,7 +10,6 @@ PROVIDER_INTERFACE_CATALOG_SCHEMA = "cogeval.provider_interface_catalog.v1"
 WORKBENCH_PROVIDER_CATALOG_SCHEMA = "cogeval.api_key_provider_catalog.v1"
 
 PROVIDER_INTERFACE_ALIASES: dict[str, str] = {
-    "litellm_openai_compatible": "openai_compatible_chat",
     "codex_model_provider": "openai_responses",
     "anthropic_gateway": "anthropic_compatible_messages",
     "qwen_code_api_key": "qwen_code_native",
@@ -27,6 +26,7 @@ VALID_PROVIDER_INTERFACES = {
     "kimi_code_native",
     "gemini_cli_native",
     "trae_agent_native",
+    "opencode_native",
 }
 
 
