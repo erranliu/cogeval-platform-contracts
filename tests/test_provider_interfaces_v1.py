@@ -80,7 +80,7 @@ def test_canonical_schema_is_accepted_and_field_aliases_are_normalized() -> None
 
 
 def test_legacy_workbench_schema_is_rejected_for_canonical_catalog() -> None:
-    with pytest.raises(ValidationError, match="Input should be 'cogeval.provider_interface_catalog.v1'"):
+    with pytest.raises(ValidationError) as exc:
         ProviderInterfaceCatalog.model_validate(
             {
                 "schema": WORKBENCH_PROVIDER_CATALOG_SCHEMA,
@@ -88,6 +88,10 @@ def test_legacy_workbench_schema_is_rejected_for_canonical_catalog() -> None:
                 "providers": [],
             }
         )
+
+    schema_errors = [error for error in exc.value.errors() if error["loc"] == ("schema",)]
+    assert schema_errors
+    assert schema_errors[0]["type"] == "literal_error"
 
 
 def test_alias_helpers_canonicalize_legacy_interface_ids() -> None:
