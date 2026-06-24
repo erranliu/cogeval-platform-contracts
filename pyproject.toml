@@ -22,7 +22,13 @@ test = [
 where = ["src"]
 
 [tool.setuptools.package-data]
-cogeval_platform_contracts = ["py.typed", "provider_capabilities/schemas/*.json", "provider_capabilities/fixtures/*.json"]
+cogeval_platform_contracts = [
+  "py.typed",
+  "provider_capabilities/schemas/*.json",
+  "provider_capabilities/fixtures/*.json",
+  "provider_interfaces/schemas/*.json",
+  "provider_interfaces/fixtures/*.json",
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

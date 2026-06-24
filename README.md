@@ -20,12 +20,17 @@ payloads before relying on them.
 ## Current Contracts
 
 - `cogeval.provider_capability_catalog.v1`
+- `cogeval.provider_interface_catalog.v1`
 
 ## Repository Layout
 
 ```text
 src/cogeval_platform_contracts/
   provider_capabilities/
+    v1.py
+    schemas/
+    fixtures/
+  provider_interfaces/
     v1.py
     schemas/
     fixtures/

@@ -1,0 +1,39 @@
+{
+  "schema": "cogeval.provider_interface_catalog.v1",
+  "updated_at": "2026-06-24T00:00:00Z",
+  "providers": [
+    {
+      "provider_id": "deepseek",
+      "display_name": "DeepSeek",
+      "status": "supported",
+      "summary": "DeepSeek API via OpenAI-compatible chat interface.",
+      "website_url": "https://www.deepseek.com",
+      "console_url": "https://platform.deepseek.com",
+      "docs_url": "https://api-docs.deepseek.com",
+      "default_base_url": "https://api.deepseek.com",
+      "recommended": true,
+      "supported_interfaces": [
+        {
+          "interface": "openai_compatible_chat",
+          "default_env_key": "DEEPSEEK_API_KEY",
+          "default_base_url": "https://api.deepseek.com",
+          "default_model_prefix": "openai/",
+          "recommended": true
+        }
+      ],
+      "models": [
+        {
+          "model_option_id": "deepseek_chat",
+          "display_name": "DeepSeek Chat",
+          "model_name": "deepseek-chat",
+          "supported_interfaces": ["openai_compatible_chat"],
+          "capabilities": {
+            "chat": true
+          },
+          "recommended": true
+        }
+      ]
+    }
+  ]
+}
+
