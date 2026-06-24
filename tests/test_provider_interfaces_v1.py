@@ -12,6 +12,7 @@ from cogeval_platform_contracts.provider_interfaces.v1 import (
     ApiKeyProvider,
     ProviderInterfaceCatalog,
     canonical_provider_interface_id,
+    is_valid_provider_interface,
     provider_interface_ids_equal,
     validate_provider_interface_catalog,
 )
@@ -57,14 +58,14 @@ def test_current_workbench_schema_is_accepted_and_normalized() -> None:
                     "status": "supported",
                     "default_base_url": "https://api.deepseek.com",
                     "supported_adapters": [
-                        {"adapter": "litellm_openai_compatible", "default_env_key": "DEEPSEEK_API_KEY"}
+                        {"adapter": "openai_compatible_chat", "default_env_key": "DEEPSEEK_API_KEY"}
                     ],
                     "models": [
                         {
                             "model_option_id": "deepseek_chat",
                             "display_name": "DeepSeek Chat",
                             "model_name": "deepseek-chat",
-                            "supported_adapters": ["litellm_openai_compatible"],
+                            "supported_adapters": ["openai_compatible_chat"],
                         }
                     ],
                 }
@@ -82,6 +83,17 @@ def test_alias_helpers_canonicalize_legacy_interface_ids() -> None:
     assert canonical_provider_interface_id("codex_model_provider") == "openai_responses"
     assert canonical_provider_interface_id("anthropic_gateway") == "anthropic_compatible_messages"
     assert provider_interface_ids_equal("anthropic_gateway", "anthropic_compatible_messages")
+
+
+def test_litellm_openai_compatible_is_not_an_openai_chat_alias() -> None:
+    assert canonical_provider_interface_id("litellm_openai_compatible") == "litellm_openai_compatible"
+    assert not provider_interface_ids_equal("litellm_openai_compatible", "openai_compatible_chat")
+    assert is_valid_provider_interface("litellm_openai_compatible") is False
+
+
+def test_opencode_native_is_a_valid_provider_interface() -> None:
+    assert canonical_provider_interface_id("opencode_native") == "opencode_native"
+    assert is_valid_provider_interface("opencode_native") is True
 
 
 def test_model_referencing_undeclared_interface_fails() -> None:
