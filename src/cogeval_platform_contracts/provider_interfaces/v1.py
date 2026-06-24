@@ -152,6 +152,13 @@ class ApiKeyProvider(StrictContractModel):
 
 
 class ProviderInterfaceCatalog(StrictContractModel):
+    model_config = ConfigDict(
+        extra="forbid",
+        populate_by_name=False,
+        validate_by_alias=True,
+        validate_by_name=False,
+    )
+
     schema_version: Literal["cogeval.provider_interface_catalog.v1"] = Field(
         alias="schema",
     )

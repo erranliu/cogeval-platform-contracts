@@ -107,6 +107,21 @@ def test_missing_schema_is_rejected_for_canonical_catalog() -> None:
     assert schema_errors
 
 
+def test_schema_version_field_name_is_rejected_for_canonical_catalog() -> None:
+    with pytest.raises(ValidationError) as exc:
+        ProviderInterfaceCatalog.model_validate(
+            {
+                "schema_version": PROVIDER_INTERFACE_CATALOG_SCHEMA,
+                "updated_at": "2026-06-24T00:00:00Z",
+                "providers": [],
+            }
+        )
+
+    error_locations = {error["loc"] for error in exc.value.errors()}
+    assert ("schema",) in error_locations
+    assert ("schema_version",) in error_locations
+
+
 def test_alias_helpers_canonicalize_legacy_interface_ids() -> None:
     assert canonical_provider_interface_id("codex_model_provider") == "openai_responses"
     assert canonical_provider_interface_id("anthropic_gateway") == "anthropic_compatible_messages"
