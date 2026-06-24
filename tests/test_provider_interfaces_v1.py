@@ -11,6 +11,7 @@ from cogeval_platform_contracts.provider_interfaces.v1 import (
     WORKBENCH_PROVIDER_CATALOG_SCHEMA,
     ApiKeyProvider,
     ProviderInterfaceCatalog,
+    ProviderInterfaceCatalogError,
     canonical_provider_interface_id,
     is_valid_provider_interface,
     provider_interface_ids_equal,
@@ -46,37 +47,129 @@ def test_schema_file_matches_contract_version() -> None:
     assert payload["properties"]["schema"]["const"] == PROVIDER_INTERFACE_CATALOG_SCHEMA
 
 
-def test_canonical_schema_is_accepted_and_field_aliases_are_normalized() -> None:
-    catalog = validate_provider_interface_catalog(
-        {
-            "schema": PROVIDER_INTERFACE_CATALOG_SCHEMA,
-            "updated_at": "2026-06-24T00:00:00Z",
-            "providers": [
-                {
-                    "provider_id": "deepseek",
-                    "display_name": "DeepSeek",
-                    "status": "supported",
-                    "default_base_url": "https://api.deepseek.com",
-                    "supported_adapters": [
-                        {"adapter": "openai_compatible_chat", "default_env_key": "DEEPSEEK_API_KEY"}
-                    ],
-                    "models": [
-                        {
-                            "model_option_id": "deepseek_chat",
-                            "display_name": "DeepSeek Chat",
-                            "model_name": "deepseek-chat",
-                            "supported_adapters": ["openai_compatible_chat"],
-                        }
-                    ],
-                }
-            ],
-        }
-    )
+def _canonical_catalog_payload() -> dict[str, object]:
+    return {
+        "schema": PROVIDER_INTERFACE_CATALOG_SCHEMA,
+        "updated_at": "2026-06-24T00:00:00Z",
+        "providers": [
+            {
+                "provider_id": "deepseek",
+                "display_name": "DeepSeek",
+                "status": "supported",
+                "default_base_url": "https://api.deepseek.com",
+                "supported_interfaces": [
+                    {"interface": "openai_compatible_chat", "default_env_key": "DEEPSEEK_API_KEY"}
+                ],
+                "models": [
+                    {
+                        "model_option_id": "deepseek_chat",
+                        "display_name": "DeepSeek Chat",
+                        "model_name": "deepseek-chat",
+                        "supported_interfaces": ["openai_compatible_chat"],
+                    }
+                ],
+            }
+        ],
+    }
+
+
+def test_canonical_schema_is_accepted() -> None:
+    catalog = validate_provider_interface_catalog(_canonical_catalog_payload())
 
     provider = catalog.providers[0]
     assert catalog.schema == PROVIDER_INTERFACE_CATALOG_SCHEMA
     assert provider.supported_interfaces[0].interface == "openai_compatible_chat"
     assert provider.models[0].supported_interfaces == ["openai_compatible_chat"]
+
+
+@pytest.mark.parametrize(
+    ("legacy_provider_field", "legacy_interface_field", "legacy_model_field"),
+    [
+        ("supported_adapters", "interface", "supported_interfaces"),
+        ("supported_interfaces", "adapter", "supported_interfaces"),
+        ("supported_interfaces", "interface", "supported_adapters"),
+    ],
+)
+def test_legacy_field_aliases_are_rejected(
+    legacy_provider_field: str,
+    legacy_interface_field: str,
+    legacy_model_field: str,
+) -> None:
+    payload = _canonical_catalog_payload()
+    provider = payload["providers"][0]
+    assert isinstance(provider, dict)
+    provider[legacy_provider_field] = provider.pop("supported_interfaces")
+    supported_interfaces = provider[legacy_provider_field]
+    assert isinstance(supported_interfaces, list)
+    interface = supported_interfaces[0]
+    assert isinstance(interface, dict)
+    interface[legacy_interface_field] = interface.pop("interface")
+    models = provider["models"]
+    assert isinstance(models, list)
+    model = models[0]
+    assert isinstance(model, dict)
+    model[legacy_model_field] = model.pop("supported_interfaces")
+
+    with pytest.raises(ValidationError):
+        ProviderInterfaceCatalog.model_validate(payload)
+
+
+@pytest.mark.parametrize(
+    "legacy_interface_id",
+    [
+        "codex_model_provider",
+        "anthropic_gateway",
+        "qwen_code_api_key",
+        "litellm_openai_compatible",
+    ],
+)
+def test_legacy_provider_interface_ids_are_rejected_in_provider_interfaces(legacy_interface_id: str) -> None:
+    payload = _canonical_catalog_payload()
+    provider = payload["providers"][0]
+    assert isinstance(provider, dict)
+    supported_interfaces = provider["supported_interfaces"]
+    assert isinstance(supported_interfaces, list)
+    interface = supported_interfaces[0]
+    assert isinstance(interface, dict)
+    interface["interface"] = legacy_interface_id
+
+    with pytest.raises(ValidationError, match="unknown provider interface"):
+        ProviderInterfaceCatalog.model_validate(payload)
+
+
+@pytest.mark.parametrize(
+    "legacy_interface_id",
+    [
+        "codex_model_provider",
+        "anthropic_gateway",
+        "qwen_code_api_key",
+        "litellm_openai_compatible",
+    ],
+)
+def test_legacy_provider_interface_ids_are_rejected_in_models(legacy_interface_id: str) -> None:
+    payload = _canonical_catalog_payload()
+    provider = payload["providers"][0]
+    assert isinstance(provider, dict)
+    models = provider["models"]
+    assert isinstance(models, list)
+    model = models[0]
+    assert isinstance(model, dict)
+    model["supported_interfaces"] = [legacy_interface_id]
+
+    with pytest.raises(ValidationError):
+        ProviderInterfaceCatalog.model_validate(payload)
+
+
+def test_legacy_field_aliases_are_rejected_by_validate_provider_interface_catalog() -> None:
+    payload = _canonical_catalog_payload()
+    provider = payload["providers"][0]
+    assert isinstance(provider, dict)
+    provider["supported_adapters"] = provider.pop("supported_interfaces")
+
+    with pytest.raises(ProviderInterfaceCatalogError) as exc:
+        validate_provider_interface_catalog(payload)
+
+    assert exc.value.code == "catalog_invalid_payload"
 
 
 def test_legacy_workbench_schema_is_rejected_for_canonical_catalog() -> None:
