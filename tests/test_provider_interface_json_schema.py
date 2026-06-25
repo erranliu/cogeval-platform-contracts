@@ -13,10 +13,16 @@ def test_provider_interface_json_schema_is_valid() -> None:
     Draft202012Validator.check_schema(load_schema("provider_interface_catalog.v1"))
 
 
-def test_provider_interface_json_schema_includes_opencode_native() -> None:
+def test_provider_interface_json_schema_excludes_native_interfaces() -> None:
     schema = load_schema("provider_interface_catalog.v1")
 
-    assert "opencode_native" in schema["$defs"]["interface_id"]["enum"]
+    assert not {
+        "qwen_code_native",
+        "kimi_code_native",
+        "gemini_cli_native",
+        "trae_agent_native",
+        "opencode_native",
+    } & set(schema["$defs"]["interface_id"]["enum"])
 
 
 def test_provider_interface_json_schema_does_not_expose_wire_api() -> None:

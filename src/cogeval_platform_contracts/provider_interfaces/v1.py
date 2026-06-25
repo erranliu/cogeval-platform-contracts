@@ -12,21 +12,12 @@ WORKBENCH_PROVIDER_CATALOG_SCHEMA = "cogeval.api_key_provider_catalog.v1"
 PROVIDER_INTERFACE_ALIASES: dict[str, str] = {
     "codex_model_provider": "openai_responses",
     "anthropic_gateway": "anthropic_compatible_messages",
-    "qwen_code_api_key": "qwen_code_native",
-    "kimi_code_api_key": "kimi_code_native",
-    "gemini_cli_api_key": "gemini_cli_native",
-    "trae_agent_api_key": "trae_agent_native",
 }
 
 VALID_PROVIDER_INTERFACES = {
     "openai_compatible_chat",
     "openai_responses",
     "anthropic_compatible_messages",
-    "qwen_code_native",
-    "kimi_code_native",
-    "gemini_cli_native",
-    "trae_agent_native",
-    "opencode_native",
 }
 
 

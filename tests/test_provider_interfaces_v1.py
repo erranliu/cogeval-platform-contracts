@@ -261,9 +261,19 @@ def test_litellm_openai_compatible_is_not_an_openai_chat_alias() -> None:
     assert is_valid_provider_interface("litellm_openai_compatible") is False
 
 
-def test_opencode_native_is_a_valid_provider_interface() -> None:
-    assert canonical_provider_interface_id("opencode_native") == "opencode_native"
-    assert is_valid_provider_interface("opencode_native") is True
+@pytest.mark.parametrize(
+    "native_interface",
+    [
+        "qwen_code_native",
+        "kimi_code_native",
+        "gemini_cli_native",
+        "trae_agent_native",
+        "opencode_native",
+    ],
+)
+def test_native_interfaces_are_not_provider_interfaces(native_interface: str) -> None:
+    assert canonical_provider_interface_id(native_interface) == native_interface
+    assert is_valid_provider_interface(native_interface) is False
 
 
 def test_unknown_interface_fails_after_canonicalization() -> None:

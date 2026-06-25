@@ -8,7 +8,7 @@ The platform owns provider facts:
 - provider identity, display text, status, and documentation URLs
 - provider models and model names
 - supported interface IDs such as `openai_compatible_chat`
-- default base URLs, env key names, model prefixes, and wire API hints
+- default base URLs and model prefixes
 - interface alias canonicalization and schema compatibility
 
 Workbench owns runtime binding:
@@ -35,7 +35,8 @@ vocabulary for its public API.
 ## Producer Guidance
 
 Platform producers should publish provider, model, and interface facts only.
-They must not publish Workbench executor IDs or local CLI binding behavior.
+They must not publish Workbench executor IDs, local CLI/native binding behavior,
+or `_native` interface IDs.
 
 Before publishing, validate payloads with:
 

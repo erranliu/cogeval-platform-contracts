@@ -72,12 +72,7 @@
       "enum": [
         "openai_compatible_chat",
         "openai_responses",
-        "anthropic_compatible_messages",
-        "qwen_code_native",
-        "kimi_code_native",
-        "gemini_cli_native",
-        "trae_agent_native",
-        "opencode_native"
+        "anthropic_compatible_messages"
       ]
     }
   }
