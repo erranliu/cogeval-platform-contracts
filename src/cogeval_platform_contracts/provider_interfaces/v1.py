@@ -73,7 +73,6 @@ class ProviderModel(StrictContractModel):
     display_name: str = Field(min_length=1)
     model_name: str = Field(min_length=1)
     recommended: bool = False
-    supported_interfaces: list[str] = Field(min_length=1)
     capabilities: dict[str, Any] = Field(default_factory=dict)
 
     @field_validator("capabilities", mode="before")
@@ -93,14 +92,6 @@ class ProviderModel(StrictContractModel):
                 raise ValueError("capabilities list items must be non-empty strings")
             capabilities[capability] = True
         return capabilities
-
-    @field_validator("supported_interfaces")
-    @classmethod
-    def validate_supported_interfaces(cls, value: list[str]) -> list[str]:
-        for interface in value:
-            if interface not in VALID_PROVIDER_INTERFACES:
-                raise ValueError(f"unknown provider interface: {interface}")
-        return value
 
 
 class ApiKeyProvider(StrictContractModel):
@@ -126,17 +117,6 @@ class ApiKeyProvider(StrictContractModel):
         _validate_optional_http_url("docs_url", self.docs_url)
         if self.status != "deprecated" and not self.models:
             raise ValueError(f"provider {self.provider_id} must include at least one model")
-
-        declared_interfaces = {item.interface for item in self.supported_interfaces}
-        for model in self.models:
-            missing = sorted(set(model.supported_interfaces) - declared_interfaces)
-            if missing:
-                raise ValueError(
-                    f"model {model.model_option_id} references undeclared provider interfaces: {', '.join(missing)}"
-                )
-            for interface in model.supported_interfaces:
-                if interface not in VALID_PROVIDER_INTERFACES:
-                    raise ValueError(f"unknown provider interface in model {model.model_option_id}: {interface}")
         return self
 
 

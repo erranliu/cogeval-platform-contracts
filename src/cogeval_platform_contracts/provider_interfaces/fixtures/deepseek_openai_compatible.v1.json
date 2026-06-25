@@ -27,7 +27,6 @@
           "model_option_id": "deepseek_chat",
           "display_name": "DeepSeek Chat",
           "model_name": "deepseek-chat",
-          "supported_interfaces": ["openai_compatible_chat"],
           "capabilities": {
             "chat": true
           },
@@ -37,4 +36,3 @@
     }
   ]
 }
-

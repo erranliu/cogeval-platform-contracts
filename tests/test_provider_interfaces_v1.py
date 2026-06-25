@@ -67,7 +67,6 @@ def _canonical_catalog_payload() -> dict[str, object]:
                         "model_option_id": "deepseek_chat",
                         "display_name": "DeepSeek Chat",
                         "model_name": "deepseek-chat",
-                        "supported_interfaces": ["openai_compatible_chat"],
                     }
                 ],
             }
@@ -83,7 +82,7 @@ def test_canonical_schema_is_accepted() -> None:
     assert provider.default_env_key == "DEEPSEEK_API_KEY"
     assert provider.model_provider == "deepseek"
     assert provider.supported_interfaces[0].interface == "openai_compatible_chat"
-    assert provider.models[0].supported_interfaces == ["openai_compatible_chat"]
+    assert not hasattr(provider.models[0], "supported_interfaces")
 
 
 @pytest.mark.parametrize("field_name", ["default_env_key", "model_provider"])
@@ -124,17 +123,15 @@ def test_wire_api_is_not_configurable_on_provider_interfaces() -> None:
 
 
 @pytest.mark.parametrize(
-    ("legacy_provider_field", "legacy_interface_field", "legacy_model_field"),
+    ("legacy_provider_field", "legacy_interface_field"),
     [
-        ("supported_adapters", "interface", "supported_interfaces"),
-        ("supported_interfaces", "adapter", "supported_interfaces"),
-        ("supported_interfaces", "interface", "supported_adapters"),
+        ("supported_adapters", "interface"),
+        ("supported_interfaces", "adapter"),
     ],
 )
 def test_legacy_field_aliases_are_rejected(
     legacy_provider_field: str,
     legacy_interface_field: str,
-    legacy_model_field: str,
 ) -> None:
     payload = _canonical_catalog_payload()
     provider = payload["providers"][0]
@@ -145,11 +142,6 @@ def test_legacy_field_aliases_are_rejected(
     interface = supported_interfaces[0]
     assert isinstance(interface, dict)
     interface[legacy_interface_field] = interface.pop("interface")
-    models = provider["models"]
-    assert isinstance(models, list)
-    model = models[0]
-    assert isinstance(model, dict)
-    model[legacy_model_field] = model.pop("supported_interfaces")
 
     with pytest.raises(ValidationError):
         ProviderInterfaceCatalog.model_validate(payload)
@@ -178,16 +170,7 @@ def test_legacy_provider_interface_ids_are_rejected_in_provider_interfaces(legac
         ProviderInterfaceCatalog.model_validate(payload)
 
 
-@pytest.mark.parametrize(
-    "legacy_interface_id",
-    [
-        "codex_model_provider",
-        "anthropic_gateway",
-        "qwen_code_api_key",
-        "litellm_openai_compatible",
-    ],
-)
-def test_legacy_provider_interface_ids_are_rejected_in_models(legacy_interface_id: str) -> None:
+def test_model_supported_interfaces_field_is_rejected() -> None:
     payload = _canonical_catalog_payload()
     provider = payload["providers"][0]
     assert isinstance(provider, dict)
@@ -195,7 +178,7 @@ def test_legacy_provider_interface_ids_are_rejected_in_models(legacy_interface_i
     assert isinstance(models, list)
     model = models[0]
     assert isinstance(model, dict)
-    model["supported_interfaces"] = [legacy_interface_id]
+    model["supported_interfaces"] = ["openai_compatible_chat"]
 
     with pytest.raises(ValidationError):
         ProviderInterfaceCatalog.model_validate(payload)
@@ -273,30 +256,6 @@ def test_opencode_native_is_a_valid_provider_interface() -> None:
     assert is_valid_provider_interface("opencode_native") is True
 
 
-def test_model_referencing_undeclared_interface_fails() -> None:
-    with pytest.raises(ValidationError, match="undeclared provider interfaces"):
-        ApiKeyProvider.model_validate(
-            {
-                "provider_id": "deepseek",
-                "display_name": "DeepSeek",
-                "status": "supported",
-                "default_base_url": "https://api.deepseek.com",
-                "default_env_key": "DEEPSEEK_API_KEY",
-                "supported_interfaces": [
-                    {"interface": "openai_compatible_chat"}
-                ],
-                "models": [
-                    {
-                        "model_option_id": "claude",
-                        "display_name": "Claude",
-                        "model_name": "claude",
-                        "supported_interfaces": ["anthropic_compatible_messages"],
-                    }
-                ],
-            }
-        )
-
-
 def test_unknown_interface_fails_after_canonicalization() -> None:
     with pytest.raises(ValidationError, match="unknown provider interface"):
         ApiKeyProvider.model_validate(
@@ -314,7 +273,6 @@ def test_unknown_interface_fails_after_canonicalization() -> None:
                         "model_option_id": "model",
                         "display_name": "Model",
                         "model_name": "model",
-                        "supported_interfaces": ["not_a_real_interface"],
                     }
                 ],
             }
