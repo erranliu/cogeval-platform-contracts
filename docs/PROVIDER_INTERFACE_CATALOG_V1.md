@@ -20,9 +20,13 @@ Workbench owns runtime binding:
 
 ## Schema Compatibility
 
-The canonical schema is `cogeval.provider_interface_catalog.v1`. Workbench may
-also accept the legacy `cogeval.api_key_provider_catalog.v1` input shape during
-migration. New producers should publish only the canonical schema.
+The only accepted schema for this contract is
+`cogeval.provider_interface_catalog.v1`. Catalog payloads using the legacy
+`cogeval.api_key_provider_catalog.v1` schema are not valid provider interface
+catalogs.
+
+Legacy interface IDs may remain as alias helpers for canonical interface IDs,
+but the legacy catalog schema is not accepted.
 
 The SDK projection used by execution-config remains
 `cogeval.execution_config.provider_catalog.v1` and keeps `supported_adapters`

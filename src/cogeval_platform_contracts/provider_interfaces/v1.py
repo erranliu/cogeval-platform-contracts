@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Any, Literal
 from urllib.parse import urlparse
 
-from pydantic import AliasChoices, BaseModel, ConfigDict, Field, ValidationError, field_validator, model_validator
+from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator, model_validator
 
 
 PROVIDER_INTERFACE_CATALOG_SCHEMA = "cogeval.provider_interface_catalog.v1"
@@ -55,7 +55,7 @@ def is_valid_provider_interface(interface: str) -> bool:
 
 
 class ProviderInterface(StrictContractModel):
-    interface: str = Field(min_length=1, validation_alias=AliasChoices("interface", "adapter"))
+    interface: str = Field(min_length=1)
     default_base_url: str | None = None
     default_env_key: str = Field(min_length=1)
     default_model_prefix: str | None = None
@@ -63,14 +63,9 @@ class ProviderInterface(StrictContractModel):
     model_provider: str | None = None
     recommended: bool = False
 
-    @field_validator("interface", mode="before")
-    @classmethod
-    def canonicalize_interface(cls, value: object) -> object:
-        return canonical_provider_interface_id(value) if isinstance(value, str) else value
-
     @model_validator(mode="after")
     def validate_interface(self) -> "ProviderInterface":
-        if not is_valid_provider_interface(self.interface):
+        if self.interface not in VALID_PROVIDER_INTERFACES:
             raise ValueError(f"unknown provider interface: {self.interface}")
         _validate_optional_http_url("supported_interfaces.default_base_url", self.default_base_url)
         return self
@@ -81,10 +76,7 @@ class ProviderModel(StrictContractModel):
     display_name: str = Field(min_length=1)
     model_name: str = Field(min_length=1)
     recommended: bool = False
-    supported_interfaces: list[str] = Field(
-        min_length=1,
-        validation_alias=AliasChoices("supported_interfaces", "supported_adapters"),
-    )
+    supported_interfaces: list[str] = Field(min_length=1)
     capabilities: dict[str, Any] = Field(default_factory=dict)
 
     @field_validator("capabilities", mode="before")
@@ -105,12 +97,13 @@ class ProviderModel(StrictContractModel):
             capabilities[capability] = True
         return capabilities
 
-    @field_validator("supported_interfaces", mode="before")
+    @field_validator("supported_interfaces")
     @classmethod
-    def canonicalize_supported_interfaces(cls, value: object) -> object:
-        if not isinstance(value, list):
-            return value
-        return [canonical_provider_interface_id(item) if isinstance(item, str) else item for item in value]
+    def validate_supported_interfaces(cls, value: list[str]) -> list[str]:
+        for interface in value:
+            if interface not in VALID_PROVIDER_INTERFACES:
+                raise ValueError(f"unknown provider interface: {interface}")
+        return value
 
 
 class ApiKeyProvider(StrictContractModel):
@@ -123,10 +116,7 @@ class ApiKeyProvider(StrictContractModel):
     docs_url: str | None = None
     default_base_url: str = Field(min_length=1)
     recommended: bool = False
-    supported_interfaces: list[ProviderInterface] = Field(
-        min_length=1,
-        validation_alias=AliasChoices("supported_interfaces", "supported_adapters"),
-    )
+    supported_interfaces: list[ProviderInterface] = Field(min_length=1)
     models: list[ProviderModel] = Field(default_factory=list)
 
     @model_validator(mode="after")
@@ -146,16 +136,22 @@ class ApiKeyProvider(StrictContractModel):
                     f"model {model.model_option_id} references undeclared provider interfaces: {', '.join(missing)}"
                 )
             for interface in model.supported_interfaces:
-                if not is_valid_provider_interface(interface):
+                if interface not in VALID_PROVIDER_INTERFACES:
                     raise ValueError(f"unknown provider interface in model {model.model_option_id}: {interface}")
         return self
 
 
 class ProviderInterfaceCatalog(StrictContractModel):
-    schema_version: Literal[
-        "cogeval.provider_interface_catalog.v1",
-        "cogeval.api_key_provider_catalog.v1",
-    ] = Field(default=PROVIDER_INTERFACE_CATALOG_SCHEMA, alias="schema")
+    model_config = ConfigDict(
+        extra="forbid",
+        populate_by_name=False,
+        validate_by_alias=True,
+        validate_by_name=False,
+    )
+
+    schema_version: Literal["cogeval.provider_interface_catalog.v1"] = Field(
+        alias="schema",
+    )
     updated_at: str = Field(min_length=1)
     providers: list[ApiKeyProvider] = Field(default_factory=list)
     metadata: dict[str, Any] = Field(default_factory=dict)
@@ -194,4 +190,3 @@ def _validate_optional_http_url(field_name: str, value: str | None) -> None:
     parsed = urlparse(value)
     if parsed.scheme not in {"http", "https"} or not parsed.netloc:
         raise ValueError(f"{field_name} must be an absolute http(s) URL")
-
