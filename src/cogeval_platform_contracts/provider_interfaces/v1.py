@@ -69,7 +69,6 @@ class ProviderInterface(StrictContractModel):
 
 
 class ProviderModel(StrictContractModel):
-    model_option_id: str = Field(min_length=1)
     display_name: str = Field(min_length=1)
     model_name: str = Field(min_length=1)
     recommended: bool = False
@@ -103,8 +102,6 @@ class ApiKeyProvider(StrictContractModel):
     console_url: str | None = None
     docs_url: str | None = None
     default_base_url: str = Field(min_length=1)
-    default_env_key: str = Field(min_length=1)
-    model_provider: str | None = None
     recommended: bool = False
     supported_interfaces: list[ProviderInterface] = Field(min_length=1)
     models: list[ProviderModel] = Field(default_factory=list)

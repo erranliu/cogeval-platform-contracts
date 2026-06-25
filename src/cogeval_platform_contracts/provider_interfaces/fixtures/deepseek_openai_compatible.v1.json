@@ -11,8 +11,6 @@
       "console_url": "https://platform.deepseek.com",
       "docs_url": "https://api-docs.deepseek.com",
       "default_base_url": "https://api.deepseek.com",
-      "default_env_key": "DEEPSEEK_API_KEY",
-      "model_provider": "deepseek",
       "recommended": true,
       "supported_interfaces": [
         {
@@ -24,7 +22,6 @@
       ],
       "models": [
         {
-          "model_option_id": "deepseek_chat",
           "display_name": "DeepSeek Chat",
           "model_name": "deepseek-chat",
           "capabilities": {

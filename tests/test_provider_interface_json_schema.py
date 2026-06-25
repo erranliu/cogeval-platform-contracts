@@ -25,16 +25,19 @@ def test_provider_interface_json_schema_does_not_expose_wire_api() -> None:
     assert "wire_api" not in schema["$defs"]["interface"]["properties"]
 
 
-def test_provider_level_auth_and_routing_fields_are_not_interface_overrides() -> None:
+def test_provider_catalog_schema_omits_auth_routing_and_model_option_fields() -> None:
     schema = load_schema("provider_interface_catalog.v1")
 
     provider_properties = schema["$defs"]["provider"]["properties"]
     interface_properties = schema["$defs"]["interface"]["properties"]
-    assert provider_properties["default_env_key"] == {"type": "string", "minLength": 1}
-    assert provider_properties["model_provider"] == {"type": ["string", "null"]}
-    assert "default_env_key" in schema["$defs"]["provider"]["required"]
+    model_properties = schema["$defs"]["model"]["properties"]
+    assert "default_env_key" not in provider_properties
+    assert "model_provider" not in provider_properties
+    assert "default_env_key" not in schema["$defs"]["provider"]["required"]
     assert "default_env_key" not in interface_properties
     assert "model_provider" not in interface_properties
+    assert "model_option_id" not in model_properties
+    assert "model_option_id" not in schema["$defs"]["model"]["required"]
 
 
 def test_provider_interface_fixtures_validate_against_json_schema() -> None:

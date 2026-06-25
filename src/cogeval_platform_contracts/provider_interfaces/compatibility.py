@@ -68,7 +68,7 @@ def _compare_provider(
     informational: list[CompatibilityChange],
 ) -> None:
     provider_path = f"providers.{provider_id}"
-    for field_name in ("default_base_url", "default_env_key", "model_provider"):
+    for field_name in ("default_base_url",):
         if getattr(old_provider, field_name) != getattr(new_provider, field_name):
             informational.append(
                 _change(
@@ -88,8 +88,8 @@ def _compare_provider(
     )
     _compare_models(
         provider_path=provider_path,
-        old_models={model.model_option_id: model for model in old_provider.models},
-        new_models={model.model_option_id: model for model in new_provider.models},
+        old_models={model.model_name: model for model in old_provider.models},
+        new_models={model.model_name: model for model in new_provider.models},
         breaking=breaking,
         additive=additive,
         informational=informational,

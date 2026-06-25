@@ -23,7 +23,6 @@
         "display_name",
         "status",
         "default_base_url",
-        "default_env_key",
         "supported_interfaces"
       ],
       "properties": {
@@ -35,8 +34,6 @@
         "console_url": { "type": ["string", "null"] },
         "docs_url": { "type": ["string", "null"] },
         "default_base_url": { "type": "string", "minLength": 1 },
-        "default_env_key": { "type": "string", "minLength": 1 },
-        "model_provider": { "type": ["string", "null"] },
         "recommended": { "type": "boolean" },
         "supported_interfaces": {
           "type": "array",
@@ -63,9 +60,8 @@
     "model": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["model_option_id", "display_name", "model_name"],
+      "required": ["display_name", "model_name"],
       "properties": {
-        "model_option_id": { "type": "string", "minLength": 1 },
         "display_name": { "type": "string", "minLength": 1 },
         "model_name": { "type": "string", "minLength": 1 },
         "recommended": { "type": "boolean" },

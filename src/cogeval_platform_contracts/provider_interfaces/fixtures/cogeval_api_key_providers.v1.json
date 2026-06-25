@@ -10,8 +10,6 @@
       "website_url": "https://openai.com/api/",
       "console_url": "https://platform.openai.com/",
       "docs_url": "https://developers.openai.com/api/docs/",
-      "default_env_key": "OPENAI_API_KEY",
-      "model_provider": "openai",
       "recommended": true,
       "supported_interfaces": [
         {
@@ -27,7 +25,6 @@
       ],
       "models": [
         {
-          "model_option_id": "openai.gpt-5.5",
           "display_name": "GPT-5.5",
           "model_name": "gpt-5.5",
           "recommended": true,
