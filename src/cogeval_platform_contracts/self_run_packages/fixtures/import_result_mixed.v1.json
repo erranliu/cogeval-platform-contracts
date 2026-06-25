@@ -1,0 +1,24 @@
+{
+  "schema": "cogeval.package_import_result.v1",
+  "package_id": "pkg-sample-1",
+  "snapshot_id": "snap_1",
+  "n_accepted": 1,
+  "n_rejected": 1,
+  "results": [
+    {
+      "external_case_ref": "case-1",
+      "accepted": true,
+      "test_result_id": "tr_1",
+      "reason_codes": []
+    },
+    {
+      "external_case_ref": "case-2",
+      "accepted": false,
+      "reason_codes": [
+        "EVIDENCE_OUTCOME_MISMATCH"
+      ],
+      "queued_for_review": true,
+      "review_item_id": "rev_1"
+    }
+  ]
+}

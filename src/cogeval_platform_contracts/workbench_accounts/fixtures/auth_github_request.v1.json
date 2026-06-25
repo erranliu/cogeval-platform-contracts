@@ -1,0 +1,7 @@
+{
+  "schema": "cogeval.workbench.auth_github_request.v1",
+  "github_access_token": "gho_example",
+  "workbench_device_id": "wbdev_1",
+  "workbench_version": "0.3.0",
+  "client_time": "2026-06-25T00:00:00Z"
+}

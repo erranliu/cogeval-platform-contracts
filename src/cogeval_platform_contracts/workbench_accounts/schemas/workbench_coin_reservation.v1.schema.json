@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "cogeval.workbench.coin_reservation.v1"
+    },
+    "reservation_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "amount": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "action": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "subject": {
+      "type": "object"
+    },
+    "client_context": {
+      "type": "object"
+    },
+    "expires_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "assets": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "ledger_entry": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "schema",
+    "amount"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "cogeval.gateway_consistency.baseline.v1"
+    },
+    "source": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "raw": {
+      "required": [
+        "reference_results_by_model"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "schema",
+    "source",
+    "raw"
+  ],
+  "type": "object"
+}

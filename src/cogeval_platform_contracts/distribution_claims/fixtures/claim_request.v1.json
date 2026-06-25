@@ -1,0 +1,19 @@
+{
+  "schema": "cogeval.distribution_claim_request.v1",
+  "workbench_id": "wb_1",
+  "agents": [
+    {
+      "agent_id": "mini_swe_agent",
+      "capabilities": [
+        "patch"
+      ]
+    }
+  ],
+  "supported_sources": [
+    "swe_bench_pro"
+  ],
+  "workspace_readiness": {
+    "swe_bench_pro": "ready"
+  },
+  "max_minutes": 90
+}

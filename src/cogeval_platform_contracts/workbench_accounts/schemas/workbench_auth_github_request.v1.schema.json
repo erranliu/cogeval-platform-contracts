@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "cogeval.workbench.auth_github_request.v1"
+    },
+    "github_access_token": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "workbench_device_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "workbench_version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "client_time": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "schema",
+    "github_access_token"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,22 @@
+{
+  "schema": "cogeval.workbench.coin_reservation.v1",
+  "reservation_id": "res_1",
+  "status": "reserved",
+  "amount": 20,
+  "action": "deep_analysis",
+  "subject": {
+    "kind": "cog_case",
+    "id": "tc_1"
+  },
+  "client_context": {
+    "workbench_run_id": "wbrun_1"
+  },
+  "expires_at": "2026-06-25T00:10:00Z",
+  "assets": {
+    "eval_score": 1200,
+    "eval_coins": 320,
+    "ledger_version": 42,
+    "updated_at": "2026-06-25T00:00:00Z"
+  },
+  "ledger_entry": null
+}

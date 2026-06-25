@@ -1,0 +1,22 @@
+{
+  "schema": "cogeval.cog_case.v1",
+  "test_case_id": "tc_1",
+  "cog_case_display_id": "SWE#1",
+  "source_id": "swe_bench_pro",
+  "external_id": "django__django-1",
+  "title": "Fix queryset regression",
+  "original_url": "https://example.test/cases/1",
+  "labels": {
+    "difficulty": {
+      "value": "medium",
+      "source": "llm"
+    }
+  },
+  "semantic_profile": {
+    "default_prompt": "Fix the bug"
+  },
+  "semantic_version": "2026-06-25",
+  "interpretation": "Representative backend debugging task.",
+  "online_at": "2026-06-25T00:00:00Z",
+  "promoted_at": "2026-06-20T00:00:00Z"
+}

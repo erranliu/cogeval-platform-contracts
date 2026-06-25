@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "assets": {
+      "additionalProperties": false,
+      "properties": {
+        "eval_score": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "eval_coins": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "ledger_version": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "updated_at": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "eval_score",
+        "eval_coins",
+        "ledger_version",
+        "updated_at"
+      ],
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "cogeval.workbench.account_assets.v1"
+    },
+    "assets": {
+      "$ref": "#/$defs/assets"
+    },
+    "ledger_entries": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema",
+    "assets"
+  ],
+  "type": "object"
+}

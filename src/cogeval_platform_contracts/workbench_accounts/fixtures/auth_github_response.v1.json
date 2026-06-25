@@ -1,0 +1,35 @@
+{
+  "schema": "cogeval.workbench.auth_github_response.v1",
+  "account": {
+    "account_id": "acct_1",
+    "status": "active",
+    "display_name": "alice",
+    "avatar_url": "https://avatars.githubusercontent.com/u/1",
+    "primary_email": "alice@example.com",
+    "created_at": "2026-06-25T00:00:00Z",
+    "updated_at": "2026-06-25T00:00:00Z",
+    "last_login_at": "2026-06-25T00:00:00Z"
+  },
+  "github_identity": {
+    "provider": "github",
+    "github_user_id": "1",
+    "github_login": "alice",
+    "profile_url": "https://github.com/alice",
+    "avatar_url": "https://avatars.githubusercontent.com/u/1",
+    "email": "alice@example.com",
+    "verified_email": true,
+    "linked_at": "2026-06-25T00:00:00Z",
+    "last_verified_at": "2026-06-25T00:00:00Z"
+  },
+  "assets": {
+    "eval_score": 0,
+    "eval_coins": 100,
+    "ledger_version": 1,
+    "updated_at": "2026-06-25T00:00:00Z"
+  },
+  "session": {
+    "access_token": "wbpat_example",
+    "token_type": "bearer",
+    "expires_at": "2026-07-25T00:00:00Z"
+  }
+}

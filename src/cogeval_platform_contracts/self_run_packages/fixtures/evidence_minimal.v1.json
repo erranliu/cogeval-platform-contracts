@@ -1,0 +1,9 @@
+{
+  "schema": "cogeval.evidence_bundle.v1",
+  "trajectory": "agent steps",
+  "final_diff": "diff --git a/file.py b/file.py",
+  "test_execution_result": {
+    "passed": true,
+    "report": "1 passed"
+  }
+}

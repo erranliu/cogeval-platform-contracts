@@ -28,6 +28,16 @@ cogeval_platform_contracts = [
   "provider_capabilities/fixtures/*.json",
   "provider_interfaces/schemas/*.json",
   "provider_interfaces/fixtures/*.json",
+  "self_run_packages/schemas/*.json",
+  "self_run_packages/fixtures/*.json",
+  "cog_cases/schemas/*.json",
+  "cog_cases/fixtures/*.json",
+  "distribution_claims/schemas/*.json",
+  "distribution_claims/fixtures/*.json",
+  "gateway_consistency/schemas/*.json",
+  "gateway_consistency/fixtures/*.json",
+  "workbench_accounts/schemas/*.json",
+  "workbench_accounts/fixtures/*.json",
 ]
 
 [tool.pytest.ini_options]

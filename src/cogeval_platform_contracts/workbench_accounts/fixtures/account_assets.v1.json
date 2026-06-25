@@ -1,0 +1,22 @@
+{
+  "schema": "cogeval.workbench.account_assets.v1",
+  "assets": {
+    "eval_score": 1200,
+    "eval_coins": 320,
+    "ledger_version": 42,
+    "updated_at": "2026-06-25T00:00:00Z"
+  },
+  "ledger_entries": [
+    {
+      "ledger_entry_id": "led_1",
+      "ledger_version": 42,
+      "asset": "eval_coins",
+      "delta": -20,
+      "balance_after": 320,
+      "reason": "workbench_action_spend",
+      "source": "workbench",
+      "metadata": {},
+      "created_at": "2026-06-25T00:00:00Z"
+    }
+  ]
+}

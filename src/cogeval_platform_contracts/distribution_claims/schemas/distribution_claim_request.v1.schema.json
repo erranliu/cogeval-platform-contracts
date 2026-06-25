@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "cogeval.distribution_claim_request.v1"
+    },
+    "workbench_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "agents": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "supported_sources": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "workspace_readiness": {
+      "type": "object"
+    },
+    "max_minutes": {
+      "anyOf": [
+        {
+          "minimum": 1,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "schema"
+  ],
+  "type": "object"
+}
