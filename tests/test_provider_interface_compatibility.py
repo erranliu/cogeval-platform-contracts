@@ -22,7 +22,7 @@ def test_compare_catalogs_flags_removed_interface() -> None:
     old_payload = load_fixture("deepseek_openai_compatible.v1")
     new_payload = deepcopy(old_payload)
     new_payload["providers"][0]["supported_interfaces"] = [
-        {"interface": "anthropic_compatible_messages", "default_env_key": "DEEPSEEK_API_KEY"}
+        {"interface": "anthropic_compatible_messages"}
     ]
     new_payload["providers"][0]["models"][0]["supported_interfaces"] = ["anthropic_compatible_messages"]
     old = ProviderInterfaceCatalog.model_validate(old_payload)

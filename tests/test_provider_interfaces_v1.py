@@ -57,8 +57,10 @@ def _canonical_catalog_payload() -> dict[str, object]:
                 "display_name": "DeepSeek",
                 "status": "supported",
                 "default_base_url": "https://api.deepseek.com",
+                "default_env_key": "DEEPSEEK_API_KEY",
+                "model_provider": "deepseek",
                 "supported_interfaces": [
-                    {"interface": "openai_compatible_chat", "default_env_key": "DEEPSEEK_API_KEY"}
+                    {"interface": "openai_compatible_chat"}
                 ],
                 "models": [
                     {
@@ -78,8 +80,47 @@ def test_canonical_schema_is_accepted() -> None:
 
     provider = catalog.providers[0]
     assert catalog.schema == PROVIDER_INTERFACE_CATALOG_SCHEMA
+    assert provider.default_env_key == "DEEPSEEK_API_KEY"
+    assert provider.model_provider == "deepseek"
     assert provider.supported_interfaces[0].interface == "openai_compatible_chat"
     assert provider.models[0].supported_interfaces == ["openai_compatible_chat"]
+
+
+@pytest.mark.parametrize("field_name", ["default_env_key", "model_provider"])
+def test_provider_interface_rows_cannot_override_provider_level_fields(field_name: str) -> None:
+    payload = _canonical_catalog_payload()
+    provider = payload["providers"][0]
+    assert isinstance(provider, dict)
+    supported_interfaces = provider["supported_interfaces"]
+    assert isinstance(supported_interfaces, list)
+    interface = supported_interfaces[0]
+    assert isinstance(interface, dict)
+    interface[field_name] = provider[field_name]
+
+    with pytest.raises(ValidationError) as exc:
+        ProviderInterfaceCatalog.model_validate(payload)
+
+    assert ("providers", 0, "supported_interfaces", 0, field_name) in {
+        error["loc"] for error in exc.value.errors()
+    }
+
+
+def test_wire_api_is_not_configurable_on_provider_interfaces() -> None:
+    payload = _canonical_catalog_payload()
+    provider = payload["providers"][0]
+    assert isinstance(provider, dict)
+    supported_interfaces = provider["supported_interfaces"]
+    assert isinstance(supported_interfaces, list)
+    interface = supported_interfaces[0]
+    assert isinstance(interface, dict)
+    interface["wire_api"] = "openai_chat_completions"
+
+    with pytest.raises(ValidationError) as exc:
+        ProviderInterfaceCatalog.model_validate(payload)
+
+    assert ("providers", 0, "supported_interfaces", 0, "wire_api") in {
+        error["loc"] for error in exc.value.errors()
+    }
 
 
 @pytest.mark.parametrize(
@@ -240,8 +281,9 @@ def test_model_referencing_undeclared_interface_fails() -> None:
                 "display_name": "DeepSeek",
                 "status": "supported",
                 "default_base_url": "https://api.deepseek.com",
+                "default_env_key": "DEEPSEEK_API_KEY",
                 "supported_interfaces": [
-                    {"interface": "openai_compatible_chat", "default_env_key": "DEEPSEEK_API_KEY"}
+                    {"interface": "openai_compatible_chat"}
                 ],
                 "models": [
                     {
@@ -263,8 +305,9 @@ def test_unknown_interface_fails_after_canonicalization() -> None:
                 "display_name": "Custom",
                 "status": "supported",
                 "default_base_url": "https://example.invalid",
+                "default_env_key": "CUSTOM_API_KEY",
                 "supported_interfaces": [
-                    {"interface": "not_a_real_interface", "default_env_key": "CUSTOM_API_KEY"}
+                    {"interface": "not_a_real_interface"}
                 ],
                 "models": [
                     {
@@ -290,8 +333,9 @@ def test_duplicate_providers_fail() -> None:
                         "display_name": "DeepSeek",
                         "status": "deprecated",
                         "default_base_url": "https://api.deepseek.com",
+                        "default_env_key": "DEEPSEEK_API_KEY",
                         "supported_interfaces": [
-                            {"interface": "openai_compatible_chat", "default_env_key": "DEEPSEEK_API_KEY"}
+                            {"interface": "openai_compatible_chat"}
                         ],
                     },
                     {
@@ -299,8 +343,9 @@ def test_duplicate_providers_fail() -> None:
                         "display_name": "DeepSeek Copy",
                         "status": "deprecated",
                         "default_base_url": "https://api.deepseek.com",
+                        "default_env_key": "DEEPSEEK_API_KEY",
                         "supported_interfaces": [
-                            {"interface": "openai_compatible_chat", "default_env_key": "DEEPSEEK_API_KEY"}
+                            {"interface": "openai_compatible_chat"}
                         ],
                     },
                 ],

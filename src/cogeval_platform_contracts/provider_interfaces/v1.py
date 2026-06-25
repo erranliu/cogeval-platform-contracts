@@ -57,10 +57,7 @@ def is_valid_provider_interface(interface: str) -> bool:
 class ProviderInterface(StrictContractModel):
     interface: str = Field(min_length=1)
     default_base_url: str | None = None
-    default_env_key: str = Field(min_length=1)
     default_model_prefix: str | None = None
-    wire_api: str | None = None
-    model_provider: str | None = None
     recommended: bool = False
 
     @model_validator(mode="after")
@@ -115,6 +112,8 @@ class ApiKeyProvider(StrictContractModel):
     console_url: str | None = None
     docs_url: str | None = None
     default_base_url: str = Field(min_length=1)
+    default_env_key: str = Field(min_length=1)
+    model_provider: str | None = None
     recommended: bool = False
     supported_interfaces: list[ProviderInterface] = Field(min_length=1)
     models: list[ProviderModel] = Field(default_factory=list)

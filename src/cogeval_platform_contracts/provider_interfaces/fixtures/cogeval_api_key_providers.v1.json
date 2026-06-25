@@ -10,23 +10,19 @@
       "website_url": "https://openai.com/api/",
       "console_url": "https://platform.openai.com/",
       "docs_url": "https://developers.openai.com/api/docs/",
+      "default_env_key": "OPENAI_API_KEY",
+      "model_provider": "openai",
       "recommended": true,
       "supported_interfaces": [
         {
           "interface": "openai_compatible_chat",
-          "default_env_key": "OPENAI_API_KEY",
           "default_base_url": "https://api.openai.com/v1",
-          "wire_api": "openai_chat_completions",
-          "model_provider": "openai",
           "recommended": true
         },
         {
           "interface": "openai_responses",
-          "default_env_key": "OPENAI_API_KEY",
           "default_base_url": "https://api.openai.com/v1",
-          "default_model_prefix": "openai/",
-          "wire_api": "openai_responses",
-          "model_provider": "openai"
+          "default_model_prefix": "openai/"
         }
       ],
       "models": [
