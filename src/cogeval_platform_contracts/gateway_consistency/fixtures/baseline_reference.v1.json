@@ -1,0 +1,17 @@
+{
+  "schema": "cogeval.gateway_consistency.baseline.v1",
+  "source": "cog_platform",
+  "raw": {
+    "reference_results_by_model": {
+      "gpt_5_5": {
+        "test_result_id": "tr_1",
+        "agent": "mini_swe_agent",
+        "model": "gpt-5.5",
+        "outcome": "resolved",
+        "pass_rate": 1.0,
+        "reference_repeat_count": 1,
+        "runs": []
+      }
+    }
+  }
+}

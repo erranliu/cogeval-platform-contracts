@@ -1,0 +1,30 @@
+{
+  "schema": "cogeval.distribution_claim.v1",
+  "claim_id": "claim_1",
+  "goal_id": "goal_1",
+  "subtask_id": "subtask_1",
+  "status": "claimed",
+  "workbench_id": "wb_1",
+  "capability_snapshot": {
+    "agents": [
+      {
+        "agent_id": "mini_swe_agent"
+      }
+    ]
+  },
+  "candidate_config": {
+    "agent": "mini_swe_agent",
+    "model": "gpt-5.5"
+  },
+  "case_refs": [
+    {
+      "source_id": "swe_bench_pro",
+      "external_id": "django__django-1",
+      "test_case_id": "tc_1"
+    }
+  ],
+  "claimed_at": "2026-06-25T00:00:00Z",
+  "occupied_at": null,
+  "expires_at": "2026-06-25T01:30:00Z",
+  "released_at": null
+}

@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "cogeval.self_run_package_manifest.v1"
+    },
+    "schema_version": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "submitter": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "package_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "created_at": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "target_source_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "submitted_by_account_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "metadata": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "schema",
+    "schema_version",
+    "package_id",
+    "created_at",
+    "target_source_id"
+  ],
+  "type": "object"
+}

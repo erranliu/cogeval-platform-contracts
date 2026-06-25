@@ -1,0 +1,52 @@
+{
+  "schema": "cogeval.gateway_consistency.task_pack.v1",
+  "task_pack_id": "gateway_consistency_platform_active",
+  "display_name": "Gateway Consistency",
+  "updated_at": "2026-06-25T00:00:00Z",
+  "executor": {
+    "executor_id": "mini_swe_agent",
+    "required": true
+  },
+  "defaults": {
+    "repeat_count": 3,
+    "timeout_seconds": 1800,
+    "cost_limit": 0
+  },
+  "models": [
+    {
+      "model_option_id": "gpt_5_5",
+      "display_name": "gpt-5.5",
+      "model_name": "gpt-5.5"
+    }
+  ],
+  "cases": [
+    {
+      "task_case_id": "tc_1",
+      "source_id": "swe_bench_pro",
+      "external_id": "django__django-1",
+      "title": "Fix queryset regression",
+      "baseline": {
+        "schema": "cogeval.gateway_consistency.baseline.v1",
+        "source": "cog_platform",
+        "raw": {
+          "reference_results_by_model": {
+            "gpt_5_5": {
+              "test_result_id": "tr_1",
+              "agent": "mini_swe_agent",
+              "model": "gpt-5.5",
+              "outcome": "resolved",
+              "pass_rate": 1.0,
+              "reference_repeat_count": 1,
+              "runs": []
+            }
+          }
+        }
+      },
+      "metadata": {
+        "selected_test_result_ids_by_model": {
+          "gpt_5_5": "tr_1"
+        }
+      }
+    }
+  ]
+}

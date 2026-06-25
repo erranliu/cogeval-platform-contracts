@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "run": {
+      "additionalProperties": false,
+      "properties": {
+        "run_index": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "outcome": {
+          "enum": [
+            "resolved",
+            "unresolved",
+            "error"
+          ]
+        },
+        "metrics": {
+          "type": "object"
+        },
+        "evidence_ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "run_index",
+        "outcome"
+      ],
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "cogeval.self_run_record.v1"
+    },
+    "external_case_ref": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "agent": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "agent_version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "model": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "model_version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "thinking_effort": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "control_vars": {
+      "type": "object"
+    },
+    "outcome": {
+      "enum": [
+        "resolved",
+        "unresolved",
+        "error",
+        "mixed"
+      ]
+    },
+    "pass_rate": {
+      "maximum": 1,
+      "minimum": 0,
+      "type": "number"
+    },
+    "repeat_count": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "result_summary": {
+      "type": "object"
+    },
+    "runs": {
+      "items": {
+        "$ref": "#/$defs/run"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema",
+    "external_case_ref",
+    "agent",
+    "model",
+    "outcome",
+    "pass_rate",
+    "repeat_count"
+  ],
+  "type": "object"
+}

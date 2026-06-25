@@ -1,0 +1,187 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "account": {
+      "additionalProperties": false,
+      "properties": {
+        "account_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "status": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "display_name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "avatar_url": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "primary_email": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "created_at": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "updated_at": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "last_login_at": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "account_id",
+        "status",
+        "created_at",
+        "updated_at"
+      ],
+      "type": "object"
+    },
+    "assets": {
+      "additionalProperties": false,
+      "properties": {
+        "eval_score": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "eval_coins": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "ledger_version": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "updated_at": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "eval_score",
+        "eval_coins",
+        "ledger_version",
+        "updated_at"
+      ],
+      "type": "object"
+    },
+    "github_identity": {
+      "additionalProperties": false,
+      "properties": {
+        "provider": {
+          "const": "github"
+        },
+        "github_user_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "github_login": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "profile_url": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "avatar_url": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "email": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "verified_email": {
+          "type": "boolean"
+        },
+        "linked_at": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "last_verified_at": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "provider",
+        "github_user_id",
+        "linked_at",
+        "last_verified_at"
+      ],
+      "type": "object"
+    },
+    "session": {
+      "additionalProperties": false,
+      "properties": {
+        "access_token": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "token_type": {
+          "const": "bearer"
+        },
+        "expires_at": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "access_token",
+        "token_type",
+        "expires_at"
+      ],
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "cogeval.workbench.auth_github_response.v1"
+    },
+    "account": {
+      "$ref": "#/$defs/account"
+    },
+    "github_identity": {
+      "$ref": "#/$defs/github_identity"
+    },
+    "assets": {
+      "$ref": "#/$defs/assets"
+    },
+    "session": {
+      "$ref": "#/$defs/session"
+    }
+  },
+  "required": [
+    "schema",
+    "account",
+    "github_identity",
+    "assets",
+    "session"
+  ],
+  "type": "object"
+}

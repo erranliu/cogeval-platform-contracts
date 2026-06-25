@@ -1,0 +1,29 @@
+{
+  "schema": "cogeval.self_run_record.v1",
+  "external_case_ref": "case-1",
+  "agent": "mini_swe_agent",
+  "agent_version": null,
+  "model": "gpt-5.5",
+  "model_version": null,
+  "thinking_effort": null,
+  "control_vars": {
+    "temperature": 0
+  },
+  "outcome": "resolved",
+  "pass_rate": 1.0,
+  "repeat_count": 1,
+  "result_summary": {
+    "pass_rate": 1.0
+  },
+  "runs": [
+    {
+      "run_index": 0,
+      "outcome": "resolved",
+      "metrics": {
+        "cost": 0.25,
+        "latency_s": 80
+      },
+      "evidence_ref": "evidence://run-0"
+    }
+  ]
+}

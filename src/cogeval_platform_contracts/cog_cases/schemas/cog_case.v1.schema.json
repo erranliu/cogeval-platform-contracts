@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "cogeval.cog_case.v1"
+    },
+    "test_case_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "cog_case_display_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "external_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "title": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "original_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "labels": {
+      "type": "object"
+    },
+    "semantic_profile": {
+      "type": "object"
+    },
+    "semantic_version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "interpretation": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "online_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "promoted_at": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema",
+    "test_case_id",
+    "source_id",
+    "external_id",
+    "title",
+    "promoted_at"
+  ],
+  "type": "object"
+}

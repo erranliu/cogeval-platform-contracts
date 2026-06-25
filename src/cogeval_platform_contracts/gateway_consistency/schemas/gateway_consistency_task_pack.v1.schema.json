@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "cogeval.gateway_consistency.task_pack.v1"
+    },
+    "task_pack_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "display_name": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "updated_at": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "executor": {
+      "additionalProperties": false,
+      "properties": {
+        "executor_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "required": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "executor_id",
+        "required"
+      ],
+      "type": "object"
+    },
+    "defaults": {
+      "additionalProperties": false,
+      "properties": {
+        "repeat_count": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "timeout_seconds": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "cost_limit": {
+          "minimum": 0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "repeat_count",
+        "timeout_seconds",
+        "cost_limit"
+      ],
+      "type": "object"
+    },
+    "models": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "model_option_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "display_name": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "model_name": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "model_option_id",
+          "display_name",
+          "model_name"
+        ],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "cases": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "task_case_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "source_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "external_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+        "title": {
+          "type": "string"
+        },
+          "baseline": {
+            "additionalProperties": false,
+            "properties": {
+              "schema": {
+                "const": "cogeval.gateway_consistency.baseline.v1"
+              },
+              "source": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "raw": {
+                "required": [
+                  "reference_results_by_model"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "schema",
+              "source",
+              "raw"
+            ],
+            "type": "object"
+          },
+          "metadata": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "task_case_id",
+          "source_id",
+          "external_id",
+          "title",
+          "baseline"
+        ],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema",
+    "task_pack_id",
+    "display_name",
+    "updated_at",
+    "executor",
+    "defaults",
+    "models",
+    "cases"
+  ],
+  "type": "object"
+}

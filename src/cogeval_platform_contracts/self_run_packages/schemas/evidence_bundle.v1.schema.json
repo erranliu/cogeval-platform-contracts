@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "cogeval.evidence_bundle.v1"
+    },
+    "trajectory": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "final_diff": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "test_execution_result": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "schema",
+    "test_execution_result"
+  ],
+  "type": "object"
+}

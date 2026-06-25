@@ -142,28 +142,6 @@ def _compare_models(
         breaking.append(_change("model_removed", "breaking", f"{provider_path}.models.{model_id}", "Model was removed."))
     for model_id in sorted(new_models.keys() - old_models.keys()):
         additive.append(_change("model_added", "additive", f"{provider_path}.models.{model_id}", "Model was added."))
-    for model_id in sorted(old_models.keys() & new_models.keys()):
-        old_supported = set(old_models[model_id].supported_interfaces)
-        new_supported = set(new_models[model_id].supported_interfaces)
-        model_path = f"{provider_path}.models.{model_id}"
-        for interface in sorted(old_supported - new_supported):
-            breaking.append(
-                _change(
-                    "model_interface_removed",
-                    "breaking",
-                    f"{model_path}.supported_interfaces.{interface}",
-                    "Model support for interface was removed.",
-                )
-            )
-        for interface in sorted(new_supported - old_supported):
-            additive.append(
-                _change(
-                    "model_interface_added",
-                    "additive",
-                    f"{model_path}.supported_interfaces.{interface}",
-                    "Model support for interface was added.",
-                )
-            )
 
 
 def _change(code: str, severity: ChangeSeverity, path: str, message: str) -> CompatibilityChange:

@@ -19,18 +19,52 @@ payloads before relying on them.
 
 ## Current Contracts
 
+- `cogeval.cog_case.v1`
+- `cogeval.cog_case_group.v1`
+- `cogeval.distribution_claim.v1`
+- `cogeval.distribution_claim_request.v1`
+- `cogeval.evidence_bundle.v1`
+- `cogeval.gateway_consistency.baseline.v1`
+- `cogeval.gateway_consistency.task_pack.v1`
+- `cogeval.package_import_result.v1`
 - `cogeval.provider_capability_catalog.v1`
 - `cogeval.provider_interface_catalog.v1`
+- `cogeval.self_run_package_manifest.v1`
+- `cogeval.self_run_record.v1`
+- `cogeval.workbench.account_assets.v1`
+- `cogeval.workbench.auth_github_request.v1`
+- `cogeval.workbench.auth_github_response.v1`
+- `cogeval.workbench.coin_reservation.v1`
 
 ## Repository Layout
 
 ```text
 src/cogeval_platform_contracts/
+  cog_cases/
+    v1.py
+    schemas/
+    fixtures/
+  distribution_claims/
+    v1.py
+    schemas/
+    fixtures/
+  gateway_consistency/
+    v1.py
+    schemas/
+    fixtures/
   provider_capabilities/
     v1.py
     schemas/
     fixtures/
   provider_interfaces/
+    v1.py
+    schemas/
+    fixtures/
+  self_run_packages/
+    v1.py
+    schemas/
+    fixtures/
+  workbench_accounts/
     v1.py
     schemas/
     fixtures/

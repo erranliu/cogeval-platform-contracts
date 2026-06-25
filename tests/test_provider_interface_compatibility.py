@@ -24,7 +24,6 @@ def test_compare_catalogs_flags_removed_interface() -> None:
     new_payload["providers"][0]["supported_interfaces"] = [
         {"interface": "anthropic_compatible_messages"}
     ]
-    new_payload["providers"][0]["models"][0]["supported_interfaces"] = ["anthropic_compatible_messages"]
     old = ProviderInterfaceCatalog.model_validate(old_payload)
     new = ProviderInterfaceCatalog.model_validate(new_payload)
 

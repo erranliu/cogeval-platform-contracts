@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "cogeval.distribution_claim.v1"
+    },
+    "claim_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "goal_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "subtask_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "status": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "workbench_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "capability_snapshot": {
+      "type": "object"
+    },
+    "candidate_config": {
+      "type": "object"
+    },
+    "case_refs": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "claimed_at": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "occupied_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "expires_at": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "released_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "schema",
+    "claim_id",
+    "goal_id",
+    "subtask_id",
+    "status",
+    "case_refs",
+    "claimed_at",
+    "expires_at"
+  ],
+  "type": "object"
+}
