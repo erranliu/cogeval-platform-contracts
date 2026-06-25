@@ -76,6 +76,8 @@ Start with [Adding A Contract](docs/ADDING_A_CONTRACT.md) when introducing a
 new boundary. See [Compatibility Policy](docs/COMPATIBILITY_POLICY.md) for
 versioning rules.
 
+For the Chinese contract index, see [契约.md](docs/契约.md).
+
 ## Development
 
 ```powershell
