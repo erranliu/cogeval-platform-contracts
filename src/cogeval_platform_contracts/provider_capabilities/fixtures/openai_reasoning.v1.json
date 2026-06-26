@@ -12,7 +12,7 @@
           "parameter_surfaces": {
             "thinking_effort": {
               "path": "reasoning.effort",
-              "values": ["none", "minimal", "low", "medium", "high", "xhigh"]
+              "values": ["minimal", "low", "medium", "high", "xhigh"]
             }
           }
         }
@@ -25,10 +25,21 @@
           "capabilities": {
             "thinking_effort": {
               "supported": true,
-              "values": ["minimal", "low", "medium", "high"],
-              "default": "medium",
+              "values": ["default", "minimal", "low", "medium", "high"],
+              "default": "default",
               "parameter_surface": "thinking_effort",
               "adapter_policy": "pass_through"
+            }
+          },
+          "interface_capabilities": {
+            "openai_responses": {
+              "thinking_effort": {
+                "supported": true,
+                "values": ["default", "minimal", "low", "medium", "high"],
+                "default": "default",
+                "parameter_surface": "thinking_effort",
+                "adapter_policy": "pass_through"
+              }
             }
           }
         }
@@ -36,4 +47,3 @@
     }
   ]
 }
-

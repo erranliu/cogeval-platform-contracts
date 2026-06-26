@@ -35,6 +35,22 @@ def test_compare_catalogs_flags_removed_capability_value() -> None:
     assert any(change.code == "capability_value_removed" for change in report.breaking_changes)
 
 
+def test_compare_catalogs_flags_removed_interface_capability_value() -> None:
+    old_payload = load_fixture("deepseek_reasoning.v1")
+    new_payload = deepcopy(old_payload)
+    capability = new_payload["providers"][0]["models"][0]["interface_capabilities"]["openai_compatible_chat"][
+        "thinking_effort"
+    ]
+    capability["values"].remove("max")
+    old = ProviderCapabilityCatalog.model_validate(old_payload)
+    new = ProviderCapabilityCatalog.model_validate(new_payload)
+
+    report = compare_catalogs(old, new)
+
+    assert report.compatible is False
+    assert any(change.code == "interface_capability_value_removed" for change in report.breaking_changes)
+
+
 def test_compare_catalogs_flags_removed_provider() -> None:
     old = ProviderCapabilityCatalog.model_validate(load_fixture("openai_reasoning.v1"))
     new = ProviderCapabilityCatalog.model_validate(load_fixture("minimal.v1"))
@@ -43,4 +59,3 @@ def test_compare_catalogs_flags_removed_provider() -> None:
 
     assert report.compatible is False
     assert any(change.code == "provider_removed" for change in report.breaking_changes)
-

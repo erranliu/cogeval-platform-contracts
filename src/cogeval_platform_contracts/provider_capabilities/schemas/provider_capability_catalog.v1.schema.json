@@ -60,7 +60,7 @@
         },
         "value_mapping": {
           "type": "object",
-          "additionalProperties": { "type": "string" }
+          "additionalProperties": { "$ref": "#/$defs/value_mapping_target" }
         },
         "metadata": { "type": "object" }
       }
@@ -76,6 +76,13 @@
         "capabilities": {
           "type": "object",
           "additionalProperties": { "$ref": "#/$defs/capability" }
+        },
+        "interface_capabilities": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": { "$ref": "#/$defs/capability" }
+          }
         },
         "metadata": { "type": "object" }
       }
@@ -97,11 +104,21 @@
         },
         "value_mapping": {
           "type": "object",
-          "additionalProperties": { "type": "string" }
+          "additionalProperties": { "$ref": "#/$defs/value_mapping_target" }
         },
         "metadata": { "type": "object" }
       }
+    },
+    "value_mapping_target": {
+      "oneOf": [
+        { "type": "string" },
+        {
+          "type": "object",
+          "additionalProperties": {
+            "type": ["string", "number", "integer", "boolean", "null"]
+          }
+        }
+      ]
     }
   }
 }
-

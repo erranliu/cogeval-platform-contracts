@@ -25,10 +25,21 @@
           "capabilities": {
             "thinking_effort": {
               "supported": true,
-              "values": ["low", "medium", "high", "xhigh", "max"],
-              "default": "high",
+              "values": ["default", "low", "medium", "high", "xhigh", "max"],
+              "default": "default",
               "parameter_surface": "thinking_effort",
               "adapter_policy": "pass_through"
+            }
+          },
+          "interface_capabilities": {
+            "anthropic_messages": {
+              "thinking_effort": {
+                "supported": true,
+                "values": ["default", "low", "medium", "high", "xhigh", "max"],
+                "default": "default",
+                "parameter_surface": "thinking_effort",
+                "adapter_policy": "pass_through"
+              }
             }
           }
         }
@@ -36,4 +47,3 @@
     }
   ]
 }
-

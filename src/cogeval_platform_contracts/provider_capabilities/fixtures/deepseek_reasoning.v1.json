@@ -14,9 +14,8 @@
               "path": "reasoning_effort",
               "values": ["high", "max"],
               "value_mapping": {
-                "low": "high",
-                "medium": "high",
-                "xhigh": "max"
+                "high": "high",
+                "max": "max"
               }
             }
           }
@@ -30,14 +29,28 @@
           "capabilities": {
             "thinking_effort": {
               "supported": true,
-              "values": ["high", "max"],
-              "default": "high",
+              "values": ["default", "high", "max"],
+              "default": "default",
               "parameter_surface": "thinking_effort",
               "adapter_policy": "map_values",
               "value_mapping": {
-                "low": "high",
-                "medium": "high",
-                "xhigh": "max"
+                "high": "high",
+                "max": "max"
+              }
+            }
+          },
+          "interface_capabilities": {
+            "openai_compatible_chat": {
+              "thinking_effort": {
+                "supported": true,
+                "values": ["default", "high", "max"],
+                "default": "default",
+                "parameter_surface": "thinking_effort",
+                "adapter_policy": "map_values",
+                "value_mapping": {
+                  "high": "high",
+                  "max": "max"
+                }
               }
             }
           }
@@ -46,4 +59,3 @@
     }
   ]
 }
-

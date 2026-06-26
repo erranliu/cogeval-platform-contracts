@@ -18,24 +18,44 @@ ProviderCapabilityCatalog
       model_id
       model_name
       capabilities
+      interface_capabilities
 ```
 
 ## Thinking Effort
 
 `thinking_effort` is modeled as a capability because support depends on the
-provider, interface, and model.
+provider, interface, and model. Consumers should prefer
+`models[].interface_capabilities[interface].thinking_effort` when present;
+`models[].capabilities.thinking_effort` is retained for consumers that do not
+yet select by interface.
+
+The platform values are:
+
+```text
+default | minimal | low | medium | high | xhigh | max
+```
+
+`default` means omit the thinking-effort parameter and let the provider,
+interface, model, or agent default apply. The platform does not expose disabling
+values such as `off` or `none`, and it does not expose `adaptive`.
 
 Example:
 
 ```json
 {
-  "capabilities": {
-    "thinking_effort": {
-      "supported": true,
-      "values": ["minimal", "low", "medium", "high"],
-      "default": "medium",
-      "parameter_surface": "thinking_effort",
-      "adapter_policy": "pass_through"
+  "interface_capabilities": {
+    "openai_compatible_chat": {
+      "thinking_effort": {
+        "supported": true,
+        "values": ["default", "high", "max"],
+        "default": "default",
+        "parameter_surface": "thinking_effort",
+        "adapter_policy": "map_values",
+        "value_mapping": {
+          "high": "high",
+          "max": "max"
+        }
+      }
     }
   }
 }
@@ -43,7 +63,15 @@ Example:
 
 `parameter_surface` references a provider interface entry that says how the
 adapter should pass the value, such as `reasoning.effort`,
-`generation_config.thinking_level`, or `reasoning_effort`.
+`generation_config.thinking_level`, or `reasoning_effort`. If a provider's
+documentation maps several vocabulary words to the same behavior, the catalog
+should expose only the platform values that are meaningful for the model and use
+`value_mapping` for the actual provider value.
+
+Workbench must still intersect provider/model/interface capabilities with its
+own agent-adapter capabilities. Provider capability labels and value mappings
+come from this catalog; how a selected value is materialized in an agent CLI,
+environment variable, config file, or native API is Workbench behavior.
 
 ## Adapter Policies
 
@@ -63,4 +91,3 @@ Fixtures are contract examples and regression cases:
 - `gemini_thinking.v1`
 - `deepseek_reasoning.v1`
 - `unknown_provider.v1`
-
