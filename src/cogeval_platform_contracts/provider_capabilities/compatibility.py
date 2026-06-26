@@ -95,24 +95,91 @@ def _compare_model(
     additive: list[CompatibilityChange],
     informational: list[CompatibilityChange],
 ) -> None:
-    old_capabilities = old_model.capabilities
-    new_capabilities = new_model.capabilities
+    _compare_capability_group(
+        group_path=f"{model_path}.capabilities",
+        removed_code="capability_removed",
+        added_code="capability_added",
+        disabled_code="capability_disabled",
+        enabled_code="capability_enabled",
+        value_removed_code="capability_value_removed",
+        value_added_code="capability_value_added",
+        default_changed_code="capability_default_changed",
+        old_capabilities=old_model.capabilities,
+        new_capabilities=new_model.capabilities,
+        breaking=breaking,
+        additive=additive,
+        informational=informational,
+    )
 
+    old_interface_capabilities = old_model.interface_capabilities
+    new_interface_capabilities = new_model.interface_capabilities
+    for interface_name in sorted(old_interface_capabilities.keys() - new_interface_capabilities.keys()):
+        breaking.append(
+            _change(
+                "interface_capabilities_removed",
+                "breaking",
+                f"{model_path}.interface_capabilities.{interface_name}",
+                "Interface capabilities were removed.",
+            )
+        )
+    for interface_name in sorted(new_interface_capabilities.keys() - old_interface_capabilities.keys()):
+        additive.append(
+            _change(
+                "interface_capabilities_added",
+                "additive",
+                f"{model_path}.interface_capabilities.{interface_name}",
+                "Interface capabilities were added.",
+            )
+        )
+    for interface_name in sorted(old_interface_capabilities.keys() & new_interface_capabilities.keys()):
+        _compare_capability_group(
+            group_path=f"{model_path}.interface_capabilities.{interface_name}",
+            removed_code="interface_capability_removed",
+            added_code="interface_capability_added",
+            disabled_code="interface_capability_disabled",
+            enabled_code="interface_capability_enabled",
+            value_removed_code="interface_capability_value_removed",
+            value_added_code="interface_capability_value_added",
+            default_changed_code="interface_capability_default_changed",
+            old_capabilities=old_interface_capabilities[interface_name],
+            new_capabilities=new_interface_capabilities[interface_name],
+            breaking=breaking,
+            additive=additive,
+            informational=informational,
+        )
+
+
+def _compare_capability_group(
+    *,
+    group_path: str,
+    removed_code: str,
+    added_code: str,
+    disabled_code: str,
+    enabled_code: str,
+    value_removed_code: str,
+    value_added_code: str,
+    default_changed_code: str,
+    old_capabilities,
+    new_capabilities,
+    breaking: list[CompatibilityChange],
+    additive: list[CompatibilityChange],
+    informational: list[CompatibilityChange],
+) -> None:
     for capability_name in sorted(old_capabilities.keys() - new_capabilities.keys()):
         breaking.append(
             _change(
-                "capability_removed",
+                removed_code,
                 "breaking",
-                f"{model_path}.capabilities.{capability_name}",
+                f"{group_path}.{capability_name}",
                 "Capability was removed.",
             )
         )
     for capability_name in sorted(new_capabilities.keys() - old_capabilities.keys()):
         additive.append(
             _change(
-                "capability_added",
+                added_code,
                 "additive",
-                f"{model_path}.capabilities.{capability_name}",
+                f"{group_path}.{capability_name}",
                 "Capability was added.",
             )
         )
@@ -120,20 +187,20 @@ def _compare_model(
     for capability_name in sorted(old_capabilities.keys() & new_capabilities.keys()):
         old_capability = old_capabilities[capability_name]
         new_capability = new_capabilities[capability_name]
-        capability_path = f"{model_path}.capabilities.{capability_name}"
+        capability_path = f"{group_path}.{capability_name}"
         if old_capability.supported and not new_capability.supported:
             breaking.append(
-                _change("capability_disabled", "breaking", capability_path, "Capability changed from supported to unsupported.")
+                _change(disabled_code, "breaking", capability_path, "Capability changed from supported to unsupported.")
             )
         if not old_capability.supported and new_capability.supported:
-            additive.append(_change("capability_enabled", "additive", capability_path, "Capability changed to supported."))
+            additive.append(_change(enabled_code, "additive", capability_path, "Capability changed to supported."))
 
         old_values = set(old_capability.values)
         new_values = set(new_capability.values)
         for value in sorted(old_values - new_values):
             breaking.append(
                 _change(
-                    "capability_value_removed",
+                    value_removed_code,
                     "breaking",
                     f"{capability_path}.values.{value}",
                     "Capability value was removed.",
@@ -142,7 +209,7 @@ def _compare_model(
         for value in sorted(new_values - old_values):
             additive.append(
                 _change(
-                    "capability_value_added",
+                    value_added_code,
                     "additive",
                     f"{capability_path}.values.{value}",
                     "Capability value was added.",
@@ -151,7 +218,7 @@ def _compare_model(
         if old_capability.default != new_capability.default:
             informational.append(
                 _change(
-                    "capability_default_changed",
+                    default_changed_code,
                     "informational",
                     f"{capability_path}.default",
                     "Capability default changed.",
@@ -161,4 +228,3 @@ def _compare_model(
 
 def _change(code: str, severity: ChangeSeverity, path: str, message: str) -> CompatibilityChange:
     return CompatibilityChange(code=code, severity=severity, path=path, message=message)
-

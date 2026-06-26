@@ -7,8 +7,11 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 
 SCHEMA_VERSION = "cogeval.provider_capability_catalog.v1"
 
-EffortValue = Literal["none", "minimal", "low", "medium", "high", "xhigh", "max"]
+EffortValue = Literal["default", "minimal", "low", "medium", "high", "xhigh", "max"]
 AdapterPolicy = Literal["pass_through", "map_values", "unsupported", "drop_with_warning"]
+MappedParameterValue = str | int | float | bool | None
+ValueMappingTarget = str | dict[str, MappedParameterValue]
+THINKING_EFFORT_VALUES = set(EffortValue.__args__)
 
 
 class StrictContractModel(BaseModel):
@@ -20,7 +23,7 @@ class ParameterSurface(StrictContractModel):
 
     path: str = Field(min_length=1)
     values: list[str] = Field(default_factory=list)
-    value_mapping: dict[str, str] = Field(default_factory=dict)
+    value_mapping: dict[str, ValueMappingTarget] = Field(default_factory=dict)
     metadata: dict[str, Any] = Field(default_factory=dict)
 
 
@@ -32,7 +35,7 @@ class Capability(StrictContractModel):
     default: str | None = None
     parameter_surface: str | None = Field(default=None, min_length=1)
     adapter_policy: AdapterPolicy = "pass_through"
-    value_mapping: dict[str, str] = Field(default_factory=dict)
+    value_mapping: dict[str, ValueMappingTarget] = Field(default_factory=dict)
     metadata: dict[str, Any] = Field(default_factory=dict)
 
     @field_validator("values")
@@ -66,6 +69,7 @@ class ProviderModel(StrictContractModel):
     display_name: str = Field(min_length=1)
     model_name: str = Field(min_length=1)
     capabilities: dict[str, Capability] = Field(default_factory=dict)
+    interface_capabilities: dict[str, dict[str, Capability]] = Field(default_factory=dict)
     metadata: dict[str, Any] = Field(default_factory=dict)
 
 
@@ -86,13 +90,32 @@ class Provider(StrictContractModel):
             for interface in self.interfaces
             for surface_name in interface.parameter_surfaces
         }
+        interface_surfaces = {
+            interface.interface: set(interface.parameter_surfaces)
+            for interface in self.interfaces
+        }
         for model in self.models:
             for capability_name, capability in model.capabilities.items():
+                _validate_platform_capability_values(capability_name, capability, f"model {model.model_id} capability {capability_name}")
                 if capability.parameter_surface and capability.parameter_surface not in surfaces:
                     raise ValueError(
                         f"model {model.model_id} capability {capability_name} references unknown parameter surface: "
                         f"{capability.parameter_surface}"
                     )
+            for interface_name, capabilities in model.interface_capabilities.items():
+                if interface_name not in interface_surfaces:
+                    raise ValueError(f"model {model.model_id} references unknown interface: {interface_name}")
+                for capability_name, capability in capabilities.items():
+                    _validate_platform_capability_values(
+                        capability_name,
+                        capability,
+                        f"model {model.model_id} interface {interface_name} capability {capability_name}",
+                    )
+                    if capability.parameter_surface and capability.parameter_surface not in interface_surfaces[interface_name]:
+                        raise ValueError(
+                            f"model {model.model_id} interface {interface_name} capability {capability_name} "
+                            f"references unknown parameter surface: {capability.parameter_surface}"
+                        )
         return self
 
 
@@ -120,3 +143,14 @@ def _require_unique(values: list[str], field_name: str) -> None:
     if duplicates:
         raise ValueError(f"duplicate {field_name} values: {', '.join(duplicates)}")
 
+
+def _validate_platform_capability_values(capability_name: str, capability: Capability, location: str) -> None:
+    if capability_name != "thinking_effort":
+        return
+    values = set(capability.values)
+    invalid = sorted(values - THINKING_EFFORT_VALUES)
+    invalid.extend(sorted(set(capability.value_mapping) - THINKING_EFFORT_VALUES))
+    if capability.default is not None and capability.default not in THINKING_EFFORT_VALUES:
+        invalid.append(capability.default)
+    if invalid:
+        raise ValueError(f"{location} contains unsupported thinking effort values: {', '.join(sorted(set(invalid)))}")
