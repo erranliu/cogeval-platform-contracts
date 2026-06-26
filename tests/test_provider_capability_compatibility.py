@@ -24,6 +24,11 @@ def test_compare_catalogs_flags_removed_capability_value() -> None:
     new_payload = deepcopy(old_payload)
     capability = new_payload["providers"][0]["models"][0]["capabilities"]["thinking_effort"]
     capability["values"].remove("high")
+    capability["model_value_labels"].pop("high")
+    interface_capability = new_payload["providers"][0]["models"][0]["interface_capabilities"]["openai_responses"][
+        "thinking_effort"
+    ]
+    interface_capability["values"].remove("high")
     if capability["default"] == "high":
         capability["default"] = "medium"
     old = ProviderCapabilityCatalog.model_validate(old_payload)
@@ -42,6 +47,7 @@ def test_compare_catalogs_flags_removed_interface_capability_value() -> None:
         "thinking_effort"
     ]
     capability["values"].remove("max")
+    capability["value_mapping"].pop("max")
     old = ProviderCapabilityCatalog.model_validate(old_payload)
     new = ProviderCapabilityCatalog.model_validate(new_payload)
 
@@ -49,6 +55,20 @@ def test_compare_catalogs_flags_removed_interface_capability_value() -> None:
 
     assert report.compatible is False
     assert any(change.code == "interface_capability_value_removed" for change in report.breaking_changes)
+
+
+def test_compare_catalogs_reports_model_value_label_changes_as_informational() -> None:
+    old_payload = load_fixture("deepseek_reasoning.v1")
+    new_payload = deepcopy(old_payload)
+    capability = new_payload["providers"][0]["models"][0]["capabilities"]["thinking_effort"]
+    capability["model_value_labels"]["high"] = "Deep reasoning"
+    old = ProviderCapabilityCatalog.model_validate(old_payload)
+    new = ProviderCapabilityCatalog.model_validate(new_payload)
+
+    report = compare_catalogs(old, new)
+
+    assert report.compatible is True
+    assert any(change.code == "model_value_label_changed" for change in report.informational_changes)
 
 
 def test_compare_catalogs_flags_removed_provider() -> None:

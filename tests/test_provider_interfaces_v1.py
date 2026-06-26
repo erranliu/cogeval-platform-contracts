@@ -62,6 +62,7 @@ def _canonical_catalog_payload() -> dict[str, object]:
                 ],
                 "models": [
                     {
+                        "model_id": "deepseek-v4-flash",
                         "display_name": "DeepSeek Chat",
                         "model_name": "deepseek-chat",
                     }
@@ -77,6 +78,7 @@ def test_canonical_schema_is_accepted() -> None:
     provider = catalog.providers[0]
     assert catalog.schema == PROVIDER_INTERFACE_CATALOG_SCHEMA
     assert provider.supported_interfaces[0].interface == "openai_compatible_chat"
+    assert provider.models[0].model_id == "deepseek-v4-flash"
     assert provider.models[0].model_name == "deepseek-chat"
     assert not hasattr(provider.models[0], "supported_interfaces")
 
@@ -110,6 +112,24 @@ def test_model_option_id_is_rejected() -> None:
         ProviderInterfaceCatalog.model_validate(payload)
 
     assert ("providers", 0, "models", 0, "model_option_id") in {
+        error["loc"] for error in exc.value.errors()
+    }
+
+
+def test_model_id_is_required() -> None:
+    payload = _canonical_catalog_payload()
+    provider = payload["providers"][0]
+    assert isinstance(provider, dict)
+    models = provider["models"]
+    assert isinstance(models, list)
+    model = models[0]
+    assert isinstance(model, dict)
+    model.pop("model_id")
+
+    with pytest.raises(ValidationError) as exc:
+        ProviderInterfaceCatalog.model_validate(payload)
+
+    assert ("providers", 0, "models", 0, "model_id") in {
         error["loc"] for error in exc.value.errors()
     }
 
@@ -289,6 +309,7 @@ def test_unknown_interface_fails_after_canonicalization() -> None:
                 ],
                 "models": [
                     {
+                        "model_id": "model",
                         "display_name": "Model",
                         "model_name": "model",
                     }

@@ -2,7 +2,8 @@
 
 from cogeval_platform_contracts.provider_capabilities.v1 import (
     Capability,
-    ParameterSurface,
+    INTERFACE_THINKING_EFFORT_PARAMETER_SURFACES,
+    InterfaceParameterSurface,
     Provider,
     ProviderCapabilityCatalog,
     ProviderInterface,
@@ -19,7 +20,8 @@ __all__ = [
     "Capability",
     "CompatibilityChange",
     "CompatibilityReport",
-    "ParameterSurface",
+    "INTERFACE_THINKING_EFFORT_PARAMETER_SURFACES",
+    "InterfaceParameterSurface",
     "Provider",
     "ProviderCapabilityCatalog",
     "ProviderInterface",

@@ -8,13 +8,7 @@
       "interfaces": [
         {
           "interface": "gemini_interactions",
-          "display_name": "Gemini Interactions API",
-          "parameter_surfaces": {
-            "thinking_effort": {
-              "path": "generation_config.thinking_level",
-              "values": ["minimal", "low", "medium", "high"]
-            }
-          }
+          "display_name": "Gemini Interactions API"
         }
       ],
       "models": [
@@ -27,8 +21,13 @@
               "supported": true,
               "values": ["default", "minimal", "low", "medium", "high"],
               "default": "default",
-              "parameter_surface": "thinking_effort",
-              "adapter_policy": "pass_through"
+              "model_value_labels": {
+                "default": "Model default",
+                "minimal": "Minimal thinking",
+                "low": "Low thinking",
+                "medium": "Medium thinking",
+                "high": "High thinking"
+              }
             }
           },
           "interface_capabilities": {

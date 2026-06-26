@@ -8,13 +8,7 @@
       "interfaces": [
         {
           "interface": "anthropic_messages",
-          "display_name": "Anthropic Messages API",
-          "parameter_surfaces": {
-            "thinking_effort": {
-              "path": "output_config.effort",
-              "values": ["low", "medium", "high", "xhigh", "max"]
-            }
-          }
+          "display_name": "Anthropic Messages API"
         }
       ],
       "models": [
@@ -27,8 +21,14 @@
               "supported": true,
               "values": ["default", "low", "medium", "high", "xhigh", "max"],
               "default": "default",
-              "parameter_surface": "thinking_effort",
-              "adapter_policy": "pass_through"
+              "model_value_labels": {
+                "default": "Model default",
+                "low": "Low effort",
+                "medium": "Medium effort",
+                "high": "High effort",
+                "xhigh": "Extended effort",
+                "max": "Max effort"
+              }
             }
           },
           "interface_capabilities": {

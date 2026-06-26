@@ -47,3 +47,16 @@ def test_compare_catalogs_flags_removed_model() -> None:
     assert report.compatible is False
     assert any(change.code == "model_removed" for change in report.breaking_changes)
 
+
+def test_compare_catalogs_reports_provider_model_name_changes_as_informational() -> None:
+    old_payload = load_fixture("deepseek_openai_compatible.v1")
+    new_payload = deepcopy(old_payload)
+    new_payload["providers"][0]["models"][0]["model_name"] = "deepseek-v4-flash"
+    old = ProviderInterfaceCatalog.model_validate(old_payload)
+    new = ProviderInterfaceCatalog.model_validate(new_payload)
+
+    report = compare_catalogs(old, new)
+
+    assert report.compatible is True
+    assert any(change.code == "model_model_name_changed" for change in report.informational_changes)
+
