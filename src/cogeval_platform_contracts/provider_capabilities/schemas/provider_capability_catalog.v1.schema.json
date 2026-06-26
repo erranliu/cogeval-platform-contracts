@@ -41,27 +41,6 @@
       "properties": {
         "interface": { "type": "string", "minLength": 1 },
         "display_name": { "type": ["string", "null"] },
-        "parameter_surfaces": {
-          "type": "object",
-          "additionalProperties": { "$ref": "#/$defs/parameter_surface" }
-        },
-        "metadata": { "type": "object" }
-      }
-    },
-    "parameter_surface": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["path"],
-      "properties": {
-        "path": { "type": "string", "minLength": 1 },
-        "values": {
-          "type": "array",
-          "items": { "type": "string" }
-        },
-        "value_mapping": {
-          "type": "object",
-          "additionalProperties": { "$ref": "#/$defs/value_mapping_target" }
-        },
         "metadata": { "type": "object" }
       }
     },

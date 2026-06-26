@@ -6,7 +6,7 @@ key provider catalogs shared by the COGEval platform and Workbench.
 The platform owns provider facts:
 
 - provider identity, display text, status, and documentation URLs
-- provider models and model names
+- provider models, canonical model IDs, and provider invocation model names
 - supported interface IDs such as `openai_compatible_chat`
 - default base URLs and model prefixes
 - interface alias canonicalization and schema compatibility
@@ -37,6 +37,19 @@ vocabulary for its public API.
 Platform producers should publish provider, model, and interface facts only.
 They must not publish Workbench executor IDs, local CLI/native binding behavior,
 or `_native` interface IDs.
+
+Provider model entries use two model identifiers:
+
+- `model_id` is the canonical COGEval model identifier. Official provider
+  entries must use a `model_id` selected from the Provider Capability Catalog so
+  the same model has the same identity across providers.
+- `model_name` is the provider-specific invocation name sent to the provider
+  API. It may differ from `model_id` when a provider aliases, routes, or versions
+  a canonical model under a different request name.
+
+For example, an official provider may expose canonical `model_id`
+`deepseek-v4-flash` while requiring `model_name` `deepseek-chat` in the provider
+request payload.
 
 Before publishing, validate payloads with:
 

@@ -25,6 +25,7 @@
       ],
       "models": [
         {
+          "model_id": "gpt-5.5",
           "display_name": "GPT-5.5",
           "model_name": "gpt-5.5",
           "recommended": true,

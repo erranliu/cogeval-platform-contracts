@@ -60,8 +60,9 @@
     "model": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["display_name", "model_name"],
+      "required": ["model_id", "display_name", "model_name"],
       "properties": {
+        "model_id": { "type": "string", "minLength": 1 },
         "display_name": { "type": "string", "minLength": 1 },
         "model_name": { "type": "string", "minLength": 1 },
         "recommended": { "type": "boolean" },

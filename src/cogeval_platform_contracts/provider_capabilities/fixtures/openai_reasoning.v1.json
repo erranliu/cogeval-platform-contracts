@@ -8,13 +8,7 @@
       "interfaces": [
         {
           "interface": "openai_responses",
-          "display_name": "OpenAI Responses API",
-          "parameter_surfaces": {
-            "thinking_effort": {
-              "path": "reasoning.effort",
-              "values": ["minimal", "low", "medium", "high", "xhigh"]
-            }
-          }
+          "display_name": "OpenAI Responses API"
         }
       ],
       "models": [
@@ -27,8 +21,13 @@
               "supported": true,
               "values": ["default", "minimal", "low", "medium", "high"],
               "default": "default",
-              "parameter_surface": "thinking_effort",
-              "adapter_policy": "pass_through"
+              "model_value_labels": {
+                "default": "Model default",
+                "minimal": "Minimal reasoning",
+                "low": "Low reasoning",
+                "medium": "Medium reasoning",
+                "high": "High reasoning"
+              }
             }
           },
           "interface_capabilities": {

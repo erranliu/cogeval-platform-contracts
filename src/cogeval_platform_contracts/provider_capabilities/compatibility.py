@@ -224,7 +224,50 @@ def _compare_capability_group(
                     "Capability default changed.",
                 )
             )
+        _compare_model_value_labels(
+            capability_path=capability_path,
+            old_labels=old_capability.model_value_labels,
+            new_labels=new_capability.model_value_labels,
+            informational=informational,
+        )
 
 
 def _change(code: str, severity: ChangeSeverity, path: str, message: str) -> CompatibilityChange:
     return CompatibilityChange(code=code, severity=severity, path=path, message=message)
+
+
+def _compare_model_value_labels(
+    *,
+    capability_path: str,
+    old_labels: dict[str, str],
+    new_labels: dict[str, str],
+    informational: list[CompatibilityChange],
+) -> None:
+    for value in sorted(old_labels.keys() - new_labels.keys()):
+        informational.append(
+            _change(
+                "model_value_label_removed",
+                "informational",
+                f"{capability_path}.model_value_labels.{value}",
+                "Model value label was removed.",
+            )
+        )
+    for value in sorted(new_labels.keys() - old_labels.keys()):
+        informational.append(
+            _change(
+                "model_value_label_added",
+                "informational",
+                f"{capability_path}.model_value_labels.{value}",
+                "Model value label was added.",
+            )
+        )
+    for value in sorted(old_labels.keys() & new_labels.keys()):
+        if old_labels[value] != new_labels[value]:
+            informational.append(
+                _change(
+                    "model_value_label_changed",
+                    "informational",
+                    f"{capability_path}.model_value_labels.{value}",
+                    "Model value label changed.",
+                )
+            )

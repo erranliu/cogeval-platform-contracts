@@ -8,17 +8,7 @@
       "interfaces": [
         {
           "interface": "openai_compatible_chat",
-          "display_name": "OpenAI-Compatible Chat API",
-          "parameter_surfaces": {
-            "thinking_effort": {
-              "path": "reasoning_effort",
-              "values": ["high", "max"],
-              "value_mapping": {
-                "high": "high",
-                "max": "max"
-              }
-            }
-          }
+          "display_name": "OpenAI-Compatible Chat API"
         }
       ],
       "models": [
@@ -31,11 +21,10 @@
               "supported": true,
               "values": ["default", "high", "max"],
               "default": "default",
-              "parameter_surface": "thinking_effort",
-              "adapter_policy": "map_values",
-              "value_mapping": {
-                "high": "high",
-                "max": "max"
+              "model_value_labels": {
+                "default": "Model default",
+                "high": "Reasoning high",
+                "max": "Reasoning max"
               }
             }
           },

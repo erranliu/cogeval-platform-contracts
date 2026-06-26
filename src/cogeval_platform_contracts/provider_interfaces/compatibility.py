@@ -88,8 +88,8 @@ def _compare_provider(
     )
     _compare_models(
         provider_path=provider_path,
-        old_models={model.model_name: model for model in old_provider.models},
-        new_models={model.model_name: model for model in new_provider.models},
+        old_models={model.model_id: model for model in old_provider.models},
+        new_models={model.model_id: model for model in new_provider.models},
         breaking=breaking,
         additive=additive,
         informational=informational,
@@ -142,6 +142,20 @@ def _compare_models(
         breaking.append(_change("model_removed", "breaking", f"{provider_path}.models.{model_id}", "Model was removed."))
     for model_id in sorted(new_models.keys() - old_models.keys()):
         additive.append(_change("model_added", "additive", f"{provider_path}.models.{model_id}", "Model was added."))
+    for model_id in sorted(old_models.keys() & new_models.keys()):
+        old = old_models[model_id]
+        new = new_models[model_id]
+        model_path = f"{provider_path}.models.{model_id}"
+        for field_name in ("display_name", "model_name"):
+            if getattr(old, field_name) != getattr(new, field_name):
+                informational.append(
+                    _change(
+                        f"model_{field_name}_changed",
+                        "informational",
+                        f"{model_path}.{field_name}",
+                        f"Model {field_name} changed.",
+                    )
+                )
 
 
 def _change(code: str, severity: ChangeSeverity, path: str, message: str) -> CompatibilityChange:
