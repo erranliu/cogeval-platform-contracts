@@ -61,7 +61,6 @@ class ProviderInterface(StrictContractModel):
 
 class ProviderModel(StrictContractModel):
     model_id: str = Field(min_length=1)
-    display_name: str = Field(min_length=1)
     model_name: str = Field(min_length=1)
     recommended: bool = False
     capabilities: dict[str, Any] = Field(default_factory=dict)
