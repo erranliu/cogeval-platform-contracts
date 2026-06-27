@@ -92,14 +92,12 @@ class ApiKeyProvider(StrictContractModel):
     website_url: str | None = None
     console_url: str | None = None
     docs_url: str | None = None
-    default_base_url: str = Field(min_length=1)
     recommended: bool = False
     supported_interfaces: list[ProviderInterface] = Field(min_length=1)
     models: list[ProviderModel] = Field(default_factory=list)
 
     @model_validator(mode="after")
     def validate_models(self) -> "ApiKeyProvider":
-        _validate_required_http_url("default_base_url", self.default_base_url)
         _validate_optional_http_url("website_url", self.website_url)
         _validate_optional_http_url("console_url", self.console_url)
         _validate_optional_http_url("docs_url", self.docs_url)

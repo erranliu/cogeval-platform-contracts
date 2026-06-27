@@ -56,7 +56,6 @@ def _canonical_catalog_payload() -> dict[str, object]:
                 "provider_id": "deepseek",
                 "display_name": "DeepSeek",
                 "status": "supported",
-                "default_base_url": "https://api.deepseek.com",
                 "supported_interfaces": [
                     {"interface": "openai_compatible_chat"}
                 ],
@@ -303,7 +302,6 @@ def test_unknown_interface_fails_after_canonicalization() -> None:
                 "provider_id": "custom",
                 "display_name": "Custom",
                 "status": "supported",
-                "default_base_url": "https://example.invalid",
                 "supported_interfaces": [
                     {"interface": "not_a_real_interface"}
                 ],
@@ -329,7 +327,6 @@ def test_duplicate_providers_fail() -> None:
                         "provider_id": "deepseek",
                         "display_name": "DeepSeek",
                         "status": "deprecated",
-                        "default_base_url": "https://api.deepseek.com",
                         "supported_interfaces": [
                             {"interface": "openai_compatible_chat"}
                         ],
@@ -338,7 +335,6 @@ def test_duplicate_providers_fail() -> None:
                         "provider_id": "deepseek",
                         "display_name": "DeepSeek Copy",
                         "status": "deprecated",
-                        "default_base_url": "https://api.deepseek.com",
                         "supported_interfaces": [
                             {"interface": "openai_compatible_chat"}
                         ],

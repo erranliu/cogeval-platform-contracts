@@ -10,7 +10,6 @@
       "website_url": "https://www.deepseek.com",
       "console_url": "https://platform.deepseek.com",
       "docs_url": "https://api-docs.deepseek.com",
-      "default_base_url": "https://api.deepseek.com",
       "recommended": true,
       "supported_interfaces": [
         {

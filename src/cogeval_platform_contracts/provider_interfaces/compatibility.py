@@ -68,16 +68,6 @@ def _compare_provider(
     informational: list[CompatibilityChange],
 ) -> None:
     provider_path = f"providers.{provider_id}"
-    for field_name in ("default_base_url",):
-        if getattr(old_provider, field_name) != getattr(new_provider, field_name):
-            informational.append(
-                _change(
-                    f"provider_{field_name}_changed",
-                    "informational",
-                    f"{provider_path}.{field_name}",
-                    f"Provider {field_name} changed.",
-                )
-            )
     _compare_interfaces(
         provider_path=provider_path,
         old_interfaces={item.interface: item for item in old_provider.supported_interfaces},

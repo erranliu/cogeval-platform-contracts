@@ -6,7 +6,6 @@
       "provider_id": "openai",
       "display_name": "OpenAI",
       "status": "supported",
-      "default_base_url": "https://api.openai.com/v1",
       "website_url": "https://openai.com/api/",
       "console_url": "https://platform.openai.com/",
       "docs_url": "https://developers.openai.com/api/docs/",

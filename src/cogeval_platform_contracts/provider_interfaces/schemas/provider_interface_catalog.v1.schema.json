@@ -22,7 +22,6 @@
         "provider_id",
         "display_name",
         "status",
-        "default_base_url",
         "supported_interfaces"
       ],
       "properties": {
@@ -33,7 +32,6 @@
         "website_url": { "type": ["string", "null"] },
         "console_url": { "type": ["string", "null"] },
         "docs_url": { "type": ["string", "null"] },
-        "default_base_url": { "type": "string", "minLength": 1 },
         "recommended": { "type": "boolean" },
         "supported_interfaces": {
           "type": "array",
