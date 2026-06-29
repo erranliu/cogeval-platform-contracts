@@ -77,3 +77,9 @@ catalog. Duplicate `agent_id` values are invalid.
 built-in provider interface. Interface capability values must be declared by
 the model-level `thinking_effort.values` and supported by the target
 `interfaces.<interface_id>.thinking_effort.platform_values`.
+
+`interfaces.<interface_id>.thinking_effort.value_mapping` must declare a
+mapping for every `platform_values[]` entry. `default` must map to `null`
+because it means omitting the interface parameter. For each model/interface
+projection, the selected values must map to distinct interface parameter
+values so a result can be attributed back to one platform value.

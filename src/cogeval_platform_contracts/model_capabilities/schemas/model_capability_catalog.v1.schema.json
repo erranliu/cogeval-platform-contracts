@@ -60,6 +60,9 @@
         "value_mapping": {
           "type": "object",
           "propertyNames": { "$ref": "#/$defs/thinking_effort_value" },
+          "properties": {
+            "default": { "type": "null" }
+          },
           "additionalProperties": { "type": ["string", "null"] }
         }
       }

@@ -106,6 +106,30 @@ def test_rejects_interface_capability_value_not_declared_by_model() -> None:
         ModelCapabilityCatalog.model_validate(payload)
 
 
+def test_rejects_interface_surface_missing_mapping_for_declared_value() -> None:
+    payload = _payload()
+    del payload["interfaces"]["openai_responses"]["thinking_effort"]["value_mapping"]["low"]
+
+    with pytest.raises(ValidationError, match="interface thinking_effort value_mapping must cover platform_values"):
+        ModelCapabilityCatalog.model_validate(payload)
+
+
+def test_rejects_interface_surface_default_mapping_to_parameter_value() -> None:
+    payload = _payload()
+    payload["interfaces"]["openai_responses"]["thinking_effort"]["value_mapping"]["default"] = "minimal"
+
+    with pytest.raises(ValidationError, match="interface thinking_effort default must map to null"):
+        ModelCapabilityCatalog.model_validate(payload)
+
+
+def test_rejects_interface_capability_values_mapping_to_same_interface_value() -> None:
+    payload = _payload()
+    payload["interfaces"]["openai_responses"]["thinking_effort"]["value_mapping"]["low"] = "medium"
+
+    with pytest.raises(ValidationError, match="interface thinking_effort values must map to distinct interface values"):
+        ModelCapabilityCatalog.model_validate(payload)
+
+
 def test_rejects_builtin_account_unknown_model_id() -> None:
     payload = _payload()
     payload["built_in_account_capabilities"][0]["model_ids"].append("missing-model")
