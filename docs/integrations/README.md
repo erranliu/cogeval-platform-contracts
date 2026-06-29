@@ -11,9 +11,16 @@
 
 ## 集成契约
 
-| 集成契约 | 数据 schema | 生产者 API | 消费者入口 | 文档 |
-|---|---|---|---|---|
-| Workbench Model Capability Catalog v2 | `cogeval.model_capability_catalog.v2` | `GET /api/workbench/v1/model-capabilities` | Workbench execution selection catalog | [workbench-model-capability-catalog-v2.md](workbench-model-capability-catalog-v2.md) |
+| 集成契约 | 数据 schema | 数据方向 | 平台 API | Workbench 入口 | 文档 |
+|---|---|---|---|---|---|
+| Workbench COG Cases v1 | `cogeval.cog_case.v1`, `cogeval.cog_case_group.v1` | 中台 -> Workbench | `GET /api/public/cog-cases` | COG Cases local API | [workbench-cog-cases-v1.md](workbench-cog-cases-v1.md) |
+| Workbench API Key Provider Catalog v1 | `cogeval.interface_capability_catalog.v1` | 中台 -> Workbench | `GET /api/workbench/v1/api-key-providers` | provider catalog loader | [workbench-api-key-provider-catalog-v1.md](workbench-api-key-provider-catalog-v1.md) |
+| Workbench Provider Capability Catalog v1 | `cogeval.provider_capability_catalog.v1` | 中台 -> Workbench | bundled or configured capability catalog path | provider catalog loader | [workbench-provider-capability-catalog-v1.md](workbench-provider-capability-catalog-v1.md) |
+| Workbench Model Capability Catalog v2 | `cogeval.model_capability_catalog.v2` | 中台 -> Workbench | `GET /api/workbench/v1/model-capabilities` | execution selection catalog | [workbench-model-capability-catalog-v2.md](workbench-model-capability-catalog-v2.md) |
+| Workbench Gateway Consistency v1 | `cogeval.gateway_consistency.task_pack.v1` | 中台 -> Workbench | `GET /api/workbench/v1/gateway-consistency/task-pack` | Gateway Consistency local API | [workbench-gateway-consistency-v1.md](workbench-gateway-consistency-v1.md) |
+| Workbench Accounts v1 | `cogeval.workbench.*.v1` | 双向 | `/api/workbench/v1/auth/github`, `/me`, `/assets`, `/coin-reservations` | platform account client | [workbench-accounts-v1.md](workbench-accounts-v1.md) |
+| Workbench Self-run Package Ingest v1 | `cogeval.self_run_*`, `cogeval.evidence_bundle.v1`, `cogeval.package_import_result.v1` | Workbench -> 中台，导入结果返回 Workbench | `POST /api/workbench/v1/ingest/package` | test result submit flow | [workbench-self-run-package-ingest-v1.md](workbench-self-run-package-ingest-v1.md) |
+| Workbench Distribution Claims v1 | `cogeval.distribution_claim*.v1` | Workbench 请求，中台返回 claim | `/api/tasks/claim`, `/api/tasks/{claim_id}/start`, `/release` | task claim client | [workbench-distribution-claims-v1.md](workbench-distribution-claims-v1.md) |
 
 ## 新增集成契约流程
 
@@ -22,4 +29,3 @@
 3. 写清生产者 API、认证、返回 envelope、消费者 loader、配置覆盖项、失败行为和测试清单。
 4. 在本索引登记新文档。
 5. 在生产者仓和消费者仓添加测试，证明实际 API 与消费投影符合本集成契约。
-
