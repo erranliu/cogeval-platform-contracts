@@ -33,6 +33,14 @@ class InterfaceThinkingEffortSurface(StrictContractModel):
                 "interface thinking_effort value_mapping keys must be declared platform_values: "
                 f"{', '.join(unknown_mapping_values)}"
             )
+        missing_mapping_values = sorted(set(self.platform_values) - set(self.value_mapping))
+        if missing_mapping_values:
+            raise ValueError(
+                "interface thinking_effort value_mapping must cover platform_values: "
+                f"{', '.join(missing_mapping_values)}"
+            )
+        if self.value_mapping.get("default") is not None:
+            raise ValueError("interface thinking_effort default must map to null")
         return self
 
 
@@ -159,6 +167,18 @@ class ModelCapabilityCatalog(StrictContractModel):
                     raise ValueError(
                         "interface thinking_effort values must be supported by interface contract: "
                         f"{', '.join(unsupported_by_interface)}"
+                    )
+                interface_value_mapping = interface_contract.thinking_effort.value_mapping
+                mapped_values = [
+                    interface_value_mapping[value]
+                    for value in capability.thinking_effort.values
+                ]
+                duplicate_mapped_values = {
+                    value for value in mapped_values if mapped_values.count(value) > 1
+                }
+                if duplicate_mapped_values:
+                    raise ValueError(
+                        "interface thinking_effort values must map to distinct interface values"
                     )
         agent_ids = [account.agent_id for account in self.built_in_account_capabilities]
         duplicate_agent_ids = sorted(
