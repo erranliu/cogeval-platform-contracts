@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.cogeval.dev/model_capability_catalog.v2.schema.json",
+  "title": "COGEval Model Capability Catalog v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "updated_at", "interfaces", "models"],
+  "properties": {
+    "schema": { "const": "cogeval.model_capability_catalog.v2" },
+    "updated_at": { "type": "string", "minLength": 1 },
+    "metadata": { "type": "object" },
+    "interfaces": {
+      "type": "object",
+      "additionalProperties": false,
+      "propertyNames": { "$ref": "#/$defs/interface_id" },
+      "minProperties": 1,
+      "properties": {
+        "openai_responses": { "$ref": "#/$defs/interface_contract" },
+        "openai_compatible_chat": { "$ref": "#/$defs/interface_contract" },
+        "anthropic_compatible_messages": { "$ref": "#/$defs/interface_contract" }
+      }
+    },
+    "models": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/model" }
+    },
+    "built_in_account_capabilities": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/built_in_account_capability" }
+    }
+  },
+  "$defs": {
+    "interface_id": {
+      "enum": [
+        "openai_responses",
+        "openai_compatible_chat",
+        "anthropic_compatible_messages"
+      ]
+    },
+    "interface_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "thinking_effort": { "$ref": "#/$defs/interface_thinking_effort_surface" }
+      }
+    },
+    "interface_thinking_effort_surface": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["surface", "path", "vocabulary"],
+      "properties": {
+        "surface": { "const": "thinking_effort" },
+        "path": { "type": "string", "minLength": 1 },
+        "vocabulary": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/interface_thinking_effort_vocabulary_item" }
+        }
+      }
+    },
+    "interface_thinking_effort_vocabulary_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "wire_value"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "wire_value": { "type": ["string", "null"] },
+        "display_name": { "type": ["string", "null"], "minLength": 1 }
+      }
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["model_id", "display_name"],
+      "properties": {
+        "model_id": { "type": "string", "minLength": 1 },
+        "display_name": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["supported", "preview", "deprecated"] },
+        "recommended": { "type": "boolean" },
+        "capability_tags": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "thinking_effort": { "$ref": "#/$defs/thinking_effort" },
+        "interface_capabilities": {
+          "type": "object",
+          "additionalProperties": false,
+          "propertyNames": { "$ref": "#/$defs/interface_id" },
+          "properties": {
+            "openai_responses": { "$ref": "#/$defs/model_interface_capability" },
+            "openai_compatible_chat": { "$ref": "#/$defs/model_interface_capability" },
+            "anthropic_compatible_messages": { "$ref": "#/$defs/model_interface_capability" }
+          }
+        },
+        "metadata": { "type": "object" }
+      }
+    },
+    "thinking_effort": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["values"],
+      "properties": {
+        "values": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/thinking_effort_value" }
+        },
+        "default": { "type": ["string", "null"], "minLength": 1 }
+      }
+    },
+    "thinking_effort_value": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "display_name": { "type": ["string", "null"], "minLength": 1 }
+      }
+    },
+    "model_interface_capability": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "thinking_effort": { "$ref": "#/$defs/model_interface_thinking_effort" }
+      }
+    },
+    "model_interface_thinking_effort": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mapping", "parameter_surface"],
+      "properties": {
+        "mapping": {
+          "type": "object",
+          "additionalProperties": { "type": "string", "minLength": 1 }
+        },
+        "parameter_surface": { "const": "thinking_effort" },
+        "adapter_policy": { "enum": ["map_values"] }
+      }
+    },
+    "built_in_account_capability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["agent_id", "display_name", "model_ids"],
+      "properties": {
+        "agent_id": { "enum": ["codex_cli", "claude_code_cli"] },
+        "display_name": { "type": "string", "minLength": 1 },
+        "model_ids": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        }
+      }
+    }
+  }
+}

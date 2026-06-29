@@ -11,5 +11,5 @@ def test_model_capability_fixtures_validate_against_json_schema() -> None:
     schema = load_schema("model_capability_catalog.v1")
     validator = Draft202012Validator(schema)
 
-    for fixture_name in list_fixtures():
+    for fixture_name in (name for name in list_fixtures() if name.endswith(".v1")):
         validator.validate(load_fixture(fixture_name))

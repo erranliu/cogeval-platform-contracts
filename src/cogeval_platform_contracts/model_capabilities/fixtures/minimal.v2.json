@@ -1,0 +1,67 @@
+{
+  "schema": "cogeval.model_capability_catalog.v2",
+  "updated_at": "2026-06-29T00:00:00Z",
+  "interfaces": {
+    "openai_responses": {
+      "thinking_effort": {
+        "surface": "thinking_effort",
+        "path": "reasoning.effort",
+        "vocabulary": [
+          {
+            "id": "default",
+            "wire_value": null,
+            "display_name": "Model default"
+          },
+          { "id": "low", "wire_value": "low" },
+          { "id": "medium", "wire_value": "medium" },
+          { "id": "high", "wire_value": "high" },
+          { "id": "xhigh", "wire_value": "xhigh" }
+        ]
+      }
+    }
+  },
+  "models": [
+    {
+      "model_id": "gpt-5.5",
+      "display_name": "GPT-5.5",
+      "status": "supported",
+      "recommended": true,
+      "capability_tags": ["chat", "reasoning"],
+      "thinking_effort": {
+        "values": [
+          { "id": "default", "display_name": "Model default" },
+          { "id": "low", "display_name": "Low reasoning" },
+          { "id": "high", "display_name": "High reasoning" },
+          { "id": "max", "display_name": "Max reasoning" }
+        ],
+        "default": "default"
+      },
+      "interface_capabilities": {
+        "openai_responses": {
+          "thinking_effort": {
+            "mapping": {
+              "default": "default",
+              "low": "low",
+              "high": "high",
+              "max": "xhigh"
+            },
+            "parameter_surface": "thinking_effort",
+            "adapter_policy": "map_values"
+          }
+        }
+      }
+    }
+  ],
+  "built_in_account_capabilities": [
+    {
+      "agent_id": "codex_cli",
+      "display_name": "Codex CLI",
+      "model_ids": ["gpt-5.5"]
+    },
+    {
+      "agent_id": "claude_code_cli",
+      "display_name": "Claude Code CLI",
+      "model_ids": []
+    }
+  ]
+}
