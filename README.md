@@ -27,8 +27,9 @@ payloads before relying on them.
 - `cogeval.gateway_consistency.baseline.v1`
 - `cogeval.gateway_consistency.task_pack.v1`
 - `cogeval.package_import_result.v1`
+- `cogeval.model_capability_catalog.v1`
 - `cogeval.provider_capability_catalog.v1`
-- `cogeval.provider_interface_catalog.v1`
+- `cogeval.interface_capability_catalog.v1`
 - `cogeval.self_run_package_manifest.v1`
 - `cogeval.self_run_record.v1`
 - `cogeval.workbench.account_assets.v1`
@@ -49,6 +50,10 @@ src/cogeval_platform_contracts/
     schemas/
     fixtures/
   gateway_consistency/
+    v1.py
+    schemas/
+    fixtures/
+  model_capabilities/
     v1.py
     schemas/
     fixtures/

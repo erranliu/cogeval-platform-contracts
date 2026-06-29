@@ -1,12 +1,12 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://contracts.cogeval.dev/provider_interface_catalog.v1.schema.json",
-  "title": "COGEval Provider Interface Catalog v1",
+  "$id": "https://contracts.cogeval.dev/interface_capability_catalog.v1.schema.json",
+  "title": "COGEval Interface Capability Catalog v1",
   "type": "object",
   "additionalProperties": false,
   "required": ["schema", "updated_at", "providers"],
   "properties": {
-    "schema": { "const": "cogeval.provider_interface_catalog.v1" },
+    "schema": { "const": "cogeval.interface_capability_catalog.v1" },
     "updated_at": { "type": "string", "minLength": 1 },
     "metadata": { "type": "object" },
     "providers": {
@@ -61,6 +61,7 @@
       "required": ["model_id", "model_name"],
       "properties": {
         "model_id": { "type": "string", "minLength": 1 },
+        "display_name": { "type": ["string", "null"] },
         "model_name": { "type": "string", "minLength": 1 },
         "recommended": { "type": "boolean" },
         "capabilities": { "type": "object" }

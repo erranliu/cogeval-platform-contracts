@@ -1,0 +1,21 @@
+{
+  "schema": "cogeval.model_capability_catalog.v1",
+  "updated_at": "2026-06-27T00:00:00Z",
+  "models": [
+    {
+      "model_id": "gpt-5.5",
+      "display_name": "GPT-5.5",
+      "status": "supported",
+      "recommended": true,
+      "capability_tags": ["chat", "reasoning"],
+      "thinking_effort": {
+        "values": ["default", "minimal", "low", "medium", "high"],
+        "default": "default",
+        "model_value_labels": {
+          "default": "Model default",
+          "high": "High reasoning"
+        }
+      }
+    }
+  ]
+}

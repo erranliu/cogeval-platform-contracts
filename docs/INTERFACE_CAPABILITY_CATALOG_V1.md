@@ -1,7 +1,8 @@
-# Provider Interface Catalog v1
+# Interface Capability Catalog v1
 
-`cogeval.provider_interface_catalog.v1` is the provider-facing contract for API
-key provider catalogs shared by the COGEval platform and Workbench.
+`cogeval.interface_capability_catalog.v1` is the platform contract for interface
+capability IDs and the provider bindings that expose those interfaces to
+Workbench.
 
 The platform owns provider facts:
 
@@ -21,8 +22,8 @@ Workbench owns runtime binding:
 ## Schema Compatibility
 
 The only accepted schema for this contract is
-`cogeval.provider_interface_catalog.v1`. Catalog payloads using the legacy
-`cogeval.api_key_provider_catalog.v1` schema are not valid provider interface
+`cogeval.interface_capability_catalog.v1`. Catalog payloads using the legacy
+`cogeval.api_key_provider_catalog.v1` schema are not valid interface capability
 catalogs.
 
 Legacy interface IDs may remain as alias helpers for canonical interface IDs,

@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 from typing import Any, Literal
 from urllib.parse import urlparse
@@ -6,7 +6,7 @@ from urllib.parse import urlparse
 from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator, model_validator
 
 
-PROVIDER_INTERFACE_CATALOG_SCHEMA = "cogeval.provider_interface_catalog.v1"
+PROVIDER_INTERFACE_CATALOG_SCHEMA = "cogeval.interface_capability_catalog.v1"
 WORKBENCH_PROVIDER_CATALOG_SCHEMA = "cogeval.api_key_provider_catalog.v1"
 
 PROVIDER_INTERFACE_ALIASES: dict[str, str] = {
@@ -61,6 +61,7 @@ class ProviderInterface(StrictContractModel):
 
 class ProviderModel(StrictContractModel):
     model_id: str = Field(min_length=1)
+    display_name: str | None = None
     model_name: str = Field(min_length=1)
     recommended: bool = False
     capabilities: dict[str, Any] = Field(default_factory=dict)
@@ -114,7 +115,7 @@ class ProviderInterfaceCatalog(StrictContractModel):
         validate_by_name=False,
     )
 
-    schema_version: Literal["cogeval.provider_interface_catalog.v1"] = Field(
+    schema_version: Literal["cogeval.interface_capability_catalog.v1"] = Field(
         alias="schema",
     )
     updated_at: str = Field(min_length=1)

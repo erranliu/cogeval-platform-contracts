@@ -14,7 +14,7 @@ from cogeval_platform_contracts.provider_interfaces.v1 import (
 
 
 def test_load_schema_returns_provider_interface_schema() -> None:
-    schema = load_schema("provider_interface_catalog.v1")
+    schema = load_schema("interface_capability_catalog.v1")
 
     assert schema["properties"]["schema"]["const"] == PROVIDER_INTERFACE_CATALOG_SCHEMA
 
@@ -34,6 +34,6 @@ def test_load_fixture_returns_valid_catalog_payload() -> None:
 
 
 def test_loaded_schema_and_fixture_are_json_serializable() -> None:
-    json.dumps(load_schema("provider_interface_catalog.v1"))
+    json.dumps(load_schema("interface_capability_catalog.v1"))
     json.dumps(load_fixture("minimal.v1"))
 

@@ -26,6 +26,8 @@ cogeval_platform_contracts = [
   "py.typed",
   "provider_capabilities/schemas/*.json",
   "provider_capabilities/fixtures/*.json",
+  "model_capabilities/schemas/*.json",
+  "model_capabilities/fixtures/*.json",
   "provider_interfaces/schemas/*.json",
   "provider_interfaces/fixtures/*.json",
   "self_run_packages/schemas/*.json",

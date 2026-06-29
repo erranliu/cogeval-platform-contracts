@@ -32,7 +32,7 @@ SCHEMA_PATH = (
     / "cogeval_platform_contracts"
     / "provider_interfaces"
     / "schemas"
-    / "provider_interface_catalog.v1.schema.json"
+    / "interface_capability_catalog.v1.schema.json"
 )
 
 

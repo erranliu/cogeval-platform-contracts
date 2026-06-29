@@ -10,11 +10,11 @@ from cogeval_platform_contracts.provider_interfaces.resources import (
 
 
 def test_provider_interface_json_schema_is_valid() -> None:
-    Draft202012Validator.check_schema(load_schema("provider_interface_catalog.v1"))
+    Draft202012Validator.check_schema(load_schema("interface_capability_catalog.v1"))
 
 
 def test_provider_interface_json_schema_excludes_native_interfaces() -> None:
-    schema = load_schema("provider_interface_catalog.v1")
+    schema = load_schema("interface_capability_catalog.v1")
 
     assert not {
         "qwen_code_native",
@@ -26,13 +26,13 @@ def test_provider_interface_json_schema_excludes_native_interfaces() -> None:
 
 
 def test_provider_interface_json_schema_does_not_expose_wire_api() -> None:
-    schema = load_schema("provider_interface_catalog.v1")
+    schema = load_schema("interface_capability_catalog.v1")
 
     assert "wire_api" not in schema["$defs"]["interface"]["properties"]
 
 
 def test_provider_catalog_schema_omits_auth_routing_and_model_option_fields() -> None:
-    schema = load_schema("provider_interface_catalog.v1")
+    schema = load_schema("interface_capability_catalog.v1")
 
     provider_properties = schema["$defs"]["provider"]["properties"]
     interface_properties = schema["$defs"]["interface"]["properties"]
@@ -47,7 +47,7 @@ def test_provider_catalog_schema_omits_auth_routing_and_model_option_fields() ->
 
 
 def test_provider_interface_fixtures_validate_against_json_schema() -> None:
-    schema = load_schema("provider_interface_catalog.v1")
+    schema = load_schema("interface_capability_catalog.v1")
     validator = Draft202012Validator(schema)
 
     for fixture_name in list_fixtures():

@@ -1,5 +1,5 @@
 {
-  "schema": "cogeval.provider_interface_catalog.v1",
+  "schema": "cogeval.interface_capability_catalog.v1",
   "updated_at": "2026-06-24T00:00:00Z",
   "providers": [
     {
