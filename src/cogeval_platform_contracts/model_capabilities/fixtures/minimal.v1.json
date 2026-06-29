@@ -1,6 +1,22 @@
 {
   "schema": "cogeval.model_capability_catalog.v1",
   "updated_at": "2026-06-27T00:00:00Z",
+  "interfaces": {
+    "openai_responses": {
+      "thinking_effort": {
+        "surface": "thinking_effort",
+        "path": "reasoning.effort",
+        "platform_values": ["default", "minimal", "low", "medium", "high"],
+        "value_mapping": {
+          "default": null,
+          "minimal": "minimal",
+          "low": "low",
+          "medium": "medium",
+          "high": "high"
+        }
+      }
+    }
+  },
   "models": [
     {
       "model_id": "gpt-5.5",
@@ -15,7 +31,28 @@
           "default": "Model default",
           "high": "High reasoning"
         }
+      },
+      "interface_capabilities": {
+        "openai_responses": {
+          "thinking_effort": {
+            "values": ["default", "minimal", "low", "medium", "high"],
+            "parameter_surface": "thinking_effort",
+            "adapter_policy": "map_values"
+          }
+        }
       }
+    }
+  ],
+  "built_in_account_capabilities": [
+    {
+      "agent_id": "codex_cli",
+      "display_name": "Codex CLI",
+      "model_ids": ["gpt-5.5"]
+    },
+    {
+      "agent_id": "claude_code_cli",
+      "display_name": "Claude Code CLI",
+      "model_ids": []
     }
   ]
 }

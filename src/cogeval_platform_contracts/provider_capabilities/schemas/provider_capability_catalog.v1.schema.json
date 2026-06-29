@@ -85,6 +85,10 @@
           "type": "object",
           "additionalProperties": { "$ref": "#/$defs/value_mapping_target" }
         },
+        "model_value_labels": {
+          "type": "object",
+          "additionalProperties": { "type": "string", "minLength": 1 }
+        },
         "metadata": { "type": "object" }
       }
     },
