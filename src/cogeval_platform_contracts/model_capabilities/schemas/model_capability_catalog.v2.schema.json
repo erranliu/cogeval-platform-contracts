@@ -114,8 +114,7 @@
       "additionalProperties": false,
       "required": ["id"],
       "properties": {
-        "id": { "type": "string", "minLength": 1 },
-        "display_name": { "type": ["string", "null"], "minLength": 1 }
+        "id": { "type": "string", "minLength": 1 }
       }
     },
     "model_interface_capability": {

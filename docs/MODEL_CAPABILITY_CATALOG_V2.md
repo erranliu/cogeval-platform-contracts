@@ -28,7 +28,6 @@ ModelCapabilityCatalogV2
     thinking_effort
       values[]
         id
-        display_name?
       default?
     interface_capabilities{}
       <interface_id>
@@ -82,8 +81,9 @@ model_id + model_effort_id -> interface_id + interface_vocab_id -> wire_value
 ```
 
 There is no v2 `platform_values` field and no v2 `value_mapping` field on the
-interface surface. There is no v2 `model_value_labels` field; model display
-text lives on each `values[]` item as `display_name`.
+interface surface. There is no v2 `model_value_labels` field and no model
+thinking-effort `display_name`; the model-owned effort `id` is also the
+user-facing display name.
 
 ## Interface Capabilities
 

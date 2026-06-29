@@ -59,12 +59,6 @@ class ProviderInterfaceCapabilityContract(StrictContractModel):
 
 class ModelThinkingEffortValue(StrictContractModel):
     id: str = Field(min_length=1)
-    display_name: str | None = None
-
-    @field_validator("display_name")
-    @classmethod
-    def validate_display_name(cls, display_name: str | None) -> str | None:
-        return _reject_blank_display_name(display_name, "thinking_effort display_name")
 
 
 class ModelThinkingEffortCapability(StrictContractModel):

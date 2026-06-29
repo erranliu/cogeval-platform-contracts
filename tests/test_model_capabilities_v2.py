@@ -37,10 +37,10 @@ def _payload() -> dict:
                 "display_name": "GPT-5.5",
                 "thinking_effort": {
                     "values": [
-                        {"id": "default", "display_name": "Model default"},
-                        {"id": "low", "display_name": "Low reasoning"},
-                        {"id": "high", "display_name": "High reasoning"},
-                        {"id": "max", "display_name": "Max reasoning"},
+                        {"id": "default"},
+                        {"id": "low"},
+                        {"id": "high"},
+                        {"id": "max"},
                     ],
                     "default": "default",
                 },
@@ -123,6 +123,14 @@ def test_rejects_legacy_model_value_labels_field() -> None:
         ModelCapabilityCatalogV2.model_validate(payload)
 
 
+def test_rejects_model_thinking_effort_display_name_field() -> None:
+    payload = _payload()
+    payload["models"][0]["thinking_effort"]["values"][1]["display_name"] = "Low reasoning"
+
+    with pytest.raises(ValidationError):
+        ModelCapabilityCatalogV2.model_validate(payload)
+
+
 def test_rejects_mapping_key_not_declared_by_model() -> None:
     payload = _payload()
     payload["models"][0]["interface_capabilities"]["openai_responses"][
@@ -165,7 +173,7 @@ def test_rejects_duplicate_interface_vocabulary_id() -> None:
 def test_rejects_duplicate_model_effort_id() -> None:
     payload = _payload()
     payload["models"][0]["thinking_effort"]["values"].append(
-        {"id": "high", "display_name": "High duplicate"}
+        {"id": "high"}
     )
 
     with pytest.raises(

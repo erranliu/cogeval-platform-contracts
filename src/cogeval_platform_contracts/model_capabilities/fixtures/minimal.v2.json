@@ -29,10 +29,10 @@
       "capability_tags": ["chat", "reasoning"],
       "thinking_effort": {
         "values": [
-          { "id": "default", "display_name": "Model default" },
-          { "id": "low", "display_name": "Low reasoning" },
-          { "id": "high", "display_name": "High reasoning" },
-          { "id": "max", "display_name": "Max reasoning" }
+          { "id": "default" },
+          { "id": "low" },
+          { "id": "high" },
+          { "id": "max" }
         ],
         "default": "default"
       },
