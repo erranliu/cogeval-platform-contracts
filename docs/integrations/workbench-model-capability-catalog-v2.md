@@ -19,6 +19,7 @@ The schema defines valid model capability data. This integration defines how Wor
 - Response shape: the response body is the `cogeval.model_capability_catalog.v2` catalog itself, not an outer wrapper.
 - Required integration fields: `schema`, `updated_at`, `interfaces`, `models`, and `built_in_account_capabilities`.
 - `built_in_account_capabilities` must be returned by the public API. It is not enough for this field to exist only in draft storage, active DB rows, admin API payloads, or ops-console state.
+- Public `built_in_account_capabilities[]` rows should include `native_interface`, `provider_interface`, and `binding_policy`. Omitted or `null` interface fields are filled by the contract defaults, but producers should emit explicit values at the API boundary.
 
 ## Consumer Loader
 
@@ -43,6 +44,13 @@ Website active model capability catalog
 ```
 
 For Codex CLI built-in account support, Workbench reads the `built_in_account_capabilities` row where `agent_id == "codex_cli"` and creates `builtin:codex_cli_account` only from the listed `model_ids`.
+
+Workbench must use the row binding metadata to distinguish built-in account native execution from API-key provider execution. Current contract defaults are:
+
+```text
+codex_cli -> native_interface=codex_native, provider_interface=openai_responses, binding_policy=builtin_account_native
+claude_code_cli -> native_interface=claude_code_native, provider_interface=anthropic_compatible_messages, binding_policy=builtin_account_native
+```
 
 Workbench must not infer Codex CLI built-in account model support from local CLI model probes or from all `models[]` in the catalog when `built_in_account_capabilities` is absent.
 
@@ -111,12 +119,18 @@ Consumer tests in the Workbench repository:
     {
       "agent_id": "codex_cli",
       "display_name": "Codex CLI",
-      "model_ids": ["gpt-5.5"]
+      "model_ids": ["gpt-5.5"],
+      "native_interface": "codex_native",
+      "provider_interface": "openai_responses",
+      "binding_policy": "builtin_account_native"
     },
     {
       "agent_id": "claude_code_cli",
       "display_name": "Claude Code CLI",
-      "model_ids": []
+      "model_ids": [],
+      "native_interface": "claude_code_native",
+      "provider_interface": "anthropic_compatible_messages",
+      "binding_policy": "builtin_account_native"
     }
   ]
 }

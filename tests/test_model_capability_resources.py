@@ -36,6 +36,8 @@ def test_load_fixture_returns_valid_model_capability_v2_catalog() -> None:
 
     assert catalog.schema == MODEL_CAPABILITY_CATALOG_SCHEMA_V2
     assert catalog.models[0].model_id == "gpt-5.5"
+    assert payload["built_in_account_capabilities"][0]["native_interface"] == "codex_native"
+    assert payload["built_in_account_capabilities"][0]["provider_interface"] == "openai_responses"
 
 
 def test_list_fixtures_includes_minimal_fixture() -> None:

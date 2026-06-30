@@ -56,12 +56,18 @@
     {
       "agent_id": "codex_cli",
       "display_name": "Codex CLI",
-      "model_ids": ["gpt-5.5"]
+      "model_ids": ["gpt-5.5"],
+      "native_interface": "codex_native",
+      "provider_interface": "openai_responses",
+      "binding_policy": "builtin_account_native"
     },
     {
       "agent_id": "claude_code_cli",
       "display_name": "Claude Code CLI",
-      "model_ids": []
+      "model_ids": [],
+      "native_interface": "claude_code_native",
+      "provider_interface": "anthropic_compatible_messages",
+      "binding_policy": "builtin_account_native"
     }
   ]
 }

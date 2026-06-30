@@ -12,6 +12,8 @@ ProviderInterfaceId = Literal[
     "anthropic_compatible_messages",
 ]
 BuiltInAccountAgentId = Literal["codex_cli", "claude_code_cli"]
+BuiltInAccountNativeInterfaceId = Literal["codex_native", "claude_code_native"]
+BuiltInAccountBindingPolicy = Literal["builtin_account_native", "reuse_provider_interface"]
 ModelInterfaceAdapterPolicy = Literal["map_values"]
 
 
@@ -103,6 +105,9 @@ class BuiltInAccountCapability(StrictContractModel):
     agent_id: BuiltInAccountAgentId
     display_name: str = Field(min_length=1)
     model_ids: list[str] = Field(default_factory=list)
+    native_interface: BuiltInAccountNativeInterfaceId | None = None
+    provider_interface: ProviderInterfaceId | None = None
+    binding_policy: BuiltInAccountBindingPolicy = "builtin_account_native"
 
     @field_validator("model_ids")
     @classmethod
@@ -114,6 +119,31 @@ class BuiltInAccountCapability(StrictContractModel):
         if duplicates:
             raise ValueError(f"duplicate built-in account model_ids: {', '.join(duplicates)}")
         return model_ids
+
+    @model_validator(mode="after")
+    def validate_binding_metadata(self) -> "BuiltInAccountCapability":
+        expected_native_interface: dict[BuiltInAccountAgentId, BuiltInAccountNativeInterfaceId] = {
+            "codex_cli": "codex_native",
+            "claude_code_cli": "claude_code_native",
+        }
+        expected_provider_interface: dict[BuiltInAccountAgentId, ProviderInterfaceId] = {
+            "codex_cli": "openai_responses",
+            "claude_code_cli": "anthropic_compatible_messages",
+        }
+
+        native_interface = self.native_interface or expected_native_interface[self.agent_id]
+        provider_interface = self.provider_interface or expected_provider_interface[self.agent_id]
+        if native_interface != expected_native_interface[self.agent_id]:
+            raise ValueError(
+                f"{self.agent_id} native_interface must be {expected_native_interface[self.agent_id]}"
+            )
+        if provider_interface != expected_provider_interface[self.agent_id]:
+            raise ValueError(
+                f"{self.agent_id} provider_interface must be {expected_provider_interface[self.agent_id]}"
+            )
+        self.native_interface = native_interface
+        self.provider_interface = provider_interface
+        return self
 
 
 class ModelCapabilityCatalogV2(StrictContractModel):

@@ -38,6 +38,12 @@
         "anthropic_compatible_messages"
       ]
     },
+    "native_interface_id": {
+      "enum": ["codex_native", "claude_code_native", null]
+    },
+    "built_in_account_binding_policy": {
+      "enum": ["builtin_account_native", "reuse_provider_interface"]
+    },
     "interface_contract": {
       "type": "object",
       "additionalProperties": false,
@@ -148,8 +154,49 @@
           "type": "array",
           "items": { "type": "string", "minLength": 1 },
           "uniqueItems": true
+        },
+        "native_interface": {
+          "$ref": "#/$defs/native_interface_id",
+          "default": null
+        },
+        "provider_interface": {
+          "anyOf": [
+            { "$ref": "#/$defs/interface_id" },
+            { "type": "null" }
+          ],
+          "default": null
+        },
+        "binding_policy": {
+          "$ref": "#/$defs/built_in_account_binding_policy",
+          "default": "builtin_account_native"
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "agent_id": { "const": "codex_cli" } },
+            "required": ["agent_id"]
+          },
+          "then": {
+            "properties": {
+              "native_interface": { "enum": ["codex_native", null] },
+              "provider_interface": { "enum": ["openai_responses", null] }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "agent_id": { "const": "claude_code_cli" } },
+            "required": ["agent_id"]
+          },
+          "then": {
+            "properties": {
+              "native_interface": { "enum": ["claude_code_native", null] },
+              "provider_interface": { "enum": ["anthropic_compatible_messages", null] }
+            }
+          }
+        }
+      ]
     }
   }
 }
