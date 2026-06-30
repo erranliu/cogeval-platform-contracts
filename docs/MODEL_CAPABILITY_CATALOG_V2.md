@@ -40,6 +40,9 @@ ModelCapabilityCatalogV2
     agent_id
     display_name
     model_ids[]
+    native_interface?
+    provider_interface?
+    binding_policy
 ```
 
 ## Boundaries
@@ -54,6 +57,8 @@ The Model Capability Catalog owns:
 - model-to-interface thinking-effort mappings
 - built-in agent account model support lists for `codex_cli` and
   `claude_code_cli`
+- built-in agent account binding metadata that identifies native execution
+  surfaces and the provider interface mapping they reuse
 
 It must not carry `provider_id`, provider API-key details, provider request
 model names, base URLs, environment variable names, or Workbench executor
@@ -116,12 +121,23 @@ Current built-in account ids:
 Every `model_ids[]` value must reference a `models[].model_id` in the same
 catalog. Duplicate `agent_id` values are invalid.
 
-Built-in accounts may reuse existing interface mappings operationally:
+Built-in account rows also carry binding metadata:
+
+- `native_interface`: `codex_native`, `claude_code_native`, or `null` for the
+  contract default
+- `provider_interface`: `openai_responses`,
+  `anthropic_compatible_messages`, or `null` for the contract default
+- `binding_policy`: `builtin_account_native` or `reuse_provider_interface`;
+  defaults to `builtin_account_native`
+
+Defaults and validation:
 
 ```text
-codex_cli -> openai_responses
-claude_code_cli -> anthropic_compatible_messages
+codex_cli -> native_interface=codex_native, provider_interface=openai_responses
+claude_code_cli -> native_interface=claude_code_native, provider_interface=anthropic_compatible_messages
 ```
 
-Future contracts may add first-class built-in interface ids if native execution
-surfaces diverge from those mappings.
+`codex_cli` must not declare a provider interface other than
+`openai_responses`, and `claude_code_cli` must not declare a provider interface
+other than `anthropic_compatible_messages`. `native_interface` must match the
+declared `agent_id`.

@@ -19,6 +19,7 @@ The platform response uses the interface capability catalog schema. Workbench pr
 - Response shape: the response body is `cogeval.interface_capability_catalog.v1`.
 - Required fields: `schema`, `updated_at`, `providers[]`, `providers[].supported_interfaces[]`, and `providers[].models[]`.
 - Provider entries must not publish Workbench executor IDs or local CLI binding behavior.
+- Built-in account native execution bindings do not belong in this provider API-key catalog. They are declared by `cogeval.model_capability_catalog.v2` `built_in_account_capabilities[]` rows with `native_interface`, `provider_interface`, and `binding_policy`.
 
 ## Consumer Loader
 
@@ -38,7 +39,7 @@ Website provider interface catalog
   -> COG Cases and Executors model-source selectors
 ```
 
-The same platform response may bundle `capability_catalog` and `model_capability_catalog`. If bundled, Workbench validates and consumes those sub-payloads according to their integration contracts.
+The same platform response may bundle `capability_catalog` and `model_capability_catalog`. If bundled, Workbench validates and consumes those sub-payloads according to their integration contracts. Bundled model capability catalogs remain the source of truth for built-in account binding metadata; API-key provider rows must not duplicate or override it.
 
 ## Failure Behavior
 

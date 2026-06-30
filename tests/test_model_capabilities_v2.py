@@ -91,6 +91,61 @@ def test_validates_v2_model_capability_catalog() -> None:
     assert catalog.models[0].thinking_effort.values[-1].id == "max"
 
 
+def test_defaults_builtin_account_binding_metadata() -> None:
+    catalog = validate_model_capability_catalog_v2(_payload())
+
+    codex_account = catalog.built_in_account_capabilities[0]
+    claude_account = catalog.built_in_account_capabilities[1]
+    assert codex_account.native_interface == "codex_native"
+    assert codex_account.provider_interface == "openai_responses"
+    assert codex_account.binding_policy == "builtin_account_native"
+    assert claude_account.native_interface == "claude_code_native"
+    assert claude_account.provider_interface == "anthropic_compatible_messages"
+    assert claude_account.binding_policy == "builtin_account_native"
+
+
+@pytest.mark.parametrize(
+    ("agent_index", "field_name", "invalid_value", "expected_message"),
+    [
+        (
+            0,
+            "provider_interface",
+            "openai_compatible_chat",
+            "codex_cli provider_interface must be openai_responses",
+        ),
+        (
+            1,
+            "provider_interface",
+            "openai_responses",
+            "claude_code_cli provider_interface must be anthropic_compatible_messages",
+        ),
+        (
+            0,
+            "native_interface",
+            "claude_code_native",
+            "codex_cli native_interface must be codex_native",
+        ),
+        (
+            1,
+            "native_interface",
+            "codex_native",
+            "claude_code_cli native_interface must be claude_code_native",
+        ),
+    ],
+)
+def test_rejects_builtin_account_binding_mismatches(
+    agent_index: int,
+    field_name: str,
+    invalid_value: str,
+    expected_message: str,
+) -> None:
+    payload = _payload()
+    payload["built_in_account_capabilities"][agent_index][field_name] = invalid_value
+
+    with pytest.raises(ValidationError, match=expected_message):
+        ModelCapabilityCatalogV2.model_validate(payload)
+
+
 def test_rejects_legacy_platform_values_field() -> None:
     payload = _payload()
     payload["interfaces"]["openai_responses"]["thinking_effort"]["platform_values"] = [
