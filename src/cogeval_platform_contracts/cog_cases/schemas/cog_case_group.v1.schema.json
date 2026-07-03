@@ -73,31 +73,6 @@
         "promoted_at"
       ],
       "type": "object"
-    },
-    "time_scope": {
-      "additionalProperties": false,
-      "properties": {
-        "label": {
-          "minLength": 1,
-          "type": "string"
-        },
-        "starts_at": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "ends_at": {
-          "type": [
-            "string",
-            "null"
-          ]
-        }
-      },
-      "required": [
-        "label"
-      ],
-      "type": "object"
     }
   },
   "additionalProperties": false,
@@ -128,16 +103,6 @@
         "type": "string"
       },
       "type": "array"
-    },
-    "time_scope": {
-      "anyOf": [
-        {
-          "$ref": "#/$defs/time_scope"
-        },
-        {
-          "type": "null"
-        }
-      ]
     },
     "status": {
       "enum": [

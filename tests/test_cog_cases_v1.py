@@ -37,3 +37,11 @@ def test_cog_case_group_requires_public_members_to_match_contract() -> None:
 
     with pytest.raises(ValidationError):
         CogCaseGroup.model_validate(payload)
+
+
+def test_cog_case_group_rejects_time_scope() -> None:
+    payload = load_fixture("group_public.v1")
+    payload["time_scope"] = {"label": "2026 H1"}
+
+    with pytest.raises(ValidationError):
+        CogCaseGroup.model_validate(payload)

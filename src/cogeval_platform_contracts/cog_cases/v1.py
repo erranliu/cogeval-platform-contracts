@@ -33,12 +33,6 @@ class CogCase(StrictContractModel):
         return self.schema_
 
 
-class CogCaseGroupTimeScope(StrictContractModel):
-    label: str = Field(min_length=1)
-    starts_at: str | None = None
-    ends_at: str | None = None
-
-
 class CogCaseGroup(StrictContractModel):
     schema_: Literal["cogeval.cog_case_group.v1"] = Field(alias="schema")
     group_id: str = Field(min_length=1)
@@ -46,7 +40,6 @@ class CogCaseGroup(StrictContractModel):
     name: str = Field(min_length=1)
     description: str | None = None
     theme_tags: list[str] = Field(default_factory=list)
-    time_scope: CogCaseGroupTimeScope | None = None
     status: Literal["draft", "published", "archived"] = "draft"
     visibility: Literal["internal", "public"] = "internal"
     selection_mode: Literal["manual", "rule_snapshot"] = "manual"
