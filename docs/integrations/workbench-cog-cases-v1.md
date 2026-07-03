@@ -42,6 +42,30 @@ Website published COG Cases
 
 Workbench execution and result submission use `source_id + external_id` as the case identity loop. `cog_case_display_id` is display-only and must not replace the execution identity.
 
+## Validation Projection
+
+Workbench consumes validation configuration from the COG Case payload and from raw case detail metadata. Producers should preserve validation setup/build requirements instead of relying on Workbench language fallback.
+
+Supported validation fields:
+
+- `validation.backend`
+- `validation.command`
+- `validation.setup_command`
+- `validation.setup_commands`
+- `validation.host_command`
+- `validation.docker_image`
+- `validation.timeout_seconds`
+- `validation.backend_config`
+
+Consumers resolve validation configuration in this order:
+
+1. Explicit `validation` fields in the COG Case payload.
+2. Raw/detail TOML or verifier/test metadata, such as `tests.command`, `tests.setup_command`, or equivalent raw validation command fields.
+3. Workbench local validation policy.
+4. Workspace/language fallback.
+
+Language fallback is diagnostic fallback only. If a case requires a generated binary, install step, build step, or fixture materialization before tests, the producer should expose the setup requirement through explicit validation fields or raw/detail metadata. Workbench must preserve these fields through prepared case materialization and run session sidecars.
+
 ## Failure Behavior
 
 - Platform not configured: Workbench returns local smoke/mini case data where available and marks `platform_configured: false`.
@@ -55,10 +79,12 @@ Producer tests in the Website repository:
 
 - Public COG Case list returns only published COG Cases and validates `cogeval.cog_case.v1`.
 - Public COG Case group list/detail returns only public published groups and validates `cogeval.cog_case_group.v1`.
+- Published COG Case detail preserves validation command and setup/build fields when the source case defines them.
 
 Consumer tests in the Workbench repository:
 
 - `GET /api/cog-cases` accepts the platform page object shape.
 - `GET /api/cog-cases` preserves `source_id + external_id`.
 - Workspace preparation uses platform COG Case identity and local registry matching.
-
+- Workspace preparation preserves validation command and setup/build fields in the prepared case.
+- Scheduler-backed run sessions preserve prepared validation fields in task context and run sidecars.
