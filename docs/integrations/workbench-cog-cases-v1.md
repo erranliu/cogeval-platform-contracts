@@ -42,11 +42,13 @@ Website published COG Cases
 
 Workbench execution and result submission use `source_id + external_id` as the case identity loop. `cog_case_display_id` is display-only and must not replace the execution identity.
 
-## Validation Projection
+## Case Source and Validation Boundary
 
-Workbench consumes validation configuration from the COG Case payload and from raw case detail metadata. Producers should preserve validation setup/build requirements instead of relying on Workbench language fallback.
+Platform COG Case payloads are public projections. They provide case identity, display fields, grouping, and source locator fields that are allowed to be published. They are not the required transport for restricted test content, hidden tests, private fixtures, verifier payloads, or validation data whose upstream license or authorization model forbids redistribution by the platform.
 
-Supported validation fields:
+For sources such as DeepSWE, Terminal-Bench/Terminal2, and SWE-bench Pro, Workbench resolves validation by directly accessing the official or otherwise authorized case source using the platform-provided `source_id + external_id` identity and any public locator fields. Missing `validation.command` or setup/build fields in the platform COG Case payload is not a producer failure for these restricted-source cases.
+
+The optional `validation` object remains valid for source kinds where the producer is authorized to publish validation information, such as local, public, or custom cases. When present and authorized, consumers may preserve these fields:
 
 - `validation.backend`
 - `validation.command`
@@ -59,12 +61,13 @@ Supported validation fields:
 
 Consumers resolve validation configuration in this order:
 
-1. Explicit `validation` fields in the COG Case payload.
-2. Raw/detail TOML or verifier/test metadata, such as `tests.command`, `tests.setup_command`, or equivalent raw validation command fields.
-3. Workbench local validation policy.
-4. Workspace/language fallback.
+1. Workbench source hydrator for recognized source families, using `source_id + external_id` and public source locator fields.
+2. Cached prepared-case source hydration when the cache revision and source identity still match.
+3. Explicit public `validation` fields in the COG Case payload, only for source kinds allowed to publish them.
+4. Workbench local validation policy for local/custom cases.
+5. Workspace/language fallback for generic local cases.
 
-Language fallback is diagnostic fallback only. If a case requires a generated binary, install step, build step, or fixture materialization before tests, the producer should expose the setup requirement through explicit validation fields or raw/detail metadata. Workbench must preserve these fields through prepared case materialization and run session sidecars.
+Language fallback is diagnostic fallback only. It must not hide missing source hydration for supported external case sources that require official or authorized validation material.
 
 ## Failure Behavior
 
@@ -72,6 +75,7 @@ Language fallback is diagnostic fallback only. If a case requires a generated bi
 - Platform unavailable: Workbench returns a 502-style local API error for the COG Cases request.
 - Invalid COG Case payload: Workbench treats the platform response as invalid and fails the local request rather than guessing required identity fields.
 - Missing detail fields: Workbench may fetch public test-case detail and merge missing values, but must preserve the original COG Case identity.
+- Missing restricted validation fields: not a platform producer error for restricted-source cases; Workbench reports source hydration errors such as source unavailable, unauthorized, or missing validation.
 
 ## Required Tests
 
@@ -79,12 +83,14 @@ Producer tests in the Website repository:
 
 - Public COG Case list returns only published COG Cases and validates `cogeval.cog_case.v1`.
 - Public COG Case group list/detail returns only public published groups and validates `cogeval.cog_case_group.v1`.
-- Published COG Case detail preserves validation command and setup/build fields when the source case defines them.
+- Public COG Case payloads do not leak restricted hidden tests, private fixtures, verifier payloads, or validation data from sources whose license or authorization model forbids platform redistribution.
+- Published COG Case detail may include `validation` only for source kinds where the producer is authorized to publish those fields.
 
 Consumer tests in the Workbench repository:
 
 - `GET /api/cog-cases` accepts the platform page object shape.
 - `GET /api/cog-cases` preserves `source_id + external_id`.
 - Workspace preparation uses platform COG Case identity and local registry matching.
-- Workspace preparation preserves validation command and setup/build fields in the prepared case.
-- Scheduler-backed run sessions preserve prepared validation fields in task context and run sidecars.
+- Workbench source hydration resolves validation directly from supported case sources for DeepSWE, Terminal-Bench/Terminal2, and SWE-bench Pro.
+- Workspace preparation persists hydrated validation metadata in the prepared case without requiring restricted validation fields from the platform payload.
+- Scheduler-backed run sessions preserve hydrated validation fields in task context and run sidecars.
