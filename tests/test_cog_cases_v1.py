@@ -58,6 +58,9 @@ def test_workbench_integration_declares_case_no_lookup_contract() -> None:
     assert "cog_case_no" in integration
     assert "cogeval.cog_case.v1" in integration
     assert "404" in integration
+    assert "communication alias" in integration
+    assert "Orchestration activity/read-model payloads" in integration
+    assert "must not replace the execution identity" in integration
     assert "cog_case_display_id" in schema_doc
     assert "lookup" in schema_doc
     assert "source_id + external_id" in schema_doc

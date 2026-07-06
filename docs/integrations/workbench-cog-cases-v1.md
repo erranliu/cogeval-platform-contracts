@@ -44,9 +44,9 @@ Website published COG Cases
   -> COG Cases UI
 ```
 
-Workbench execution and result submission use `source_id + external_id` as the case identity loop. `cog_case_display_id` is display-only and must not replace the execution identity.
+Workbench execution and result submission use `source_id + external_id` as the case identity loop. `cog_case_display_id` is a stable human-facing communication alias for display, debugging, support, CLI messages, Run Logs, and cross-team case discussion. Workbench may preserve it in local run metadata, Orchestration activity/read-model payloads, and UI projections, but it must not replace the execution identity, result-submission identity, scheduler uniqueness key, or artifact path identity.
 
-Workbench CLI flows may use the Case No. lookup endpoint to resolve a human-entered COG Case No. to the platform identity fields. The resolved payload must still carry `source_id + external_id`; Workbench must not start execution from `cog_case_display_id` alone.
+Workbench CLI flows may use the Case No. lookup endpoint to resolve a human-entered COG Case No. to the platform identity fields and the communication alias. The resolved payload must still carry `source_id + external_id`; Workbench must not start execution from `cog_case_display_id` alone.
 
 ## Case Environment Requirements
 
@@ -108,9 +108,11 @@ Consumer tests in the Workbench repository:
 
 - `GET /api/cog-cases` accepts the platform page object shape.
 - `GET /api/cog-cases` preserves `source_id + external_id`.
+- `GET /api/cog-cases` preserves `cog_case_display_id` as a communication alias when present.
 - `GET /api/cog-cases` projects COG Case v2 `environment_requirements` into local `environment_status`.
 - CLI case preparation resolves a COG Case No. through `GET /api/public/cog-cases/lookup?cog_case_no=...` before falling back to legacy list scanning.
 - Workspace preparation uses platform COG Case identity and local registry matching.
+- Scheduler-backed run sessions preserve `cog_case_display_id` in local run metadata, Orchestration activity/read-model payloads, and Run Logs projections when the platform payload provides it.
 - Workbench source hydration resolves validation directly from supported case sources for DeepSWE, Terminal-Bench/Terminal2, and SWE-bench Pro.
 - Workspace preparation persists hydrated validation metadata in the prepared case without requiring restricted validation fields from the platform payload.
 - Scheduler-backed run sessions preserve hydrated validation fields in task context and run sidecars.
