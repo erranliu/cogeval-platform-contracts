@@ -1,0 +1,33 @@
+{
+  "schema": "cogeval.cog_case.v2",
+  "test_case_id": "case_1",
+  "cog_case_display_id": "SWEPro#1",
+  "source_id": "swe-bench-pro",
+  "external_id": "django__django-1",
+  "title": "Fix Django regression",
+  "original_url": "https://example.com/django__django-1",
+  "labels": {
+    "language": "go"
+  },
+  "semantic_profile": {
+    "difficulty": "medium"
+  },
+  "semantic_version": "2026-07-06",
+  "interpretation": "Patch the failing repository behavior.",
+  "online_at": "2026-07-06T00:00:00Z",
+  "promoted_at": "2026-07-06T00:00:00Z",
+  "environment_requirements": [
+    {
+      "id": "go_toolchain",
+      "kind": "host_toolchain",
+      "display_name": "Go",
+      "required": true,
+      "version_constraint": ">=1.22",
+      "applies_to": [
+        "candidate_execution",
+        "official_validation"
+      ],
+      "reason": "The case repository uses Go build and test tooling."
+    }
+  ]
+}
