@@ -1,6 +1,6 @@
-# Workbench COG Cases v1
+# Workbench COG Cases v1/v2
 
-Data schemas: `cogeval.cog_case.v1`, `cogeval.cog_case_group.v1`
+Data schemas: `cogeval.cog_case.v1`, `cogeval.cog_case.v2`, `cogeval.cog_case_group.v1`
 
 Producer: COGEval Website public API
 
@@ -18,8 +18,9 @@ This integration provides published COG Cases from the platform to Workbench. Wo
 - Group detail: `GET /api/public/cog-case-groups/{slug}`
 - Authentication: none for public published COG Case reads.
 - List response shape: paged object with `items`, `next_cursor`, and compatible paging fields. Workbench also tolerates legacy list responses.
-- Case payloads must validate as `cogeval.cog_case.v1`.
+- Case payloads must validate as `cogeval.cog_case.v1` or `cogeval.cog_case.v2`.
 - Group payloads must validate as `cogeval.cog_case_group.v1`.
+- Producers must use `cogeval.cog_case.v2` when emitting top-level `environment_requirements`.
 
 ## Consumer Loader
 
@@ -27,7 +28,7 @@ This integration provides published COG Cases from the platform to Workbench. Wo
 - Platform URL: `${platform_base_url}/api/public/cog-cases`
 - Loader implementation: `src/cogeval/workbench/cases_api.py` in the Workbench repository.
 - Workbench may fetch `/api/public/test-cases/{test_case_id}` as a detail fallback when a COG Case omits fields needed for local workspace matching.
-- Workbench validates COG Case payloads with `cogeval_platform_contracts.cog_cases.v1.validate_cog_case`.
+- Workbench validates known COG Case payloads with the matching `cogeval_platform_contracts.cog_cases` validator and preserves forward-compatible fields for local projection.
 
 ## Data Flow
 
@@ -41,6 +42,15 @@ Website published COG Cases
 ```
 
 Workbench execution and result submission use `source_id + external_id` as the case identity loop. `cog_case_display_id` is display-only and must not replace the execution identity.
+
+## Case Environment Requirements
+
+COG Case v2 may include `environment_requirements` to declare local resources needed by the case. Current canonical resources are:
+
+- `docker_engine`
+- `go_toolchain`
+
+The platform only declares the requirement. Workbench probes local status, exposes the unified Test Environment API, and enriches `/api/cog-cases` with `environment_status` for UI gating. Workbench may still infer requirements for v1 payloads from authorized validation fields or source metadata, but explicit v2 requirements take precedence.
 
 ## Case Source and Validation Boundary
 
@@ -73,7 +83,7 @@ Language fallback is diagnostic fallback only. It must not hide missing source h
 
 - Platform not configured: Workbench returns local smoke/mini case data where available and marks `platform_configured: false`.
 - Platform unavailable: Workbench returns a 502-style local API error for the COG Cases request.
-- Invalid COG Case payload: Workbench treats the platform response as invalid and fails the local request rather than guessing required identity fields.
+- Invalid known-version COG Case payload: Workbench treats the platform response as invalid and fails the local request rather than guessing required identity fields.
 - Missing detail fields: Workbench may fetch public test-case detail and merge missing values, but must preserve the original COG Case identity.
 - Missing restricted validation fields: not a platform producer error for restricted-source cases; Workbench reports source hydration errors such as source unavailable, unauthorized, or missing validation.
 
@@ -81,7 +91,8 @@ Language fallback is diagnostic fallback only. It must not hide missing source h
 
 Producer tests in the Website repository:
 
-- Public COG Case list returns only published COG Cases and validates `cogeval.cog_case.v1`.
+- Public COG Case list returns only published COG Cases and validates `cogeval.cog_case.v1` or `cogeval.cog_case.v2`.
+- COG Case v2 payloads declare `environment_requirements` only with contract resource ids such as `docker_engine` and `go_toolchain`.
 - Public COG Case group list/detail returns only public published groups and validates `cogeval.cog_case_group.v1`.
 - Public COG Case payloads do not leak restricted hidden tests, private fixtures, verifier payloads, or validation data from sources whose license or authorization model forbids platform redistribution.
 - Published COG Case detail may include `validation` only for source kinds where the producer is authorized to publish those fields.
@@ -90,6 +101,7 @@ Consumer tests in the Workbench repository:
 
 - `GET /api/cog-cases` accepts the platform page object shape.
 - `GET /api/cog-cases` preserves `source_id + external_id`.
+- `GET /api/cog-cases` projects COG Case v2 `environment_requirements` into local `environment_status`.
 - Workspace preparation uses platform COG Case identity and local registry matching.
 - Workbench source hydration resolves validation directly from supported case sources for DeepSWE, Terminal-Bench/Terminal2, and SWE-bench Pro.
 - Workspace preparation persists hydrated validation metadata in the prepared case without requiring restricted validation fields from the platform payload.
