@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 import pytest
 from pydantic import ValidationError
 
@@ -45,3 +47,17 @@ def test_cog_case_group_rejects_time_scope() -> None:
 
     with pytest.raises(ValidationError):
         CogCaseGroup.model_validate(payload)
+
+
+def test_workbench_integration_declares_case_no_lookup_contract() -> None:
+    root = Path(__file__).resolve().parents[1]
+    integration = (root / "docs" / "integrations" / "workbench-cog-cases-v1.md").read_text(encoding="utf-8")
+    schema_doc = (root / "docs" / "COG_CASES_V1.md").read_text(encoding="utf-8")
+
+    assert "GET /api/public/cog-cases/lookup" in integration
+    assert "cog_case_no" in integration
+    assert "cogeval.cog_case.v1" in integration
+    assert "404" in integration
+    assert "cog_case_display_id" in schema_doc
+    assert "lookup" in schema_doc
+    assert "source_id + external_id" in schema_doc
