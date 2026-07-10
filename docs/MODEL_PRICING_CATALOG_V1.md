@@ -60,6 +60,8 @@ Top-level fields are all required:
 must also be real, so invalid dates such as `2026-02-30T00:00:00Z` and hour 24
 are rejected.
 
+For an active catalog, `updated_at` is its publication time. For the no-active empty seed, `updated_at` is a stable seed-definition constant and is never generated from request time. The seed value changes only when the seed definition changes.
+
 ## Identity and Uniqueness
 
 The row identity is the exact `provider_id + model_id` pair. Both identifiers

@@ -26,10 +26,7 @@ failure isolation.
   envelope, or a request-time timestamp. The seed has `prices: []` and a stable
   checked-in or code-level `updated_at` constant.
 
-The producer validates the public response with the shared contract. Internal
-draft/version storage and admin DTOs are Website implementation details, not
-cross-project contracts. A structured draft, validate, and publish lifecycle is
-recommended, with a single current active catalog exposed publicly.
+The producer validates the public response with the shared contract. Candidate draft validation is mandatory before publication, and draft validation uses the shared contract. A producer must not publish a candidate that fails contract or active-provider reference validation. Internal draft/version storage, admin DTOs, and the UI used to implement the required draft/validate/publish behavior are Website implementation details, not cross-project contracts. Exactly one current active catalog is exposed publicly.
 
 ## Consumer Loader
 
@@ -63,9 +60,7 @@ Website committed active pricing catalog (or stable empty seed)
   -> Decimal cost estimate
 ```
 
-Workbench may additionally check accepted pricing pairs against its accepted
-API Key Provider Catalog and ignore an orphan row defensively. This does not
-relax the producer publication invariant.
+Workbench must cross-check the accepted API Key Provider Catalog and ignore orphan pricing rows. This consumer defense is normative but does not relax the producer publication invariant or permit partially accepting any otherwise invalid pricing catalog.
 
 ## Publication Ordering and Concurrency
 
@@ -78,17 +73,17 @@ The required operator ordering is:
 - Add a pair: provider-first, then pricing.
 - Remove a pair: pricing-first, then provider.
 
-No dual-catalog atomic publish endpoint is required. However, counterpart validation must be repeated inside the publish transaction or equivalent
-serialization boundary against the committed active counterpart. A successful
-draft validation against stale state is insufficient. If the counterpart
-changes concurrently, publication must revalidate the committed active
-counterpart and reject a result that would make the two active catalogs
-inconsistent.
+No dual-catalog atomic publish endpoint is required. Both Pricing Catalog publication and API Key Provider Catalog publication must acquire the same cross-catalog publication lock before reading the committed active counterpart, validating, and committing. The lock covers the counterpart read, reference validation, active-version change, and commit for both publication directions.
+
+Equivalent serializable database isolation is acceptable only when it guarantees conflict detection and retry. On a serialization conflict, the producer must retry from a fresh committed counterpart read rather than reuse a prior validation result. No interleaving may activate an orphan provider/model pair.
+
+For both directions, counterpart validation must be repeated inside the publish transaction or equivalent serialization boundary against the committed active counterpart. A successful draft validation against stale state is insufficient. If the counterpart changes concurrently, publication must revalidate the committed active counterpart and reject a result that would make the two active catalogs inconsistent.
 
 ## Failure Behavior
 
 - No active Website version returns the stable valid empty seed; Workbench
   reports price not configured.
+- Platform not configured: Workbench reports pricing unavailable and preserves token recording and execution.
 - An empty catalog or missing exact row means price not configured, never zero.
 - An explicit zero rate is valid and means the corresponding dimension is free.
 - Built-in account, missing, and orphan rows have pricing unavailable.
@@ -105,27 +100,26 @@ inconsistent.
 
 The Website repository must prove:
 
-- public endpoint returns the direct v1 catalog;
-- no active catalog returns the stable valid empty seed;
 - draft validation uses the shared contract;
-- publish rejects unknown provider/model references;
-- provider catalog publish blocks referenced removal;
+- pricing publication validates references against the active API Key Provider Catalog and rejects unknown provider/model references;
+- provider publication reverse-validates active pricing and blocks referenced removal;
+- synchronized conflicting publication attempts cannot activate an orphan pair;
 - stale validation cannot commit inconsistent active catalogs;
-- only one current active catalog is returned;
-- endpoint authentication follows the existing catalog policy.
+- the public endpoint returns exactly one active version as the direct v1 catalog;
+- public endpoint authentication follows the existing catalog policy;
+- no active catalog returns the stable valid empty seed.
 
 ### Future Workbench consumer tests
 
 The Workbench repository must prove:
 
-- accepted payloads are loaded and validated;
-- decimal strings are preserved;
+- the whole payload is loaded and validated before any row is used;
 - exact API-key `provider_id + model_id` matching works;
+- decimal rate strings are preserved;
 - missing, built-in, and orphan pricing are unavailable;
-- invalid catalog disables cost only while tokens and execution remain usable;
-- cache and reasoning dimensions map to canonical token fields;
-- reasoning output is charged exactly once and ordinary output is not double
-  counted.
+- invalid catalog disables cost only while token recording and execution remain available;
+- cache and reasoning rates map to their exact canonical token fields;
+- reasoning output is charged exactly once.
 
 ## Minimal Payload
 
