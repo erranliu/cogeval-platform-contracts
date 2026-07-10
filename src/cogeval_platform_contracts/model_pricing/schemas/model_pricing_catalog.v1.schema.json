@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.cogeval.dev/model_pricing_catalog.v1.schema.json",
+  "title": "COGEval Model Pricing Catalog v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "updated_at",
+    "currency",
+    "unit_tokens",
+    "prices"
+  ],
+  "properties": {
+    "schema": {
+      "const": "cogeval.model_pricing_catalog.v1"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "currency": {
+      "const": "USD"
+    },
+    "unit_tokens": {
+      "const": 1000000
+    },
+    "prices": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/model_price"
+      }
+    }
+  },
+  "$defs": {
+    "rate": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]{0,11})(\\.[0-9]{1,12})?$",
+      "not": {
+        "pattern": "\\s"
+      }
+    },
+    "rates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "input_uncached",
+        "input_cache_read",
+        "input_cache_write",
+        "output",
+        "reasoning_output"
+      ],
+      "properties": {
+        "input_uncached": {
+          "$ref": "#/$defs/rate"
+        },
+        "input_cache_read": {
+          "$ref": "#/$defs/rate"
+        },
+        "input_cache_write": {
+          "$ref": "#/$defs/rate"
+        },
+        "output": {
+          "$ref": "#/$defs/rate"
+        },
+        "reasoning_output": {
+          "$ref": "#/$defs/rate"
+        }
+      }
+    },
+    "model_price": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider_id",
+        "model_id",
+        "rates"
+      ],
+      "properties": {
+        "provider_id": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "model_id": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "rates": {
+          "$ref": "#/$defs/rates"
+        }
+      }
+    }
+  }
+}

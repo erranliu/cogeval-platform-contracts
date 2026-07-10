@@ -15,6 +15,7 @@
 |---|---|---|---|---|---|
 | Workbench COG Cases v1/v2 | `cogeval.cog_case.v1`, `cogeval.cog_case.v2`, `cogeval.cog_case_group.v1` | 中台 -> Workbench | `GET /api/public/cog-cases` | COG Cases local API | [workbench-cog-cases-v1.md](workbench-cog-cases-v1.md) |
 | Workbench API Key Provider Catalog v1 | `cogeval.interface_capability_catalog.v1` | 中台 -> Workbench | `GET /api/workbench/v1/api-key-providers` | provider catalog loader | [workbench-api-key-provider-catalog-v1.md](workbench-api-key-provider-catalog-v1.md) |
+| Workbench Model Pricing Catalog v1 | `cogeval.model_pricing_catalog.v1` | 中台 -> Workbench | `GET /api/workbench/v1/model-pricing` | model pricing catalog loader | [workbench-model-pricing-v1.md](workbench-model-pricing-v1.md) |
 | Workbench Provider Capability Catalog v1 | `cogeval.provider_capability_catalog.v1` | 中台 -> Workbench | bundled or configured capability catalog path | provider catalog loader | [workbench-provider-capability-catalog-v1.md](workbench-provider-capability-catalog-v1.md) |
 | Workbench Model Capability Catalog v2 | `cogeval.model_capability_catalog.v2` | 中台 -> Workbench | `GET /api/workbench/v1/model-capabilities` | execution selection catalog | [workbench-model-capability-catalog-v2.md](workbench-model-capability-catalog-v2.md) |
 | Workbench Gateway Consistency v1 | `cogeval.gateway_consistency.task_pack.v1` | 中台 -> Workbench | `GET /api/workbench/v1/gateway-consistency/task-pack` | Gateway Consistency local API | [workbench-gateway-consistency-v1.md](workbench-gateway-consistency-v1.md) |

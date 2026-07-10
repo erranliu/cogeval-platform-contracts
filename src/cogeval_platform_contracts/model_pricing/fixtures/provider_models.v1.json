@@ -1,0 +1,41 @@
+{
+  "schema": "cogeval.model_pricing_catalog.v1",
+  "updated_at": "2026-01-01T00:00:00Z",
+  "currency": "USD",
+  "unit_tokens": 1000000,
+  "prices": [
+    {
+      "provider_id": "openai",
+      "model_id": "gpt-5.4",
+      "rates": {
+        "input_uncached": "2.5",
+        "input_cache_read": "0.25",
+        "input_cache_write": "2.5",
+        "output": "15",
+        "reasoning_output": "15"
+      }
+    },
+    {
+      "provider_id": "anthropic",
+      "model_id": "claude-sonnet-4",
+      "rates": {
+        "input_uncached": "3",
+        "input_cache_read": "0.3",
+        "input_cache_write": "3.75",
+        "output": "15",
+        "reasoning_output": "15"
+      }
+    },
+    {
+      "provider_id": "local",
+      "model_id": "mock-zero",
+      "rates": {
+        "input_uncached": "0",
+        "input_cache_read": "0",
+        "input_cache_write": "0",
+        "output": "0",
+        "reasoning_output": "0"
+      }
+    }
+  ]
+}

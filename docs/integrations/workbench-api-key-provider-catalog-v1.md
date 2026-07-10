@@ -20,6 +20,10 @@ The platform response uses the interface capability catalog schema. Workbench pr
 - Required fields: `schema`, `updated_at`, `providers[]`, `providers[].supported_interfaces[]`, and `providers[].models[]`.
 - Provider entries must not publish Workbench executor IDs or local CLI binding behavior.
 - Built-in account native execution bindings do not belong in this provider API-key catalog. They are declared by `cogeval.model_capability_catalog.v2` `built_in_account_capabilities[]` rows with `native_interface`, `provider_interface`, and `binding_policy`.
+- Before publishing, the producer reverse-validates the candidate provider catalog against the committed active Model Pricing Catalog. Publication blocks removal of a provider/model pair while active pricing references it. Operators must publish pricing removal first, then publish the provider/model removal.
+- Both API Key Provider Catalog publication and Model Pricing Catalog publication must acquire the same cross-catalog publication lock before reading the committed active counterpart, validating, and committing. The lock covers the counterpart read, reference validation, active-version change, and commit in both directions.
+- Equivalent serializable database isolation is acceptable only when it guarantees conflict detection and retry. A conflicted publisher retries from a fresh committed counterpart read. No interleaving may activate an orphan provider/model pair.
+- While holding that shared boundary, the provider publisher must re-read the committed active pricing catalog before commit; concurrent or stale validation must not activate catalogs with orphan pricing references.
 
 ## Consumer Loader
 
@@ -48,6 +52,7 @@ The same platform response may bundle `capability_catalog` and `model_capability
 - Unavailable or timeout: Workbench reports `catalog_unavailable` or `catalog_timeout`.
 - Invalid schema: Workbench reports `catalog_invalid_payload`.
 - Unknown provider interface IDs are invalid.
+- Provider publication is rejected when it would remove a provider/model pair referenced by the active Model Pricing Catalog. This producer-side rejection does not change the currently active provider catalog or the Workbench read path.
 
 ## Required Tests
 
@@ -55,6 +60,10 @@ Producer tests in the Website repository:
 
 - `GET /api/workbench/v1/api-key-providers` returns `cogeval.interface_capability_catalog.v1`.
 - Public provider payloads do not expose secrets, env var values, or Workbench executor IDs.
+- Provider publication blocks removal of a provider/model pair while active pricing references it.
+- After operators publish pricing removal first, the provider/model removal can be published.
+- Publish revalidates the committed active pricing catalog so concurrent or stale validation cannot commit an orphan pricing reference.
+- Producer tests use synchronized conflicting publication attempts to prove a provider removal and pricing addition cannot interleave to activate an orphan provider/model pair.
 
 Consumer tests in the Workbench repository:
 
