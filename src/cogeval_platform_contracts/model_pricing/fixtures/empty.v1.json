@@ -1,0 +1,7 @@
+{
+  "schema": "cogeval.model_pricing_catalog.v1",
+  "updated_at": "2026-01-01T00:00:00Z",
+  "currency": "USD",
+  "unit_tokens": 1000000,
+  "prices": []
+}

@@ -14,7 +14,8 @@ dependencies = [
 
 [project.optional-dependencies]
 test = [
-  "jsonschema>=4.22",
+  "build>=1,<2",
+  "jsonschema[format]>=4.22",
   "pytest>=8",
 ]
 
@@ -40,6 +41,8 @@ cogeval_platform_contracts = [
   "gateway_consistency/fixtures/*.json",
   "workbench_accounts/schemas/*.json",
   "workbench_accounts/fixtures/*.json",
+  "model_pricing/schemas/*.json",
+  "model_pricing/fixtures/*.json",
 ]
 
 [tool.pytest.ini_options]
