@@ -47,6 +47,15 @@ def test_model_pricing_json_schema_is_valid_draft_2020_12() -> None:
     Draft202012Validator.check_schema(schema)
 
 
+def test_model_pricing_json_schema_uses_repository_identifier_convention() -> None:
+    schema = model_pricing.load_schema("model_pricing_catalog.v1")
+
+    assert (
+        schema["$id"]
+        == "https://contracts.cogeval.dev/model_pricing_catalog.v1.schema.json"
+    )
+
+
 def test_both_fixtures_validate_with_json_schema_and_pydantic() -> None:
     validator = _validator()
 
@@ -96,6 +105,19 @@ def test_json_schema_requires_rates_object() -> None:
         _validator().validate(payload)
 
 
+@pytest.mark.parametrize("field", ["provider_id", "model_id"])
+@pytest.mark.parametrize("value", [" ", "\t", "\n"])
+def test_json_schema_rejects_whitespace_only_price_identifiers(
+    field: str,
+    value: str,
+) -> None:
+    payload = _valid_payload()
+    payload["prices"][0][field] = value  # type: ignore[index]
+
+    with pytest.raises(ValidationError):
+        _validator().validate(payload)
+
+
 @pytest.mark.parametrize("rate", [1, 0.5, True, False])
 def test_json_schema_rejects_json_numeric_and_boolean_rates(rate: object) -> None:
     payload = _valid_payload()
@@ -103,6 +125,21 @@ def test_json_schema_rejects_json_numeric_and_boolean_rates(rate: object) -> Non
 
     with pytest.raises(ValidationError):
         _validator().validate(payload)
+
+
+@pytest.mark.parametrize(
+    "rate",
+    [
+        "123456789012",
+        "0.123456789012",
+        "123456789012.123456789012",
+    ],
+)
+def test_json_schema_accepts_twelve_digit_decimal_boundaries(rate: str) -> None:
+    payload = _valid_payload()
+    payload["prices"][0]["rates"]["input_uncached"] = rate  # type: ignore[index]
+
+    _validator().validate(payload)
 
 
 @pytest.mark.parametrize(
@@ -206,5 +243,12 @@ def test_json_schema_enforces_catalog_constants(field: str, value: object) -> No
 def test_json_schema_allows_empty_prices() -> None:
     payload = deepcopy(_valid_payload())
     payload["prices"] = []
+
+    _validator().validate(payload)
+
+
+def test_json_schema_allows_duplicate_pairs_because_pydantic_is_normative() -> None:
+    payload = _valid_payload()
+    payload["prices"].append(deepcopy(payload["prices"][0]))  # type: ignore[union-attr]
 
     _validator().validate(payload)

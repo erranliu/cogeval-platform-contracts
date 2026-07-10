@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cogeval.dev/schemas/model_pricing_catalog.v1.schema.json",
+  "$id": "https://contracts.cogeval.dev/model_pricing_catalog.v1.schema.json",
   "title": "COGEval Model Pricing Catalog v1",
   "type": "object",
   "additionalProperties": false,
@@ -80,11 +80,13 @@
       "properties": {
         "provider_id": {
           "type": "string",
-          "minLength": 1
+          "minLength": 1,
+          "pattern": "\\S"
         },
         "model_id": {
           "type": "string",
-          "minLength": 1
+          "minLength": 1,
+          "pattern": "\\S"
         },
         "rates": {
           "$ref": "#/$defs/rates"
