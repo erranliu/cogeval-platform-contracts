@@ -116,8 +116,18 @@ def test_accepts_canonical_decimal_rate_strings(rate: str) -> None:
         "\t1",
         "1\n",
         "1e3",
+        "1e-3",
         "1E+3",
+        "+1",
+        "+0.5",
         "-1",
+        "NaN",
+        "nan",
+        "Infinity",
+        "+Infinity",
+        "-Infinity",
+        "inf",
+        "-inf",
         "1234567890123",
         "0.1234567890123",
         1,
@@ -225,11 +235,23 @@ def test_rejects_internal_schema_version_wire_key() -> None:
         validate_model_pricing_catalog(payload)
 
 
-def test_rejects_duplicate_provider_and_model_pair_with_clear_message() -> None:
-    payload = _payload(prices=[_price(), deepcopy(_price())])
+def test_rejects_duplicate_provider_model_pricing_pairs_with_sorted_message() -> None:
+    openai_price = _price()
+    anthropic_price = _price(provider_id="anthropic", model_id="claude-sonnet-4")
+    payload = _payload(
+        prices=[
+            openai_price,
+            deepcopy(openai_price),
+            anthropic_price,
+            deepcopy(anthropic_price),
+        ]
+    )
 
     with pytest.raises(
         ValidationError,
-        match=r"duplicate provider_id \+ model_id pair: openai/gpt-5\.4",
+        match=(
+            r"duplicate provider/model pricing pairs: "
+            r"anthropic/claude-sonnet-4, openai/gpt-5\.4"
+        ),
     ):
         validate_model_pricing_catalog(payload)

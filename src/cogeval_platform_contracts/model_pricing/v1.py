@@ -63,11 +63,19 @@ class ModelPricingCatalog(StrictContractModel):
 
     @model_validator(mode="after")
     def reject_duplicate_prices(self) -> "ModelPricingCatalog":
-        pairs = [(price.provider_id, price.model_id) for price in self.prices]
-        duplicates = sorted({pair for pair in pairs if pairs.count(pair) > 1})
+        seen: set[tuple[str, str]] = set()
+        duplicates: set[tuple[str, str]] = set()
+        for price in self.prices:
+            pair = (price.provider_id, price.model_id)
+            if pair in seen:
+                duplicates.add(pair)
+            else:
+                seen.add(pair)
         if duplicates:
-            formatted = ", ".join(f"{provider_id}/{model_id}" for provider_id, model_id in duplicates)
-            raise ValueError(f"duplicate provider_id + model_id pair: {formatted}")
+            formatted = ", ".join(
+                f"{provider_id}/{model_id}" for provider_id, model_id in sorted(duplicates)
+            )
+            raise ValueError(f"duplicate provider/model pricing pairs: {formatted}")
         return self
 
 
