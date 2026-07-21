@@ -20,6 +20,7 @@ payloads before relying on them.
 ## Current Contracts
 
 - `cogeval.cog_case.v1`
+- `cogeval.cog_case.v3` (current published COG Case contract)
 - `cogeval.cog_case_group.v1`
 - `cogeval.distribution_claim.v1`
 - `cogeval.distribution_claim_request.v1`

@@ -6,7 +6,7 @@ from cogeval_platform_contracts.cog_cases import list_fixtures, load_fixture, lo
 
 
 def test_cog_case_json_schemas_are_valid() -> None:
-    for schema_name in ("cog_case.v1", "cog_case.v2", "cog_case_group.v1"):
+    for schema_name in ("cog_case.v1", "cog_case.v2", "cog_case.v3", "cog_case_group.v1"):
         Draft202012Validator.check_schema(load_schema(schema_name))
 
 
@@ -14,6 +14,7 @@ def test_cog_case_fixtures_validate_against_json_schema() -> None:
     mapping = {
         "case_public.v1": "cog_case.v1",
         "case_public.v2": "cog_case.v2",
+        "case_public.v3": "cog_case.v3",
         "group_public.v1": "cog_case_group.v1",
     }
 
