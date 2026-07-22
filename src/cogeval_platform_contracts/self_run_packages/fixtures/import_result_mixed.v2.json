@@ -1,0 +1,29 @@
+{
+  "schema": "cogeval.package_import_result.v2",
+  "package_id": "pkg-1",
+  "snapshot_id": "snap-1",
+  "n_accepted": 1,
+  "n_rejected": 1,
+  "results": [
+    {
+      "external_case_ref": "case-1",
+      "accepted": true,
+      "failure_reason": null,
+      "decision_codes": [],
+      "queued_for_review": false
+    },
+    {
+      "external_case_ref": "case-2",
+      "accepted": false,
+      "failure_reason": {
+        "schema_version": "cogeval.failure-reason.v1",
+        "code": "platform.ingest_rejected",
+        "category": "contract_violation",
+        "retry_policy": "after_user_action",
+        "message": "Package import was rejected."
+      },
+      "decision_codes": [],
+      "queued_for_review": false
+    }
+  ]
+}

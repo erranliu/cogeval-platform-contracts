@@ -20,7 +20,8 @@
 | Workbench Model Capability Catalog v2 | `cogeval.model_capability_catalog.v2` | 中台 -> Workbench | `GET /api/workbench/v1/model-capabilities` | execution selection catalog | [workbench-model-capability-catalog-v2.md](workbench-model-capability-catalog-v2.md) |
 | Workbench Gateway Consistency v1 | `cogeval.gateway_consistency.task_pack.v1` | 中台 -> Workbench | `GET /api/workbench/v1/gateway-consistency/task-pack` | Gateway Consistency local API | [workbench-gateway-consistency-v1.md](workbench-gateway-consistency-v1.md) |
 | Workbench Accounts v1 | `cogeval.workbench.*.v1` | 双向 | `/api/workbench/v1/auth/github`, `/me`, `/assets`, `/coin-reservations` | platform account client | [workbench-accounts-v1.md](workbench-accounts-v1.md) |
-| Workbench Self-run Package Ingest v1 | `cogeval.self_run_*`, `cogeval.evidence_bundle.v1`, `cogeval.package_import_result.v1` | Workbench -> 中台，导入结果返回 Workbench | `POST /api/workbench/v1/ingest/package` | test result submit flow | [workbench-self-run-package-ingest-v1.md](workbench-self-run-package-ingest-v1.md) |
+| Workbench Self-run Package Ingest v1 | `cogeval.self_run_*`, `cogeval.evidence_bundle.v1`, `cogeval.package_import_result.v1` | Workbench -> 中台，导入结果返回 Workbench | `POST /api/workbench/v1/ingest/package` | historical integration | [workbench-self-run-package-ingest-v1.md](workbench-self-run-package-ingest-v1.md) |
+| Workbench Self-run Package Ingest v2 | `cogeval.package_import_result.v2`, `cogeval.failure-reason.v1` | Workbench -> 中台，导入结果返回 Workbench | `POST /api/workbench/v1/ingest/package` | current self-run submit flow | [workbench-self-run-package-ingest-v2.md](workbench-self-run-package-ingest-v2.md) |
 | Workbench Distribution Claims v1 | `cogeval.distribution_claim*.v1` | Workbench 请求，中台返回 claim | `/api/tasks/claim`, `/api/tasks/{claim_id}/start`, `/release` | task claim client | [workbench-distribution-claims-v1.md](workbench-distribution-claims-v1.md) |
 
 ## 新增集成契约流程

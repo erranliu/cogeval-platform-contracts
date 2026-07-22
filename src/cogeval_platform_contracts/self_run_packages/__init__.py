@@ -17,6 +17,12 @@ from cogeval_platform_contracts.self_run_packages.v1 import (
     validate_self_run_package_manifest,
     validate_self_run_record,
 )
+from cogeval_platform_contracts.self_run_packages.v2 import (
+    PACKAGE_IMPORT_RESULT_SCHEMA_V2,
+    PackageImportResultV2,
+    RecordImportResultV2,
+    validate_package_import_result_v2,
+)
 
 __all__ = [
     "EVIDENCE_BUNDLE_SCHEMA",
@@ -36,4 +42,8 @@ __all__ = [
     "validate_package_import_result",
     "validate_self_run_package_manifest",
     "validate_self_run_record",
+    "PackageImportResultV2",
+    "PACKAGE_IMPORT_RESULT_SCHEMA_V2",
+    "RecordImportResultV2",
+    "validate_package_import_result_v2",
 ]

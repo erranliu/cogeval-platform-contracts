@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.cogeval.dev/cogeval.failure-envelope.v1.schema.json",
+  "title": "COGEval FailureEnvelopeV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "reason", "correlation_id"],
+  "properties": {
+    "schema_version": {"const": "cogeval.failure-envelope.v1"},
+    "reason": {"$ref": "failure_reason.v1.schema.json"},
+    "correlation_id": {"type": "string", "minLength": 1, "maxLength": 200},
+    "retry_after_ms": {"type": ["integer", "null"], "minimum": 0}
+  }
+}

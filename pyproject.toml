@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "cogeval-platform-contracts"
-version = "0.1.1"
+version = "0.2.0"
 description = "Shared contracts between the COGEval platform and Workbench."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -33,6 +33,8 @@ cogeval_platform_contracts = [
   "provider_interfaces/fixtures/*.json",
   "self_run_packages/schemas/*.json",
   "self_run_packages/fixtures/*.json",
+  "failure_reasons/schemas/*.json",
+  "failure_reasons/fixtures/*.json",
   "cog_cases/schemas/*.json",
   "cog_cases/fixtures/*.json",
   "distribution_claims/schemas/*.json",

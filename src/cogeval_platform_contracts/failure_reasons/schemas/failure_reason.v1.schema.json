@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.cogeval.dev/cogeval.failure-reason.v1.schema.json",
+  "title": "COGEval FailureReasonV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "code", "category", "retry_policy", "message"],
+  "properties": {
+    "schema_version": {"const": "cogeval.failure-reason.v1"},
+    "code": {"type": "string", "pattern": "^(case|config|source_execution|host_execution|runner|orchestration|validation|evidence|delivery|workbench|platform)\\.[a-z][a-z0-9_]*$", "minLength": 3, "maxLength": 120},
+    "category": {"enum": ["invalid_input", "not_found", "conflict", "blocked", "unavailable", "timeout", "execution_failure", "contract_violation", "invariant_violation", "cancelled", "internal"]},
+    "retry_policy": {"enum": ["never", "same_request", "after_external_recovery", "after_user_action"]},
+    "message": {"type": "string", "minLength": 1, "maxLength": 240, "pattern": "^[^\\r\\n]*$"}
+  }
+}

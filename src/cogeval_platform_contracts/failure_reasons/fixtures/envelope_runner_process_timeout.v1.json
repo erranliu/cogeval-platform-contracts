@@ -1,0 +1,11 @@
+{
+  "schema_version": "cogeval.failure-envelope.v1",
+  "reason": {
+    "schema_version": "cogeval.failure-reason.v1",
+    "code": "runner.process_timeout",
+    "category": "timeout",
+    "retry_policy": "same_request",
+    "message": "Runner process timed out."
+  },
+  "correlation_id": "corr-1"
+}

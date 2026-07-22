@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.cogeval.dev/package_import_result.v2.schema.json",
+  "title": "COGEval PackageImportResultV2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "snapshot_id", "n_accepted", "n_rejected", "results"],
+  "properties": {
+    "schema": {"const": "cogeval.package_import_result.v2"},
+    "package_id": {"type": ["string", "null"]},
+    "snapshot_id": {"type": "string", "minLength": 1},
+    "n_accepted": {"type": "integer", "minimum": 0},
+    "n_rejected": {"type": "integer", "minimum": 0},
+    "results": {"type": "array", "items": {"$ref": "#/$defs/result"}}
+  },
+  "$defs": {
+    "failure_reason": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "code", "category", "retry_policy", "message"],
+      "properties": {
+        "schema_version": {"const": "cogeval.failure-reason.v1"},
+        "code": {"type": "string", "pattern": "^(case|config|source_execution|host_execution|runner|orchestration|validation|evidence|delivery|workbench|platform)\\.[a-z][a-z0-9_]*$"},
+        "category": {"enum": ["invalid_input", "not_found", "conflict", "blocked", "unavailable", "timeout", "execution_failure", "contract_violation", "invariant_violation", "cancelled", "internal"]},
+        "retry_policy": {"enum": ["never", "same_request", "after_external_recovery", "after_user_action"]},
+        "message": {"type": "string", "minLength": 1, "pattern": "^[^\\r\\n]*$"}
+      }
+    },
+    "result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["external_case_ref", "accepted", "failure_reason", "decision_codes", "queued_for_review"],
+      "properties": {
+        "external_case_ref": {"type": "string", "minLength": 1},
+        "accepted": {"type": "boolean"},
+        "test_result_id": {"type": ["string", "null"]},
+        "failure_reason": {"anyOf": [{"$ref": "#/$defs/failure_reason"}, {"type": "null"}]},
+        "decision_codes": {"type": "array", "items": {"type": "string"}},
+        "queued_for_review": {"type": "boolean"},
+        "review_item_id": {"type": ["string", "null"]}
+      }
+    }
+  }
+}
