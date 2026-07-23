@@ -15,8 +15,12 @@ consumers do not scan, normalize, or merge historical versions.
 - `GET /api/public/cog-cases/lookup?cog_case_no=...` returns one immutable
   `cogeval.cog_case.v3` snapshot containing the complete identity and any
   source-specific public projection fields available to Workbench, or `404`.
-- `GET /api/public/cog-case-groups` returns a page of fully hydrated
-  `cogeval.cog_case_group.v1` values.
+- `GET /api/public/cog-case-groups` returns a page envelope with group metadata
+  (`items`, `next_cursor`). A list row may omit `members`; Workbench resolves
+  `/api/public/cog-case-groups/{slug}` in that case and validates the returned
+  fully hydrated `cogeval.cog_case_group.v1` value.
+- `GET /api/public/cog-case-groups/{slug}` returns one fully hydrated
+  `cogeval.cog_case_group.v1` value, or `404`.
 - Authentication is not required for these published reads.
 
 The v3 case includes `cog_case_display_id`, `source_id`, and `external_id` in
@@ -36,5 +40,8 @@ product-local case.
 
 - list and lookup return only published active cases;
 - lookup matches `cog_case_display_id` exactly and returns a complete v3 payload;
-- group list items are complete group payloads with members;
+- group list rows expose a valid `slug` and `member_count` for detail
+  hydration;
+- group detail returns a complete group payload with members and a matching
+  `member_count`;
 - restricted source data is not leaked into the public projection.
