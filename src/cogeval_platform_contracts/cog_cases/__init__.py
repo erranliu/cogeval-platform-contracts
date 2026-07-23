@@ -20,6 +20,14 @@ from cogeval_platform_contracts.cog_cases.v3 import (
     CogCaseV3,
     validate_cog_case_v3,
 )
+from cogeval_platform_contracts.cog_cases.current import (
+    COG_CASE_GROUP_SCHEMA as CURRENT_COG_CASE_GROUP_SCHEMA,
+    COG_CASE_SCHEMA as CURRENT_COG_CASE_SCHEMA,
+    CurrentCogCase,
+    CurrentCogCaseGroup,
+    validate_current_cog_case,
+    validate_current_cog_case_group,
+)
 
 __all__ = [
     "COG_CASE_GROUP_SCHEMA",
@@ -38,4 +46,10 @@ __all__ = [
     "validate_cog_case_group",
     "validate_cog_case_v2",
     "validate_cog_case_v3",
+    "CURRENT_COG_CASE_GROUP_SCHEMA",
+    "CURRENT_COG_CASE_SCHEMA",
+    "CurrentCogCase",
+    "CurrentCogCaseGroup",
+    "validate_current_cog_case",
+    "validate_current_cog_case_group",
 ]

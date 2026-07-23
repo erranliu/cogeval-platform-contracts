@@ -56,11 +56,10 @@ def test_workbench_integration_declares_case_no_lookup_contract() -> None:
 
     assert "GET /api/public/cog-cases/lookup" in integration
     assert "cog_case_no" in integration
-    assert "cogeval.cog_case.v1" in integration
+    assert "cogeval.cog_case.v3" in integration
     assert "404" in integration
-    assert "product identity" in integration
-    assert "Orchestration activity/read-model payloads" in integration
-    assert "must not expose the source pair as the case label" in integration
+    assert "fully hydrated" in integration
+    assert "source_id + external_id" in integration
     assert "cog_case_display_id" in schema_doc
     assert "lookup" in schema_doc
     assert "source_id + external_id" in schema_doc
