@@ -10,7 +10,7 @@ def test_self_run_package_json_schemas_are_valid() -> None:
         "self_run_package_manifest.v1",
         "self_run_record.v1",
         "evidence_bundle.v1",
-        "package_import_result.v1",
+        "package_import_result.v2",
     ):
         Draft202012Validator.check_schema(load_schema(schema_name))
 
@@ -20,7 +20,7 @@ def test_self_run_package_fixtures_validate_against_json_schema() -> None:
         "manifest_minimal.v1": "self_run_package_manifest.v1",
         "record_resolved.v1": "self_run_record.v1",
         "evidence_minimal.v1": "evidence_bundle.v1",
-        "import_result_mixed.v1": "package_import_result.v1",
+        "import_result_mixed.v2": "package_import_result.v2",
     }
 
     fixture_names = set(list_fixtures())

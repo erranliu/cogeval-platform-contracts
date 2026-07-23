@@ -2,7 +2,7 @@ import pytest
 from pydantic import ValidationError
 
 from cogeval_platform_contracts.self_run_packages import load_fixture
-from cogeval_platform_contracts.self_run_packages.v2 import validate_package_import_result_v2
+from cogeval_platform_contracts.self_run_packages.current import validate_package_import_result_v2
 
 
 def test_v2_fixture_separates_failure_from_decision() -> None:

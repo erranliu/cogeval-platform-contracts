@@ -26,7 +26,7 @@ payloads before relying on them.
 - `cogeval.evidence_bundle.v1`
 - `cogeval.gateway_consistency.baseline.v1`
 - `cogeval.gateway_consistency.task_pack.v1`
-- `cogeval.package_import_result.v1`
+- `cogeval.package_import_result.v2` (current import result contract)
 - `cogeval.model_capability_catalog.v1`
 - `cogeval.provider_capability_catalog.v1`
 - `cogeval.interface_capability_catalog.v1`

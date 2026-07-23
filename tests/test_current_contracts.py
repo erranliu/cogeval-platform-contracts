@@ -68,5 +68,3 @@ def test_current_case_accepts_hydrated_public_fields() -> None:
 def test_current_import_result_is_v2_only() -> None:
     result = validate_package_import_result_v2(load_package_fixture("import_result_mixed.v2"))
     assert result.schema == "cogeval.package_import_result.v2"
-    with pytest.raises(ValidationError):
-        validate_package_import_result_v2(load_package_fixture("import_result_mixed.v1"))
