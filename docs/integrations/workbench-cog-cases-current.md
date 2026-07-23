@@ -6,7 +6,9 @@ consumers do not scan, normalize, or merge historical versions.
 
 ## Producer API
 
-- `GET /api/public/cog-cases` returns one page envelope: `{items, next_cursor, total}`.
+- `GET /api/public/cog-cases` returns one page envelope:
+  `{items, next_cursor, total}`, where `total` is a non-negative integer when
+  the producer computes it and otherwise `null`.
   Workbench may pass `source_id` to narrow the current published catalog. The
   endpoint remains paginated; consumers must follow `next_cursor` and match
   `external_id` locally when resolving the `(source_id, external_id)` identity.
