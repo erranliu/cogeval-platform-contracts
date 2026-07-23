@@ -51,8 +51,10 @@ def test_current_case_is_v3_and_rejects_retired_schema() -> None:
     current = validate_current_cog_case(load_fixture("case_public.v3"))
     assert current.cog_case_display_id == "SWEPro#1"
 
+    retired = load_fixture("case_public.v3")
+    retired["schema"] = "cogeval.cog_case.retired"
     with pytest.raises(ValidationError):
-        validate_current_cog_case(load_fixture("case_public.v1"))
+        validate_current_cog_case(retired)
 
 
 def test_current_case_accepts_hydrated_public_fields() -> None:

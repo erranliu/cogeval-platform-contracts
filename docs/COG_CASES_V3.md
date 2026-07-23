@@ -1,6 +1,6 @@
-# COG Cases v3
+# COG Cases current (v3)
 
-`cogeval.cog_case.v3` is the current published COG Case contract.
+`cogeval.cog_case.v3` is the only published COG Case contract.
 
 `cog_case_display_id` is required and is the stable product identity used in
 all user-visible case selection, display, communication, run metadata, and
@@ -11,9 +11,6 @@ after publication, and must not be reused for another case.
 execution materialization, and platform result routing. They are internal
 technical coordinates and must not replace `cog_case_display_id` in external
 product surfaces.
-
-v1 and v2 remain available only for historical compatibility. New producers
-and new Workbench execution requests must publish and consume v3.
 
 The v3 payload also carries the v2 `environment_requirements` declaration.
 The platform declares required resources; Workbench owns local probing and

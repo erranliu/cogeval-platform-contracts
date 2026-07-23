@@ -15,7 +15,7 @@ describe the API producer, consumer, and failure boundary.
 
 | Integration | Schema | Direction | Platform API | Workbench entrypoint | Contract |
 |---|---|---|---|---|---|
-| Workbench COG Cases current | `cogeval.cog_case.v3`, `cogeval.cog_case_group.v1` | Platform -> Workbench | `GET /api/public/cog-cases`, `/lookup`, `/api/public/cog-case-groups` | COG Cases local API | [workbench-cog-cases-v1.md](workbench-cog-cases-v1.md) |
+| Workbench COG Cases current | `cogeval.cog_case.v3`, `cogeval.cog_case_group.v1` | Platform -> Workbench | `GET /api/public/cog-cases`, `/lookup`, `/api/public/cog-case-groups` | COG Cases local API | [workbench-cog-cases-current.md](workbench-cog-cases-current.md) |
 | Workbench API Key Provider Catalog v1 | `cogeval.interface_capability_catalog.v1` | Platform -> Workbench | `GET /api/workbench/v1/api-key-providers` | provider catalog loader | [workbench-api-key-provider-catalog-v1.md](workbench-api-key-provider-catalog-v1.md) |
 | Workbench Model Pricing Catalog v1 | `cogeval.model_pricing_catalog.v1` | Platform -> Workbench | `GET /api/workbench/v1/model-pricing` | model pricing catalog loader | [workbench-model-pricing-v1.md](workbench-model-pricing-v1.md) |
 | Workbench Provider Capability Catalog v1 | `cogeval.provider_capability_catalog.v1` | Platform -> Workbench | bundled or configured capability catalog path | provider catalog loader | [workbench-provider-capability-catalog-v1.md](workbench-provider-capability-catalog-v1.md) |
