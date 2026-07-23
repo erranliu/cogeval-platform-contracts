@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 from pydantic import ValidationError
 
-from cogeval_platform_contracts.cog_cases.current import validate_current_cog_case
+from cogeval_platform_contracts.cog_cases.current import validate_current_cog_case, validate_current_cog_case_group
 from cogeval_platform_contracts.cog_cases.resources import load_fixture
 from cogeval_platform_contracts.self_run_packages.current import validate_package_import_result_v2
 from cogeval_platform_contracts.self_run_packages.resources import load_fixture as load_package_fixture
@@ -32,10 +32,18 @@ def test_current_contract_modules_do_not_import_retired_version_modules() -> Non
 def test_current_group_contract_owns_member_count_invariant() -> None:
     payload = load_fixture("group_public.v1")
     payload["members"] = [load_fixture("case_public.v3")]
+    payload["member_count"] = 1
+    group = validate_current_cog_case_group(payload)
+    assert group.member_count == len(group.members)
     payload["member_count"] = 0
     with pytest.raises(ValidationError, match="member_count"):
-        from cogeval_platform_contracts.cog_cases.current import validate_current_cog_case_group
+        validate_current_cog_case_group(payload)
 
+
+def test_current_group_requires_hydrated_members() -> None:
+    payload = load_fixture("group_public.v1")
+    payload.pop("members")
+    with pytest.raises(ValidationError):
         validate_current_cog_case_group(payload)
 
 

@@ -1,157 +1,72 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$defs": {
+    "environment_requirement": {
+      "additionalProperties": false,
+      "properties": {
+        "id": { "enum": ["docker_engine", "go_toolchain"], "type": "string" },
+        "kind": { "enum": ["container_engine", "host_toolchain"], "type": "string" },
+        "display_name": { "minLength": 1, "type": "string" },
+        "required": { "type": "boolean" },
+        "version_constraint": { "type": ["string", "null"] },
+        "applies_to": {
+          "items": { "enum": ["workspace_prepare", "candidate_execution", "official_validation"], "type": "string" },
+          "type": "array"
+        },
+        "reason": { "type": ["string", "null"] }
+      },
+      "required": ["id", "kind", "display_name"],
+      "type": "object"
+    },
     "case": {
       "additionalProperties": false,
       "properties": {
-        "schema": {
-          "const": "cogeval.cog_case.v1"
-        },
-        "test_case_id": {
-          "minLength": 1,
-          "type": "string"
-        },
-        "cog_case_display_id": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "source_id": {
-          "minLength": 1,
-          "type": "string"
-        },
-        "external_id": {
-          "minLength": 1,
-          "type": "string"
-        },
-        "title": {
-          "minLength": 1,
-          "type": "string"
-        },
-        "original_url": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "labels": {
-          "type": "object"
-        },
-        "semantic_profile": {
-          "type": "object"
-        },
-        "semantic_version": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "interpretation": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "online_at": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "promoted_at": {
-          "minLength": 1,
-          "type": "string"
-        }
+        "schema": { "const": "cogeval.cog_case.v3" },
+        "test_case_id": { "minLength": 1, "type": "string" },
+        "cog_case_display_id": { "minLength": 1, "type": "string" },
+        "source_id": { "minLength": 1, "type": "string" },
+        "external_id": { "minLength": 1, "type": "string" },
+        "title": { "minLength": 1, "type": "string" },
+        "original_url": { "type": ["string", "null"] },
+        "labels": { "type": "object" },
+        "semantic_profile": { "type": "object" },
+        "semantic_version": { "type": ["string", "null"] },
+        "interpretation": { "type": ["string", "null"] },
+        "online_at": { "type": ["string", "null"] },
+        "promoted_at": { "minLength": 1, "type": "string" },
+        "environment_requirements": { "items": { "$ref": "#/$defs/environment_requirement" }, "type": "array" },
+        "summary": { "type": ["string", "null"] },
+        "source_text": { "type": ["string", "null"] },
+        "task_type": { "type": ["string", "null"] },
+        "tags": { "type": "array" },
+        "provenance": { "type": "object" },
+        "source": { "type": "object" },
+        "artifacts": { "type": "object" },
+        "source_locator": { "type": "object" },
+        "validation": { "type": ["object", "null"] },
+        "workspace": { "type": ["object", "null"] }
       },
-      "required": [
-        "schema",
-        "test_case_id",
-        "source_id",
-        "external_id",
-        "title",
-        "promoted_at"
-      ],
+      "required": ["schema", "test_case_id", "cog_case_display_id", "source_id", "external_id", "title", "promoted_at"],
       "type": "object"
     }
   },
   "additionalProperties": false,
   "properties": {
-    "schema": {
-      "const": "cogeval.cog_case_group.v1"
-    },
-    "group_id": {
-      "minLength": 1,
-      "type": "string"
-    },
-    "slug": {
-      "minLength": 1,
-      "type": "string"
-    },
-    "name": {
-      "minLength": 1,
-      "type": "string"
-    },
-    "description": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "theme_tags": {
-      "items": {
-        "type": "string"
-      },
-      "type": "array"
-    },
-    "status": {
-      "enum": [
-        "draft",
-        "published",
-        "archived"
-      ]
-    },
-    "visibility": {
-      "enum": [
-        "internal",
-        "public"
-      ]
-    },
-    "selection_mode": {
-      "enum": [
-        "manual",
-        "rule_snapshot"
-      ]
-    },
-    "selection_filters": {
-      "type": "object"
-    },
-    "member_count": {
-      "minimum": 0,
-      "type": "integer"
-    },
-    "members": {
-      "items": {
-        "$ref": "#/$defs/case"
-      },
-      "type": "array"
-    },
-    "created_at": {
-      "minLength": 1,
-      "type": "string"
-    },
-    "updated_at": {
-      "minLength": 1,
-      "type": "string"
-    }
+    "schema": { "const": "cogeval.cog_case_group.v1" },
+    "group_id": { "minLength": 1, "type": "string" },
+    "slug": { "minLength": 1, "type": "string" },
+    "name": { "minLength": 1, "type": "string" },
+    "description": { "type": ["string", "null"] },
+    "theme_tags": { "items": { "type": "string" }, "type": "array" },
+    "status": { "enum": ["draft", "published", "archived"] },
+    "visibility": { "enum": ["internal", "public"] },
+    "selection_mode": { "enum": ["manual", "rule_snapshot"] },
+    "selection_filters": { "type": "object" },
+    "member_count": { "minimum": 0, "type": "integer" },
+    "members": { "items": { "$ref": "#/$defs/case" }, "type": "array" },
+    "created_at": { "minLength": 1, "type": "string" },
+    "updated_at": { "minLength": 1, "type": "string" }
   },
-  "required": [
-    "schema",
-    "group_id",
-    "slug",
-    "name",
-    "created_at",
-    "updated_at"
-  ],
+  "required": ["schema", "group_id", "slug", "name", "member_count", "members", "created_at", "updated_at"],
   "type": "object"
 }

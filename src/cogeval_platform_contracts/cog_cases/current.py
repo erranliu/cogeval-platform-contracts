@@ -75,8 +75,8 @@ class CurrentCogCaseGroup(StrictCurrentContractModel):
     visibility: Literal["internal", "public"] = "internal"
     selection_mode: Literal["manual", "rule_snapshot"] = "manual"
     selection_filters: dict[str, Any] = Field(default_factory=dict)
-    member_count: int = Field(default=0, ge=0)
-    members: list[CurrentCogCase] = Field(default_factory=list)
+    member_count: int = Field(ge=0)
+    members: list[CurrentCogCase]
     created_at: str = Field(min_length=1)
     updated_at: str = Field(min_length=1)
 
