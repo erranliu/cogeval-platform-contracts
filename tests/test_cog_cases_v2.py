@@ -3,12 +3,11 @@ from __future__ import annotations
 import pytest
 from pydantic import ValidationError
 
-from cogeval_platform_contracts.cog_cases import (
-    COG_CASE_SCHEMA,
+from cogeval_platform_contracts.cog_cases import load_fixture
+from cogeval_platform_contracts.cog_cases.v1 import COG_CASE_SCHEMA, CogCase
+from cogeval_platform_contracts.cog_cases.v2 import (
     COG_CASE_V2_SCHEMA,
-    CogCase,
     validate_cog_case_v2,
-    load_fixture,
 )
 
 

@@ -3,7 +3,8 @@ from __future__ import annotations
 import pytest
 from pydantic import ValidationError
 
-from cogeval_platform_contracts.self_run_packages import (
+from cogeval_platform_contracts.self_run_packages import load_fixture
+from cogeval_platform_contracts.self_run_packages.v1 import (
     EVIDENCE_BUNDLE_SCHEMA,
     PACKAGE_IMPORT_RESULT_SCHEMA,
     SELF_RUN_PACKAGE_MANIFEST_SCHEMA,
@@ -12,7 +13,6 @@ from cogeval_platform_contracts.self_run_packages import (
     PackageImportResult,
     SelfRunPackageManifest,
     SelfRunRecord,
-    load_fixture,
     validate_evidence_bundle,
     validate_package_import_result,
     validate_self_run_package_manifest,

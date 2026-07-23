@@ -14,7 +14,12 @@ from cogeval_platform_contracts.self_run_packages.resources import load_fixture 
 
 def test_current_contract_modules_do_not_import_retired_version_modules() -> None:
     root = Path(__file__).resolve().parents[1] / "src" / "cogeval_platform_contracts"
-    for relative in ("cog_cases/current.py", "self_run_packages/current.py"):
+    for relative in (
+        "cog_cases/current.py",
+        "cog_cases/__init__.py",
+        "self_run_packages/current.py",
+        "self_run_packages/__init__.py",
+    ):
         tree = ast.parse((root / relative).read_text(encoding="utf-8"))
         modules = {
             node.module

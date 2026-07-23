@@ -5,12 +5,12 @@ from pathlib import Path
 import pytest
 from pydantic import ValidationError
 
-from cogeval_platform_contracts.cog_cases import (
+from cogeval_platform_contracts.cog_cases import load_fixture
+from cogeval_platform_contracts.cog_cases.v1 import (
     COG_CASE_GROUP_SCHEMA,
     COG_CASE_SCHEMA,
     CogCase,
     CogCaseGroup,
-    load_fixture,
     validate_cog_case,
     validate_cog_case_group,
 )
