@@ -52,7 +52,9 @@ def test_model_pricing_index_rows_are_complete_and_links_resolve() -> None:
 
     assert contract_row in CONTRACT_INDEX
     assert contract_integration_row in CONTRACT_INDEX
-    assert integration_row in INTEGRATION_INDEX
+    assert "| Workbench Model Pricing Catalog v1 |" in INTEGRATION_INDEX
+    assert "Platform -> Workbench" in INTEGRATION_INDEX
+    assert "`GET /api/workbench/v1/model-pricing`" in INTEGRATION_INDEX
 
     pricing_links = (
         (ROOT / "docs", CONTRACT_INDEX, "MODEL_PRICING_CATALOG_V1.md"),

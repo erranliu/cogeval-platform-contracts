@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 
 COG_CASE_SCHEMA = "cogeval.cog_case.v3"
@@ -45,9 +45,9 @@ class CurrentCogCase(StrictCurrentContractModel):
     online_at: str | None = None
     promoted_at: str = Field(min_length=1)
     environment_requirements: list[CaseEnvironmentRequirement] = Field(default_factory=list)
-    # These fields are part of the hydrated current projection. They are
-    # intentionally optional because source-specific public projections may
-    # omit them while still remaining complete for Workbench preparation.
+    # Source-specific public projections may omit these fields. When present,
+    # they are validated as part of the single current snapshot rather than
+    # being merged from a legacy detail endpoint.
     summary: str | None = None
     source_text: str | None = None
     task_type: str | None = None
@@ -79,6 +79,12 @@ class CurrentCogCaseGroup(StrictCurrentContractModel):
     members: list[CurrentCogCase] = Field(default_factory=list)
     created_at: str = Field(min_length=1)
     updated_at: str = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def validate_member_count(self) -> "CurrentCogCaseGroup":
+        if self.member_count != len(self.members):
+            raise ValueError("member_count must match members length")
+        return self
 
     @property
     def schema(self) -> str:

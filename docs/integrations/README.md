@@ -1,33 +1,33 @@
-# COGEval 集成契约索引
+# COGEval integration contracts
 
-本目录说明平台契约如何通过具体 API 被生产者提供、被消费者读取并投影到产品行为。它补充 schema 文档，不替代 JSON Schema、Pydantic 模型或 fixture。
+This index records the platform contracts used by Workbench. JSON Schema and
+Pydantic definitions remain the authoritative payload definitions; these docs
+describe the API producer, consumer, and failure boundary.
 
-## 原则
+## Principles
 
-- schema 文档回答 payload 长什么样、字段如何约束。
-- 集成契约回答哪个系统通过哪个 API 提供 payload、消费者从哪里读取、失败时如何处理。
-- 中台和 Workbench 不应在各自仓库重复定义同一 API path、认证规则或必填字段；应引用本目录文档。
-- 每个 Workbench 消费的中台契约都应有对应集成契约文档和生产者/消费者测试清单。
+- Every Workbench integration has one current contract entry and one owner.
+- API paths, authentication, envelopes, and required fields are documented in
+  the contract repository, not redefined in the Workbench repository.
+- Historical payloads are not discovered, migrated, or silently normalized.
 
-## 集成契约
+## Integrations
 
-| 集成契约 | 数据 schema | 数据方向 | 平台 API | Workbench 入口 | 文档 |
+| Integration | Schema | Direction | Platform API | Workbench entrypoint | Contract |
 |---|---|---|---|---|---|
-| Workbench COG Cases v1/v2/v3 | `cogeval.cog_case.v1`, `cogeval.cog_case.v2`, `cogeval.cog_case.v3`, `cogeval.cog_case_group.v1` | 中台 -> Workbench | `GET /api/public/cog-cases` | COG Cases local API | [workbench-cog-cases-v1.md](workbench-cog-cases-v1.md) |
-| Workbench API Key Provider Catalog v1 | `cogeval.interface_capability_catalog.v1` | 中台 -> Workbench | `GET /api/workbench/v1/api-key-providers` | provider catalog loader | [workbench-api-key-provider-catalog-v1.md](workbench-api-key-provider-catalog-v1.md) |
-| Workbench Model Pricing Catalog v1 | `cogeval.model_pricing_catalog.v1` | 中台 -> Workbench | `GET /api/workbench/v1/model-pricing` | model pricing catalog loader | [workbench-model-pricing-v1.md](workbench-model-pricing-v1.md) |
-| Workbench Provider Capability Catalog v1 | `cogeval.provider_capability_catalog.v1` | 中台 -> Workbench | bundled or configured capability catalog path | provider catalog loader | [workbench-provider-capability-catalog-v1.md](workbench-provider-capability-catalog-v1.md) |
-| Workbench Model Capability Catalog v2 | `cogeval.model_capability_catalog.v2` | 中台 -> Workbench | `GET /api/workbench/v1/model-capabilities` | execution selection catalog | [workbench-model-capability-catalog-v2.md](workbench-model-capability-catalog-v2.md) |
-| Workbench Gateway Consistency v1 | `cogeval.gateway_consistency.task_pack.v1` | 中台 -> Workbench | `GET /api/workbench/v1/gateway-consistency/task-pack` | Gateway Consistency local API | [workbench-gateway-consistency-v1.md](workbench-gateway-consistency-v1.md) |
-| Workbench Accounts v1 | `cogeval.workbench.*.v1` | 双向 | `/api/workbench/v1/auth/github`, `/me`, `/assets`, `/coin-reservations` | platform account client | [workbench-accounts-v1.md](workbench-accounts-v1.md) |
-| Workbench Self-run Package Ingest v1 | `cogeval.self_run_*`, `cogeval.evidence_bundle.v1`, `cogeval.package_import_result.v1` | Workbench -> 中台，导入结果返回 Workbench | `POST /api/workbench/v1/ingest/package` | historical integration | [workbench-self-run-package-ingest-v1.md](workbench-self-run-package-ingest-v1.md) |
-| Workbench Self-run Package Ingest v2 | `cogeval.package_import_result.v2`, `cogeval.failure-reason.v1` | Workbench -> 中台，导入结果返回 Workbench | `POST /api/workbench/v1/ingest/package` | current self-run submit flow | [workbench-self-run-package-ingest-v2.md](workbench-self-run-package-ingest-v2.md) |
-| Workbench Distribution Claims v1 | `cogeval.distribution_claim*.v1` | Workbench 请求，中台返回 claim | `/api/tasks/claim`, `/api/tasks/{claim_id}/start`, `/release` | task claim client | [workbench-distribution-claims-v1.md](workbench-distribution-claims-v1.md) |
+| Workbench COG Cases current | `cogeval.cog_case.v3`, `cogeval.cog_case_group.v1` | Platform -> Workbench | `GET /api/public/cog-cases`, `/lookup`, `/api/public/cog-case-groups` | COG Cases local API | [workbench-cog-cases-v1.md](workbench-cog-cases-v1.md) |
+| Workbench API Key Provider Catalog v1 | `cogeval.interface_capability_catalog.v1` | Platform -> Workbench | `GET /api/workbench/v1/api-key-providers` | provider catalog loader | [workbench-api-key-provider-catalog-v1.md](workbench-api-key-provider-catalog-v1.md) |
+| Workbench Model Pricing Catalog v1 | `cogeval.model_pricing_catalog.v1` | Platform -> Workbench | `GET /api/workbench/v1/model-pricing` | model pricing catalog loader | [workbench-model-pricing-v1.md](workbench-model-pricing-v1.md) |
+| Workbench Provider Capability Catalog v1 | `cogeval.provider_capability_catalog.v1` | Platform -> Workbench | bundled or configured capability catalog path | provider catalog loader | [workbench-provider-capability-catalog-v1.md](workbench-provider-capability-catalog-v1.md) |
+| Workbench Model Capability Catalog v2 | `cogeval.model_capability_catalog.v2` | Platform -> Workbench | `GET /api/workbench/v1/model-capabilities` | execution selection catalog | [workbench-model-capability-catalog-v2.md](workbench-model-capability-catalog-v2.md) |
+| Workbench Gateway Consistency v1 | `cogeval.gateway_consistency.task_pack.v1` | Platform -> Workbench | `GET /api/workbench/v1/gateway-consistency/task-pack` | Gateway Consistency local API | [workbench-gateway-consistency-v1.md](workbench-gateway-consistency-v1.md) |
+| Workbench Accounts v1 | `cogeval.workbench.*.v1` | Bidirectional | `/api/workbench/v1/auth/github`, `/me`, `/assets`, `/coin-reservations` | platform account client | [workbench-accounts-v1.md](workbench-accounts-v1.md) |
+| Workbench Self-run Package Ingest v2 | `cogeval.package_import_result.v2`, `cogeval.failure-reason.v1` | Workbench -> Platform | `POST /api/workbench/v1/ingest/package` | current self-run submit flow | [workbench-self-run-package-ingest-v2.md](workbench-self-run-package-ingest-v2.md) |
+| Workbench Distribution Claims v1 | `cogeval.distribution_claim*.v1` | Workbench -> Platform | `/api/tasks/claim`, `/api/tasks/{claim_id}/start`, `/release` | task claim client | [workbench-distribution-claims-v1.md](workbench-distribution-claims-v1.md) |
 
-## 新增集成契约流程
+## Adding an integration
 
-1. 先确认数据 schema 已在 `docs/契约.md` 和对应 schema 文档中登记。
-2. 复制 [TEMPLATE.md](TEMPLATE.md) 创建新的集成契约文档。
-3. 写清生产者 API、认证、返回 envelope、消费者 loader、配置覆盖项、失败行为和测试清单。
-4. 在本索引登记新文档。
-5. 在生产者仓和消费者仓添加测试，证明实际 API 与消费投影符合本集成契约。
+1. Register the schemas in the contract and integration documents.
+2. Define the producer API, authentication, envelope, consumer entrypoint,
+   configuration overrides, failure behavior, and test checklist.
+3. Add producer and consumer contract tests before changing either repository.

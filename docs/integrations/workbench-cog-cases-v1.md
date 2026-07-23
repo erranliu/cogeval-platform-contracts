@@ -7,8 +7,9 @@ consumers must reject them instead of scanning or normalizing them.
 ## Producer API
 
 - `GET /api/public/cog-cases` returns one page envelope: `{items, next_cursor, total}`.
-- `GET /api/public/cog-cases/lookup?cog_case_no=...` returns one fully hydrated
-  immutable `cogeval.cog_case.v3` snapshot or `404`.
+- `GET /api/public/cog-cases/lookup?cog_case_no=...` returns one immutable
+  `cogeval.cog_case.v3` snapshot containing the complete identity and any
+  source-specific public projection fields available to Workbench, or `404`.
 - `GET /api/public/cog-case-groups` returns one page envelope whose items are
   fully hydrated `cogeval.cog_case_group.v1` values.
 - `GET /api/public/cog-case-groups/{slug}` is not used by Workbench and may be
@@ -16,9 +17,9 @@ consumers must reject them instead of scanning or normalizing them.
 - Authentication is not required for these published reads.
 
 The v3 case includes the identity (`cog_case_display_id`, `source_id`,
-`external_id`) and any public source/workspace/validation fields needed for
-local preparation. Workbench must not issue a second public test-case detail
-request or merge data from another endpoint.
+`external_id`) and source-specific public/workspace/validation fields in the
+same snapshot when those fields exist for the source. Workbench must not issue
+a second public test-case detail request or merge data from another endpoint.
 The `source_id + external_id` pair remains the internal materialization
 coordinate; `cog_case_display_id` is the product identity.
 
