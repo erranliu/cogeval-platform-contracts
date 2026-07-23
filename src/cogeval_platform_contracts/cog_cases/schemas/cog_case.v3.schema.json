@@ -18,7 +18,17 @@
     "environment_requirements": {
       "items": { "$ref": "#/$defs/environment_requirement" },
       "type": "array"
-    }
+    },
+    "summary": { "type": ["string", "null"] },
+    "source_text": { "type": ["string", "null"] },
+    "task_type": { "type": ["string", "null"] },
+    "tags": { "type": "array" },
+    "provenance": { "type": "object" },
+    "source": { "type": "object" },
+    "source_locator": { "type": "object" },
+    "artifacts": { "type": "object" },
+    "validation": { "type": ["object", "null"] },
+    "workspace": { "type": ["object", "null"] }
   },
   "required": ["schema", "test_case_id", "cog_case_display_id", "source_id", "external_id", "title", "promoted_at"],
   "type": "object",

@@ -1,8 +1,8 @@
-# Workbench Self-run Package Ingest v2
+# Workbench Self-run Package Ingest — current contract
 
 Data schema: `cogeval.package_import_result.v2`.
 
-The v2 response is the only current self-run import response. Each result has
+The `cogeval.package_import_result.v2` response is the only current self-run import response. Each result has
 one of two independent meanings:
 
 - an accepted/rejected import, represented by `accepted` and an optional
@@ -18,3 +18,7 @@ one decision code.
 
 Workbench and Website share only the wire schema. Owner-local failure
 definitions remain in the producer that creates the fact.
+
+Workbench producers import the package manifest, record, and evidence models
+through `cogeval_platform_contracts.self_run_packages.current`; direct v1/v2
+module imports are retired from the consumer boundary.
