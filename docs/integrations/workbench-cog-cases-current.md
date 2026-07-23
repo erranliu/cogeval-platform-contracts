@@ -7,6 +7,9 @@ consumers do not scan, normalize, or merge historical versions.
 ## Producer API
 
 - `GET /api/public/cog-cases` returns one page envelope: `{items, next_cursor, total}`.
+  Workbench may pass `source_id` to narrow the current published catalog. The
+  endpoint remains paginated; consumers must follow `next_cursor` and match
+  `external_id` locally when resolving the `(source_id, external_id)` identity.
 - `GET /api/public/cog-cases/lookup?cog_case_no=...` returns one immutable
   `cogeval.cog_case.v3` snapshot containing the complete identity and any
   source-specific public projection fields available to Workbench, or `404`.
